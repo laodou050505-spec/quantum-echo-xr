@@ -1,0 +1,19 @@
+{
+  "task_id": "990cd7c4-7764-4395-a1fd-ed84f35cc9cf",
+  "status": "success",
+  "type": "text_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "A clean flat 2D sci-fi quantum laboratory game HUD panel texture sheet for VR, transparent-looking near-black glass surfaces on a pure black background, precise cyan and white circuit borders with a few amber status accents, thin rectangular frames, one horizontal progress bar frame, one compact objective panel, one result dialog frame, no words, no letters, no numbers, no icons, no perspective, no mockup, no device, front-facing orthographic UI asset, high contrast, restrained professional industrial interface",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260811/990cd7c4-7764-4395-a1fd-ed84f35cc9cf/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA4MTEvOTkwY2Q3YzQtNzc2NC00Mzk1LWExZmQtZWQ4NGYzNWNjOWNmL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODY1NDEyNjB9fX1dfQ__&Signature=v9X0rAZXpZLen1Jxc9E-Smno1h~WJvvPo5G1vpfM4rnfJpRlDDRyV0mRSLJbYQLZQyISKQstSiH8NeSEeArGRbE2xugBRl1Gn-6F95y7~cSRmxqE7B56584EBf7vD0Mvvc82biXI826ShSEHY8sboN3ZpIeD~S7kxjGCeQhTHRcjYhcHInPnkoWr3atVdIkEs1hV1d0kBDNS7Wl2sNNXP1RexO1n2YQ9tA~CzePhh2cC2Bkv7c0M22NRrw1XZ19ecBiCEF5LC5moEpmii4X7KnS9Jx3LCbsrd6uONFkZA8bzuaddFeOpwej6Orvl4pDaIVMDfKsED414C-Vwwv~OBg__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-08-11T13:27:19.437502Z",
+  "completed_at": "2026-08-11T13:27:36.855250Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/01_generated_image_url.png"
+  ]
+}

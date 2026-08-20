@@ -231,11 +231,10 @@ namespace QuantumEcho
 
         void UpdateDesktopLook()
         {
-            var mouse = Mouse.current;
-            if (mouse == null || !mouse.rightButton.isPressed) return;
-            var delta = mouse.delta.ReadValue() * mouseSensitivity;
-            transform.Rotate(Vector3.up, delta.x, Space.World);
-            _desktopPitch = Mathf.Clamp(_desktopPitch - delta.y, -72f, 72f);
+            // Desktop free-look belongs to QuantumThirdPersonCamera.  Do not
+            // rotate the player rig here: tying camera input to this root makes
+            // the entire room and character spin together instead of providing
+            // a stable third-person view.
         }
 
         void UpdateMovement()

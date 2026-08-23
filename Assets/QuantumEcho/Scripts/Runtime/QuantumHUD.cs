@@ -25,6 +25,11 @@ namespace QuantumEcho
         public GameObject resultPanel;
         public TMP_Text resultTitleText;
         public TMP_Text resultStatsText;
+        [Header("Comfort auxiliary HUD")]
+        [Tooltip("A small left-side, camera-relative objective reminder. It contains only short status text; gameplay stays world-space.")]
+        public QuantumComfortObjectiveHUD comfortObjectiveHud;
+        [Tooltip("Brief camera-relative success feedback. It is notification-only; all objectives and interaction remain in world space.")]
+        public QuantumLevelTransitionHUD levelTransitionHud;
 
         float _toastUntil;
 
@@ -51,6 +56,12 @@ namespace QuantumEcho
             if (toastText != null) toastText.gameObject.SetActive(false);
         }
 
+        void Start()
+        {
+            EnsureComfortObjectiveHud();
+            RefreshComfortObjectiveHud();
+        }
+
         void HideNonEssentialEmptyPanels()
         {
             SetPanelActive("Brand", false);
@@ -71,6 +82,7 @@ namespace QuantumEcho
 
         void Update()
         {
+            EnsureComfortObjectiveHud();
             if (toastText != null && toastText.gameObject.activeSelf && Time.unscaledTime >= _toastUntil)
             {
                 toastText.gameObject.SetActive(false);
@@ -82,6 +94,7 @@ namespace QuantumEcho
             levelText.text = code;
             loopText.text = $"当前回路  {loop:00}";
             timerLabelText.text = timerLabel;
+            RefreshComfortObjectiveHud();
         }
 
         public void SetLoop(int loop)
@@ -94,6 +107,7 @@ namespace QuantumEcho
             objectiveIndexText.text = $"{index + 1:00}";
             objectiveTitleText.text = title;
             objectiveCopyText.text = copy;
+            RefreshComfortObjectiveHud();
         }
 
         public void SetTimer(float remaining, float duration)
@@ -111,6 +125,37 @@ namespace QuantumEcho
         {
             promptKeyText.text = key;
             promptText.text = message;
+            RefreshComfortObjectiveHud();
+        }
+
+        void EnsureComfortObjectiveHud()
+        {
+            if (comfortObjectiveHud != null) return;
+            var camera = Camera.main;
+            var font = objectiveTitleText != null ? objectiveTitleText.font : null;
+            if (camera == null || font == null) return;
+            comfortObjectiveHud = QuantumComfortObjectiveHUD.Create(camera, font);
+        }
+
+        void EnsureLevelTransitionHud()
+        {
+            if (levelTransitionHud != null) return;
+            var camera = Camera.main;
+            var font = resultTitleText != null ? resultTitleText.font : null;
+            if (camera == null || font == null) return;
+            levelTransitionHud = QuantumLevelTransitionHUD.Create(camera, font);
+        }
+
+        void RefreshComfortObjectiveHud()
+        {
+            if (comfortObjectiveHud == null) return;
+            comfortObjectiveHud.SetContent(
+                levelText != null ? levelText.text : string.Empty,
+                objectiveIndexText != null ? objectiveIndexText.text : string.Empty,
+                objectiveTitleText != null ? objectiveTitleText.text : string.Empty,
+                objectiveCopyText != null ? objectiveCopyText.text : string.Empty,
+                promptKeyText != null ? promptKeyText.text : string.Empty,
+                promptText != null ? promptText.text : string.Empty);
         }
 
         public void SetProgress(bool visible, string label = "", float progress = 0f)
@@ -133,13 +178,27 @@ namespace QuantumEcho
         public void ShowResult(string title, int echoes, float totalSeconds, bool finalLevel)
         {
             resultTitleText.text = title;
-            resultStatsText.text = $"使用回声  {echoes:00}    总用时  {Mathf.FloorToInt(totalSeconds / 60f):00}:{Mathf.FloorToInt(totalSeconds % 60f):00}\n\n{(finalLevel ? "按 Q 重玩第三关" : "按 Q 进入下一关")}";
+            resultStatsText.text = $"使用回声  {echoes:00}    总用时  {Mathf.FloorToInt(totalSeconds / 60f):00}:{Mathf.FloorToInt(totalSeconds % 60f):00}\n\n{(finalLevel ? "按 R 重试最后一关" : "正在载入下一关…")}";
             resultPanel.SetActive(true);
+        }
+
+        /// <summary>Shows a readable completion beat before automatic level travel.</summary>
+        public void ShowLevelTransition(string completedTitle, int nextLevelOneBased, float seconds)
+        {
+            EnsureLevelTransitionHud();
+            if (levelTransitionHud != null)
+                levelTransitionHud.Show(completedTitle, nextLevelOneBased, seconds);
+        }
+
+        public void HideLevelTransition()
+        {
+            if (levelTransitionHud != null) levelTransitionHud.Hide();
         }
 
         public void HideResult()
         {
             resultPanel.SetActive(false);
+            HideLevelTransition();
         }
     }
 

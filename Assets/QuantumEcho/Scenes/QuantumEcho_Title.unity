@@ -2291,6 +2291,9 @@ MonoBehaviour:
   titleCamera: {fileID: 979575872}
   rightController: {fileID: 1775793009}
   rightRay: {fileID: 511285833}
+  titlePresentationRoot: {fileID: 1458751903}
+  opaqueCoverRoot: {fileID: 798196851}
+  presentationDistance: 3.25
   startTarget: {fileID: 1735443432}
   exitTarget: {fileID: 1150377358}
   gameplaySceneName: QuantumEcho_Main

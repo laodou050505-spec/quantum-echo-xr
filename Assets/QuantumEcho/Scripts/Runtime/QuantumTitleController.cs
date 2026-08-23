@@ -24,6 +24,11 @@ namespace QuantumEcho
         public Camera titleCamera;
         public Transform rightController;
         public LineRenderer rightRay;
+        [Tooltip("The world-space title terminal. It is aligned once to the headset's opening direction, then remains a real room object.")]
+        public Transform titlePresentationRoot;
+        [Tooltip("Opaque title backdrop moved with the terminal so gameplay never appears behind the title.")]
+        public Transform opaqueCoverRoot;
+        [Min(1.6f)] public float presentationDistance = 3.25f;
 
         [Header("World-Space Entry Targets")]
         public Collider startTarget;
@@ -36,6 +41,10 @@ namespace QuantumEcho
         bool _previousTrigger;
         bool _previousMenu;
         bool _loading;
+        int _xrActiveFrame = -1;
+        bool _presentationAligned;
+        Vector3 _coverRootOffsetInPresentationSpace;
+        Quaternion _coverRootRotationOffset = Quaternion.identity;
 
         bool IsXRActive => Application.platform == RuntimePlatform.Android && XRSettings.isDeviceActive;
 
@@ -45,6 +54,15 @@ namespace QuantumEcho
                 xrOrigin.RequestedTrackingOriginMode = XROrigin.TrackingOriginMode.Floor;
             var poseDriver = titleCamera != null ? titleCamera.GetComponent<TrackedPoseDriver>() : null;
             if (poseDriver != null) poseDriver.enabled = Application.platform == RuntimePlatform.Android;
+            // The title terminal and its opaque backdrop are authored as sibling
+            // objects.  Record their authored relationship before either one is
+            // moved, so placing the terminal in front of the opening HMD heading
+            // cannot add its original -3.25m scene offset a second time.
+            if (titlePresentationRoot != null && opaqueCoverRoot != null)
+            {
+                _coverRootOffsetInPresentationSpace = titlePresentationRoot.InverseTransformPoint(opaqueCoverRoot.position);
+                _coverRootRotationOffset = Quaternion.Inverse(titlePresentationRoot.rotation) * opaqueCoverRoot.rotation;
+            }
             MoveToDesignStart();
         }
 
@@ -79,6 +97,21 @@ namespace QuantumEcho
                 return;
             }
             if (exitPressed || triggerPressed && Hits(rightController, exitTarget)) ExitGame();
+        }
+
+        void LateUpdate()
+        {
+            if (_loading || !IsXRActive || _presentationAligned || titleCamera == null) return;
+            // Let the tracked-pose driver receive several frames of device data
+            // before capturing its current heading. The title then stays in the
+            // room rather than continuously following the player's head.
+            if (_xrActiveFrame < 0)
+            {
+                _xrActiveFrame = Time.frameCount;
+                return;
+            }
+            if (Time.frameCount - _xrActiveFrame < 4) return;
+            AlignPresentationToCurrentHeadDirection();
         }
 
         void RefreshDevices()
@@ -133,12 +166,38 @@ namespace QuantumEcho
             if (cameraFloorOffset != null) cameraFloorOffset.localPosition = Vector3.zero;
         }
 
+        void AlignPresentationToCurrentHeadDirection()
+        {
+            if (titlePresentationRoot == null && startTarget != null) titlePresentationRoot = startTarget.transform.parent;
+            if (titlePresentationRoot == null) return;
+            var heading = Vector3.ProjectOnPlane(titleCamera.transform.forward, Vector3.up);
+            if (heading.sqrMagnitude < 0.001f) return;
+            heading.Normalize();
+            var eye = titleCamera.transform.position;
+            var facePlayer = Quaternion.LookRotation(-heading, Vector3.up);
+            // titlePresentationRoot is the terminal itself, not a zero-position
+            // wrapper.  Place that terminal directly at the intended distance.
+            // Its opaque cover uses the preserved sibling offset so it still
+            // fully blocks everything behind the title without pushing the panel
+            // another authored scene-distance away.
+            titlePresentationRoot.SetPositionAndRotation(eye + heading * presentationDistance, facePlayer);
+            if (opaqueCoverRoot != null)
+            {
+                opaqueCoverRoot.SetPositionAndRotation(
+                    titlePresentationRoot.TransformPoint(_coverRootOffsetInPresentationSpace),
+                    titlePresentationRoot.rotation * _coverRootRotationOffset);
+            }
+            _presentationAligned = true;
+        }
+
         public void Recenter()
         {
             var subsystems = new List<XRInputSubsystem>();
             SubsystemManager.GetSubsystems(subsystems);
             foreach (var subsystem in subsystems) subsystem.TryRecenter();
             MoveToDesignStart();
+            _presentationAligned = false;
+            _xrActiveFrame = Time.frameCount;
         }
 
         public void StartGame()

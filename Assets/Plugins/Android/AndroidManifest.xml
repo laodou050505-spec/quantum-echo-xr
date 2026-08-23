@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Native PICO VR identity.  These values mirror the official PICO Unity SDK
+  post-build processor for PXR_Loader.  They are kept in the project manifest
+  as a deterministic fallback because Unity 6's generated Gradle project can
+  omit the SDK's IPostGenerateGradleAndroidProject callback in batch staging.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+  <application android:requestLegacyExternalStorage="true">
+    <meta-data android:name="pxr.sdk.generation" android:value="4" />
+    <meta-data android:name="pvr.app.type" android:value="vr" />
+    <meta-data android:name="pxr.sdk.version_code" android:value="6000" />
+    <meta-data android:name="use.pxr.sdk" android:value="1" />
+    <meta-data android:name="pvr.sdk.version" android:value="Unity_XR_6.0.0" />
+    <meta-data android:name="rendering_mode" android:value="1" />
+    <meta-data android:name="color_Space" android:value="1" />
+    <meta-data android:name="controller" android:value="1" />
+    <!-- Keep Unity's normal launcher contract here as well.  A custom Unity 6
+         manifest replaces (rather than augments) the generated activity block. -->
+    <activity
+        android:name="com.unity3d.player.UnityPlayerActivity"
+        android:theme="@style/UnityThemeSelector"
+        android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
+        android:enabled="true"
+        android:exported="true"
+        android:hardwareAccelerated="false"
+        android:launchMode="singleTask"
+        android:resizeableActivity="false"
+        android:screenOrientation="landscape">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+      <meta-data android:name="notch_support" android:value="true" />
+    </activity>
+  </application>
+</manifest>

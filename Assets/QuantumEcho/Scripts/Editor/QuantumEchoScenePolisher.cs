@@ -210,7 +210,10 @@ namespace QuantumEcho.Editor
                 Mathf.Abs(level.designPlayerStart.xrThirdPersonViewingDistance - level.designPlayerStart.desktopViewingDistance) < 0.01f &&
                 level.designPlayerStart.xrThirdPersonViewingDistance >= 3f &&
                 level.designPlayerStart.desktopViewingDistance >= 3f &&
-                Mathf.Abs(level.designPlayerStart.desktopViewingHeight - level.designPlayerStart.xrEyeHeight) < 0.01f);
+                // Desktop starts at the tracked eye-height plus the same stable
+                // third-person overlook lift applied to the PICO floor offset.
+                Mathf.Abs(level.designPlayerStart.desktopViewingHeight -
+                          (level.designPlayerStart.xrEyeHeight + level.designPlayerStart.xrThirdPersonObservationHeight)) < 0.01f);
             if (!authoritativeStarts) issues.Add("designPlayerStarts=invalid");
             var hudAnchoredInWorld = hud != null && allLevels.Length > 0 &&
                 hud.transform.parent == allLevels[0].worldTaskTerminalAnchor &&
@@ -458,9 +461,10 @@ namespace QuantumEcho.Editor
                 if (start == null) start = level.spawnPoint.gameObject.AddComponent<QuantumDesignPlayerStart>();
                 start.xrEyeHeight = 1.65f;
                 start.xrThirdPersonViewingDistance = 3.6f;
+                start.xrThirdPersonObservationHeight = 1.05f;
                 start.desktopViewingDistance = 3.6f;
-                start.desktopViewingHeight = 1.65f;
-                start.desktopFocusHeight = 0.9f;
+                start.desktopViewingHeight = 2.7f;
+                start.desktopFocusHeight = 0.72f;
                 start.firstLandmark = level.padA != null
                     ? level.padA
                     : level.mode == QuantumLevelMode.Lure && level.lureZones != null && level.lureZones.Length > 0

@@ -10973,9 +10973,10 @@ MonoBehaviour:
   firstLandmark: {fileID: 1340656986}
   xrEyeHeight: 1.65
   xrThirdPersonViewingDistance: 3.6
+  xrThirdPersonObservationHeight: 1.05
   desktopViewingDistance: 3.6
-  desktopViewingHeight: 1.65
-  desktopFocusHeight: 0.9
+  desktopViewingHeight: 2.7
+  desktopFocusHeight: 0.72
 --- !u!1001 &435297955
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30032,9 +30033,10 @@ MonoBehaviour:
   firstLandmark: {fileID: 973706181}
   xrEyeHeight: 1.65
   xrThirdPersonViewingDistance: 3.6
+  xrThirdPersonObservationHeight: 1.05
   desktopViewingDistance: 3.6
-  desktopViewingHeight: 1.65
-  desktopFocusHeight: 0.9
+  desktopViewingHeight: 2.7
+  desktopFocusHeight: 0.72
 --- !u!1 &1112197605
 GameObject:
   m_ObjectHideFlags: 0
@@ -30082,9 +30084,10 @@ MonoBehaviour:
   firstLandmark: {fileID: 1807286119}
   xrEyeHeight: 1.65
   xrThirdPersonViewingDistance: 3.6
+  xrThirdPersonObservationHeight: 1.05
   desktopViewingDistance: 3.6
-  desktopViewingHeight: 1.65
-  desktopFocusHeight: 0.9
+  desktopViewingHeight: 2.7
+  desktopFocusHeight: 0.72
 --- !u!1001 &1112723661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44415,9 +44418,10 @@ MonoBehaviour:
   firstLandmark: {fileID: 1537719989}
   xrEyeHeight: 1.65
   xrThirdPersonViewingDistance: 3.6
+  xrThirdPersonObservationHeight: 1.05
   desktopViewingDistance: 3.6
-  desktopViewingHeight: 1.65
-  desktopFocusHeight: 0.9
+  desktopViewingHeight: 2.7
+  desktopFocusHeight: 0.72
 --- !u!1 &1620536602
 GameObject:
   m_ObjectHideFlags: 0
@@ -53955,6 +53959,7 @@ MonoBehaviour:
   rightRay: {fileID: 1139761649}
   operationBodyVisual: {fileID: 1465703698}
   xrAvatarOnlyLocomotion: 1
+  xrCameraFollowsAvatar: 1
   xrAvatarController: {fileID: 0}
   comfortMovementUsesDesignAxes: 1
   designPlayerStart: {fileID: 1618152282}

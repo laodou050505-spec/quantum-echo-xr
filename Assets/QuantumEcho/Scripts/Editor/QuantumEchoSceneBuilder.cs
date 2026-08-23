@@ -128,7 +128,7 @@ namespace QuantumEcho.Editor
         static void ConfigureProject()
         {
             PlayerSettings.companyName = "Quantum Echo Lab";
-            PlayerSettings.productName = "解密1";
+            PlayerSettings.productName = "量子回声";
             PlayerSettings.bundleVersion = "0.1.0";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.quantumecho.decrypt1");
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
@@ -385,8 +385,9 @@ namespace QuantumEcho.Editor
             level.designPlayerStart.xrEyeHeight = 1.65f;
             level.designPlayerStart.xrThirdPersonViewingDistance = 3.6f;
             level.designPlayerStart.desktopViewingDistance = 3.6f;
-            level.designPlayerStart.desktopViewingHeight = 1.65f;
-            level.designPlayerStart.desktopFocusHeight = 0.9f;
+            level.designPlayerStart.xrThirdPersonObservationHeight = 1.05f;
+            level.designPlayerStart.desktopViewingHeight = 2.7f;
+            level.designPlayerStart.desktopFocusHeight = 0.72f;
 
             level.worldTaskTerminalAnchor = Child(root.transform, "WORLD TASK TERMINAL ANCHOR - fixed room space").transform;
             // The terminal sits inside the left entry wall, not in front of the
@@ -967,6 +968,7 @@ namespace QuantumEcho.Editor
         public static void Verify()
         {
             var issues = new List<string>();
+            EnsureAndroidPresentationMetadata();
             QuantumEchoTitleSceneBuilder.EnsureTitleScene();
             if (PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android) != ScriptingImplementation.IL2CPP) issues.Add("Android scripting backend is not IL2CPP");
             if ((PlayerSettings.Android.targetArchitectures & AndroidArchitecture.ARM64) == 0) issues.Add("ARM64 is not enabled");
@@ -996,6 +998,20 @@ namespace QuantumEcho.Editor
                 issues.Add("build settings must list isolated title then gameplay scene");
             if (issues.Count > 0) throw new BuildFailedException("PICO verification failed:\n" + string.Join("\n", issues));
             Debug.Log("PICO verification passed: PXR_Loader, Multiview, Input System-only, OpenGLES3, API 29+, ARM64, IL2CPP, Activity and editable scene are configured.");
+        }
+
+        /// <summary>
+        /// Keeps the player-facing Android identity deterministic for every build.
+        /// Unity otherwise leaves the Android icon list empty when a project is
+        /// copied to the ASCII build staging directory.
+        /// </summary>
+        static void EnsureAndroidPresentationMetadata()
+        {
+            PlayerSettings.productName = "量子回声";
+            var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/AppIcon/AppIcon.png");
+            if (icon == null) throw new BuildFailedException("Android icon is missing: Assets/AppIcon/AppIcon.png");
+            PlayerSettings.SetIcons(NamedBuildTarget.Android, new[] { icon }, IconKind.Application);
+            AssetDatabase.SaveAssets();
         }
 
         [MenuItem("Quantum Echo/Build macOS Desktop Preview")]

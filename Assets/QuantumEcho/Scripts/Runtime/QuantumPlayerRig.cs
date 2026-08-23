@@ -20,10 +20,15 @@ namespace QuantumEcho
         public Transform rightController;
         public LineRenderer leftRay;
         public LineRenderer rightRay;
+        [Header("Controller Presentation")]
+        [Tooltip("Hide the physical controller meshes so they never cover the play space. Tracking, trigger input, haptics and the right-hand interaction ray remain active.")]
+        public bool hideControllerModels = true;
         public Transform operationBodyVisual;
         [Header("XR Comfort Avatar Locomotion")]
         [Tooltip("Keeps the PICO view stationary while the world-space third-person avatar moves. Disable only for an explicitly reviewed first-person locomotion design.")]
         public bool xrAvatarOnlyLocomotion = true;
+        [Tooltip("Move the XR observation rig by the avatar's real collision-resolved displacement. The viewing distance and raised third-person composition remain fixed while the user retains free head rotation.")]
+        public bool xrCameraFollowsAvatar = true;
         [Tooltip("Collision controller for the visible third-person avatar. The XR rig itself never translates from stick input in comfort mode.")]
         public CharacterController xrAvatarController;
         [Tooltip("In comfort mode, left-stick directions stay aligned to the authored room rather than the user's changing head yaw. The avatar turns automatically; looking around never changes where it walks.")]
@@ -59,8 +64,8 @@ namespace QuantumEcho
         // The Android PICO build still uses the real tracked camera and controllers.
         public bool IsXRActive => Application.platform == RuntimePlatform.Android && XRSettings.isDeviceActive;
         // Gameplay follows the operated body's feet in PICO comfort mode.  The XR
-        // origin stays at its authored observation point, so stick input never drags
-        // the player's view through the room and creates artificial acceleration.
+        // origin follows the same collision-resolved translation, preserving the
+        // authored third-person distance without forcing a camera turn.
         public Vector3 GroundPosition => UsesComfortAvatarLocomotion && operationBodyVisual != null
             ? operationBodyVisual.position
             : transform.position;
@@ -198,6 +203,7 @@ namespace QuantumEcho
             if (!IsXRActive)
             {
                 UpdateDesktopLook();
+                HideTrackedControllerVisuals();
                 SetOperationBodyVisible(true);
                 return;
             }
@@ -213,13 +219,41 @@ namespace QuantumEcho
                 // stable third-person observation position. Local -Z is behind
                 // because rooms begin facing their -Z puzzle area.
                 var distance = designPlayerStart != null ? designPlayerStart.xrThirdPersonViewingDistance : 5.2f;
-                cameraFloorOffset.localPosition = Vector3.back * distance;
+                var overlookHeight = designPlayerStart != null ? designPlayerStart.xrThirdPersonObservationHeight : 0.65f;
+                // Lift the observation point instead of pitching the tracked HMD.
+                // The player gets the requested clearer downward third-person view,
+                // while their real head rotation remains one-to-one and comfortable.
+                cameraFloorOffset.localPosition = Vector3.back * distance + Vector3.up * overlookHeight;
                 cameraFloorOffset.localRotation = Quaternion.identity;
             }
             ApplyPose(_headDevice, xrCamera.transform);
             ApplyPose(_leftDevice, leftController);
             ApplyPose(_rightDevice, rightController);
+            // PICO controller meshes are useful for a controller demo, but in this
+            // third-person puzzle they can cover the board and objective.  The
+            // transforms remain fully tracked for the right trigger/ray interaction.
+            HideTrackedControllerVisuals();
             SetOperationBodyVisible(true);
+        }
+
+        void HideTrackedControllerVisuals()
+        {
+            if (!hideControllerModels) return;
+            HideControllerVisuals(leftController);
+            HideControllerVisuals(rightController);
+        }
+
+        static void HideControllerVisuals(Transform controller)
+        {
+            if (controller == null) return;
+            // PICO loads its controller prefab after the scene has started, so this
+            // deliberate lightweight pass also catches renderers added at runtime.
+            foreach (var renderer in controller.GetComponentsInChildren<Renderer>(true))
+            {
+                // Rays are interaction feedback, not a physical controller model.
+                if (renderer is LineRenderer) continue;
+                if (renderer.enabled) renderer.enabled = false;
+            }
         }
 
         static void ApplyPose(XRInputDevice device, Transform target)
@@ -293,10 +327,12 @@ namespace QuantumEcho
                 EnsureAvatarController();
                 if (xrAvatarController != null)
                 {
+                    var avatarBeforeMove = operationBodyVisual.position;
                     _verticalVelocity = xrAvatarController.isGrounded
                         ? -0.5f
                         : _verticalVelocity + Physics.gravity.y * Time.deltaTime;
                     xrAvatarController.Move((planar * speed + Vector3.up * _verticalVelocity) * Time.deltaTime);
+                    FollowAvatarTranslation(avatarBeforeMove);
                 }
             }
             else
@@ -319,6 +355,23 @@ namespace QuantumEcho
             {
                 operationBodyVisual.rotation = _facingRotation * Quaternion.Euler(0f, visibleModelForwardYawOffset, 0f);
             }
+        }
+
+        /// <summary>
+        /// The character visual is a child of the XR rig so its controller can own
+        /// the collision. Once that controller reports its actual displacement,
+        /// move the rig by the same amount and counter-shift the visual. This keeps
+        /// the avatar's final world position untouched while the HMD/controller
+        /// observation point follows at an exactly constant authored offset.
+        /// </summary>
+        void FollowAvatarTranslation(Vector3 avatarBeforeMove)
+        {
+            if (!UsesComfortAvatarLocomotion || !xrCameraFollowsAvatar || operationBodyVisual == null) return;
+            var actualDisplacement = operationBodyVisual.position - avatarBeforeMove;
+            if (actualDisplacement.sqrMagnitude < 0.0000001f) return;
+
+            transform.position += actualDisplacement;
+            operationBodyVisual.position -= actualDisplacement;
         }
 
         void UpdateSnapTurn()
@@ -344,7 +397,9 @@ namespace QuantumEcho
 
         void UpdateRays()
         {
-            UpdateRay(leftRay, leftController);
+            // This game is operated with the right trigger.  Keeping only that
+            // hairline ray avoids a second bright diagonal across the play field.
+            if (leftRay != null) leftRay.enabled = false;
             UpdateRay(rightRay, rightController);
         }
 
@@ -363,6 +418,8 @@ namespace QuantumEcho
             if (line == null || source == null) return;
             line.enabled = IsXRActive;
             if (!line.enabled) return;
+            line.startWidth = 0.0035f;
+            line.endWidth = 0.001f;
             line.SetPosition(0, source.position);
             line.SetPosition(1, source.position + source.forward * controllerRayLength);
         }

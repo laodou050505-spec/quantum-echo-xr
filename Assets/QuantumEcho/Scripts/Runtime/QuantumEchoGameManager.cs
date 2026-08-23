@@ -54,7 +54,11 @@ namespace QuantumEcho
         bool _trainFaulted;
         bool _trainDockAnnounced;
         bool _won;
+        bool _advancingLevel;
+        float _advanceLevelAt;
         int _luredSentinels;
+
+        const float LevelAdvanceFeedbackSeconds = 1.8f;
 
         [Serializable]
         sealed class EchoRecording
@@ -93,7 +97,14 @@ namespace QuantumEcho
 
             if (_won)
             {
-                if (player.CommitPressed) SetLevel(_currentLevelIndex < levels.Length - 1 ? _currentLevelIndex + 1 : _currentLevelIndex);
+                // Earlier levels advance on their own after a short, readable
+                // success beat.  No extra controller button is required, avoiding
+                // a confusing pause between rooms in PICO.
+                if (_advancingLevel && Time.unscaledTime >= _advanceLevelAt)
+                {
+                    SetLevel(_currentLevelIndex + 1);
+                    return;
+                }
                 if (player.ResetPressed) SetLevel(_currentLevelIndex);
                 return;
             }
@@ -143,6 +154,7 @@ namespace QuantumEcho
             ClearEchoes();
             _totalElapsed = 0f;
             _won = false;
+            _advancingLevel = false;
             if (_level.core != null) _level.core.gameObject.SetActive(true);
             hud.HideResult();
             ResetCycle();
@@ -154,6 +166,7 @@ namespace QuantumEcho
             ClearEchoes();
             _totalElapsed = 0f;
             _won = false;
+            _advancingLevel = false;
             if (_level.core != null) _level.core.gameObject.SetActive(true);
             hud.HideResult();
             ResetCycle();
@@ -708,6 +721,12 @@ namespace QuantumEcho
                 _ => "失落数据已回收"
             };
             hud.ShowResult(result, _echoRecordings.Count, _totalElapsed, _currentLevelIndex == levels.Length - 1);
+            if (_currentLevelIndex < levels.Length - 1)
+            {
+                _advancingLevel = true;
+                _advanceLevelAt = Time.unscaledTime + LevelAdvanceFeedbackSeconds;
+                hud.ShowLevelTransition(result, _currentLevelIndex + 2, LevelAdvanceFeedbackSeconds);
+            }
         }
 
         void PadActivated()

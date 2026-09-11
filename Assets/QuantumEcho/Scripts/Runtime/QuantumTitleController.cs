@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,11 +29,13 @@ namespace QuantumEcho
         public Transform titlePresentationRoot;
         [Tooltip("Opaque title backdrop moved with the terminal so gameplay never appears behind the title.")]
         public Transform opaqueCoverRoot;
-        [Min(1.6f)] public float presentationDistance = 3.25f;
+        [Min(1.6f)] public float presentationDistance = 2.70f;
 
         [Header("World-Space Entry Targets")]
         public Collider startTarget;
         public Collider exitTarget;
+        public QuantumTitleMenuButton startButton;
+        public QuantumTitleMenuButton exitButton;
         public string gameplaySceneName = "QuantumEcho_Main";
         public float controllerRayLength = 5f;
 
@@ -73,6 +76,7 @@ namespace QuantumEcho
             UpdateRightControllerPose();
             UpdateDesktopCamera();
             UpdateControllerRay();
+            UpdateMenuFocus();
 
             var keyboard = Keyboard.current;
             var startPressed = keyboard != null &&
@@ -91,12 +95,18 @@ namespace QuantumEcho
                 return;
             }
 
-            if (startPressed || triggerPressed && Hits(rightController, startTarget))
+            var mousePressed = !IsXRActive && Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+            if (startPressed || (triggerPressed || mousePressed) && Hits(rightController, startTarget))
             {
+                startButton?.Press();
                 StartGame();
                 return;
             }
-            if (exitPressed || triggerPressed && Hits(rightController, exitTarget)) ExitGame();
+            if (exitPressed || (triggerPressed || mousePressed) && Hits(rightController, exitTarget))
+            {
+                exitButton?.Press();
+                ExitGame();
+            }
         }
 
         void LateUpdate()
@@ -149,6 +159,11 @@ namespace QuantumEcho
         bool Hits(Transform rayOrigin, Collider target)
         {
             if (target == null) return false;
+            if (!IsXRActive && titleCamera != null && Mouse.current != null)
+            {
+                var ray = titleCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+                return Physics.Raycast(ray, out var desktopHit, controllerRayLength) && desktopHit.collider == target;
+            }
             var origin = IsXRActive && rayOrigin != null
                 ? rayOrigin.position
                 : titleCamera != null ? titleCamera.transform.position : transform.position;
@@ -157,6 +172,14 @@ namespace QuantumEcho
                 : titleCamera != null ? titleCamera.transform.forward : transform.forward;
             return Physics.Raycast(new Ray(origin, direction), out var hit, controllerRayLength) &&
                    (hit.collider == target || hit.collider.transform.IsChildOf(target.transform));
+        }
+
+        void UpdateMenuFocus()
+        {
+            var hoveredStart = Hits(rightController, startTarget);
+            var hoveredExit = Hits(rightController, exitTarget);
+            startButton?.SetFocused(hoveredStart);
+            exitButton?.SetFocused(hoveredExit);
         }
 
         public void MoveToDesignStart()
@@ -204,6 +227,12 @@ namespace QuantumEcho
         {
             if (_loading) return;
             _loading = true;
+            StartCoroutine(ConfirmAndStart());
+        }
+
+        IEnumerator ConfirmAndStart()
+        {
+            yield return new WaitForSecondsRealtime(0.16f);
             SceneManager.LoadSceneAsync(gameplaySceneName, LoadSceneMode.Single);
         }
 

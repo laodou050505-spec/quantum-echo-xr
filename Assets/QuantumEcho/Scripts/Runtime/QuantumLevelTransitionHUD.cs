@@ -19,9 +19,9 @@ namespace QuantumEcho
             var root = new GameObject("LEVEL COMPLETE TRANSITION HUD - brief feedback", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
             var rect = root.GetComponent<RectTransform>();
             rect.SetParent(camera.transform, false);
-            rect.localPosition = new Vector3(0f, 0.06f, 1.7f);
+            rect.localPosition = new Vector3(0f, 0.20f, 2.2f);
             rect.localRotation = Quaternion.identity;
-            rect.localScale = Vector3.one * 0.00115f;
+            rect.localScale = Vector3.one * 0.00105f;
             rect.sizeDelta = new Vector2(660f, 210f);
 
             var canvas = root.GetComponent<Canvas>();
@@ -31,11 +31,11 @@ namespace QuantumEcho
             root.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 20f;
 
             var panel = root.AddComponent<Image>();
-            panel.color = new Color(0.012f, 0.07f, 0.12f, 0.94f);
+            QuantumGeneratedPanelSkin.Apply(panel, 0.98f);
 
             var hud = root.AddComponent<QuantumLevelTransitionHUD>();
-            hud._title = AddText(rect, font, "Complete Title", new Vector2(30f, -35f), new Vector2(600f, 64f), 37f, new Color(0.3f, 0.96f, 1f, 1f));
-            hud._detail = AddText(rect, font, "Complete Detail", new Vector2(30f, -112f), new Vector2(600f, 50f), 25f, Color.white);
+            hud._title = AddText(rect, font, "Complete Title", new Vector2(58f, -48f), new Vector2(544f, 58f), 36f, new Color(0.3f, 0.96f, 1f, 1f));
+            hud._detail = AddText(rect, font, "Complete Detail", new Vector2(58f, -119f), new Vector2(544f, 46f), 24f, Color.white);
             root.SetActive(false);
             return hud;
         }

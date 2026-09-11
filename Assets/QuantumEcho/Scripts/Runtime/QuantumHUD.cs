@@ -51,9 +51,34 @@ namespace QuantumEcho
         void Awake()
         {
             HideNonEssentialEmptyPanels();
+            ApplyControllerOnlyPresentation();
             if (progressPanel != null) progressPanel.SetActive(false);
             if (resultPanel != null) resultPanel.SetActive(false);
             if (toastText != null) toastText.gameObject.SetActive(false);
+        }
+
+        void ApplyControllerOnlyPresentation()
+        {
+            // The desktop keyboard remains a QA fallback, but every player-facing
+            // instruction is authored for the PICO controllers. This also replaces
+            // any legacy serialized Q/E text before the first gameplay Update.
+            if (promptKeyText != null)
+            {
+                promptKeyText.text = "【握把 / A / X】";
+                promptKeyText.fontSize = 18f;
+                promptKeyText.textWrappingMode = TextWrappingModes.NoWrap;
+                var rect = promptKeyText.rectTransform;
+                rect.sizeDelta = new Vector2(180f, rect.sizeDelta.y);
+            }
+            if (promptText != null)
+            {
+                promptText.text = "封存当前动作并开始下一回路";
+                var rect = promptText.rectTransform;
+                rect.anchoredPosition = new Vector2(206f, rect.anchoredPosition.y);
+                rect.sizeDelta = new Vector2(430f, rect.sizeDelta.y);
+            }
+            if (progressLabelText != null)
+                progressLabelText.text = "【右扳机·持续按住】回收";
         }
 
         void Start()
@@ -114,6 +139,8 @@ namespace QuantumEcho
         {
             timerValueText.text = $"{Mathf.Max(0f, remaining):0.0}s";
             timerFill.fillAmount = duration <= 0f ? 0f : Mathf.Clamp01(remaining / duration);
+            EnsureComfortObjectiveHud();
+            if (comfortObjectiveHud != null) comfortObjectiveHud.SetCountdown(remaining);
         }
 
         public void SetEchoCount(int count, int maximum)
@@ -123,9 +150,16 @@ namespace QuantumEcho
 
         public void SetPrompt(string key, string message)
         {
-            promptKeyText.text = key;
+            promptKeyText.text = FormatControllerKey(key);
             promptText.text = message;
             RefreshComfortObjectiveHud();
+        }
+
+        static string FormatControllerKey(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) return string.Empty;
+            if (key.StartsWith("【") && key.EndsWith("】")) return key;
+            return $"【{key}】";
         }
 
         void EnsureComfortObjectiveHud()
@@ -173,12 +207,14 @@ namespace QuantumEcho
             toastText.text = message;
             toastText.gameObject.SetActive(true);
             _toastUntil = Time.unscaledTime + seconds;
+            EnsureComfortObjectiveHud();
+            if (comfortObjectiveHud != null) comfortObjectiveHud.ShowFeedback(message, seconds);
         }
 
         public void ShowResult(string title, int echoes, float totalSeconds, bool finalLevel)
         {
             resultTitleText.text = title;
-            resultStatsText.text = $"使用回声  {echoes:00}    总用时  {Mathf.FloorToInt(totalSeconds / 60f):00}:{Mathf.FloorToInt(totalSeconds % 60f):00}\n\n{(finalLevel ? "按 R 重试最后一关" : "正在载入下一关…")}";
+            resultStatsText.text = $"使用回声  {echoes:00}    总用时  {Mathf.FloorToInt(totalSeconds / 60f):00}:{Mathf.FloorToInt(totalSeconds % 60f):00}\n\n{(finalLevel ? "按【左菜单键】重试最后一关" : "正在载入下一关…")}";
             resultPanel.SetActive(true);
         }
 

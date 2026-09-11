@@ -32,6 +32,27 @@
 - 状态：success
 - 消耗：5 credits
 
+### 2026-09-07 量子航迹仪视觉更新
+
+| Unity 文件 | 用途 | Tripo 模型 | 任务 | 状态 / 消耗 |
+| --- | --- | --- | --- | --- |
+| `Assets/QuantumEcho/UI/Generated/CoverV2/01_generated_image_url.png` | 独立启动封面主视觉；左侧留白，右侧为角色、核心、门、碎片与回声路径 | `banana` (Nano Banana) | `29e9b9f7-1c3c-4083-9eea-77faf39452be` | success / 5 credits |
+| `Assets/QuantumEcho/UI/Generated/Panels/01_generated_image_url.png` | 统一科幻面板母版，无文字，中央安全区用于 TMP | `banana` (Nano Banana) | `7ea900d5-e580-4d79-8886-abcbf6917750` | success / 5 credits |
+| `Assets/Resources/QuantumEcho/QuantumPhasePanel.png` | 从面板母版裁切的 Unity 9-slice Sprite | 来自上述面板任务 | 同上 | 已接入 Runtime Resources |
+
+封面和面板图片不含任何烘焙文字；中文、手柄键位、目标和状态均由 Unity TMP 排版，可编辑且不产生 AI 文字乱码。
+
+### 2026-09-08 量子回声标题封面 V4
+
+参考 `/Users/ld/Desktop/游戏封面/` 中的构图原则（全幅叙事主视觉、稳定留白、纵向菜单、明确当前选项），没有复用其中的商标、人物、文字或界面资产。
+
+| Unity 文件 | 用途 | Tripo 模型 | 任务 | 状态 / 消耗 |
+| --- | --- | --- | --- | --- |
+| `Assets/QuantumEcho/UI/Generated/CoverV4/QuantumEchoCoverV4.png` | 旧版横向标题封面主视觉，保留作视觉迭代参考 | `banana` (Nano Banana) | `12ee3575-32e8-4235-b749-03e5d07989f8` | success / 5 credits |
+| `Assets/QuantumEcho/UI/Generated/CoverV5/01_generated_image_url.png` | 当前英文正式封面；左侧 `QUANTUM ECHO / SPATIAL PUZZLE` 品牌区，右侧量子门、核心、玩家球体、回声路径与碎片 | `banana` (Nano Banana) | `34f8858e-fad7-47a6-8995-b6884389de2c` | success / 5 credits |
+
+按钮文字仍由 TMP 渲染。START/EXIT 世界按钮具有暗色实体底、射线悬停离子青、扳机按下琥珀色收缩以及确认切换反馈；封面图不烘焙文字或按钮。
+
 ## 待制作或替换的正式模型
 
 当前占位模型已足够完成玩法，但以下内容需要正式美术模型。模型最好提供 FBX 或 Unity Prefab；若只有 GLB，导入前需要转换为 FBX，或后续给项目加入 glTF 导入包。
@@ -61,3 +82,12 @@
 | 追猎体 | https://cdn-hm.holymolly.ai/b/6/b6cde371-0c55-4dab-a31c-48dd6aabe303.glb | https://cdn-hm.holymolly.ai/7/8/7873f46e-ab0b-471e-a061-dd03ef865b1a.webp |
 | 数据碎片 | https://cdn-hm.holymolly.ai/2/b/2ba30163-d894-46bb-a74c-a9e4d0acd838.glb | https://cdn-hm.holymolly.ai/e/4/e47b955b-6240-4063-9282-af7d75474905.webp |
 
+
+### 2026-09-08 V6 封面与舒适 UI 重做
+
+- 按用户游戏封面参考重做，使用 Tripo Nano Banana Pro：`CoverV6Clean/01_generated_image_url.png` 为正式封面，`CoverV6` 保留迭代来源。定制英文品牌字与主视觉由生图承担；按钮保持 Unity 实时交互。
+- `PanelV2/01_generated_image_url.png` 为统一不透明磨砂面板，导入 `Assets/Resources/QuantumEcho/QuantumPhasePanel.png` 并按九宫格使用。
+- 参考只用于构图与工艺标准，不复用参考游戏商标、角色与资产。当前 ange-embed MCP 不可用，未从未审查的外部资产库导入素材。
+- CoverV6: task `c8cf66aa-7b1d-424d-982f-20d0cd0e2701`, status `success`, credits `15.0`.
+- CoverV6Clean: task `e7629381-ec65-459a-b8bd-cd780ac23125`, status `success`, credits `15.0`.
+- PanelV2: task `98b46888-57ae-42b5-8292-a06e57134080`, status `success`, credits `15.0`.

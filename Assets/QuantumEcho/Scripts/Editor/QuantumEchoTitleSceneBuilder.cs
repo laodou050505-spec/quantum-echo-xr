@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Unity.XR.CoreUtils;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 namespace QuantumEcho.Editor
 {
@@ -18,6 +20,8 @@ namespace QuantumEcho.Editor
     {
         public const string TitleScenePath = "Assets/QuantumEcho/Scenes/QuantumEcho_Title.unity";
         public const string GameplayScenePath = "Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity";
+        public const string CoverArtworkPath = "Assets/QuantumEcho/UI/Generated/CoverV6Clean/01_generated_image_url.png";
+        public const string CoverMaterialPath = "Assets/QuantumEcho/Materials/QuantumEchoCoverArtwork.mat";
 
         static readonly Color Void = new Color(0.008f, 0.014f, 0.022f);
         static readonly Color Cyan = new Color(0.26f, 0.9f, 0.82f);
@@ -35,12 +39,10 @@ namespace QuantumEcho.Editor
             var root = new GameObject("TITLE ROOT - isolated startup phase");
             var cover = new GameObject("OPAQUE COVER - no gameplay behind this");
             cover.transform.SetParent(root.transform);
-            CreateCube(cover.transform, "Opaque Cover Slab", new Vector3(0f, 1.7f, -3.42f), new Vector3(5.6f, 3.35f, 0.18f), Void, true);
-            var cyanMaterial = LoadMaterial("Assets/QuantumEcho/Materials/CyanEmission.mat", Cyan);
-            CreateAccentLine(cover.transform, "Cyan Cover Rim Top", new Vector3(0f, 3.0f, -3.30f), new Vector3(4.78f, 0.025f, 0.026f), cyanMaterial);
-            CreateAccentLine(cover.transform, "Cyan Cover Rim Bottom", new Vector3(0f, 0.40f, -3.30f), new Vector3(4.78f, 0.025f, 0.026f), cyanMaterial);
-            CreateAccentLine(cover.transform, "Cyan Cover Rim Left", new Vector3(-2.38f, 1.7f, -3.30f), new Vector3(0.025f, 2.62f, 0.026f), cyanMaterial);
-            CreateAccentLine(cover.transform, "Cyan Cover Rim Right", new Vector3(2.38f, 1.7f, -3.30f), new Vector3(0.025f, 2.62f, 0.026f), cyanMaterial);
+            var artwork = CreateCube(cover.transform, "NANO BANANA COVER ART - custom English wordmark", new Vector3(0f, 1.7f, -3.85f), new Vector3(4.8f, 2.7f, 0.025f), Color.white, false);
+            artwork.GetComponent<Renderer>().sharedMaterial = CreateCoverMaterial();
+            var coverArtwork = artwork.AddComponent<QuantumCoverArtwork>();
+            coverArtwork.artwork = AssetDatabase.LoadAssetAtPath<Texture2D>(CoverArtworkPath);
 
             var designStartObject = new GameObject("TITLE PLAYER SPAWN - authoritative design start");
             designStartObject.transform.SetParent(root.transform);
@@ -53,20 +55,35 @@ namespace QuantumEcho.Editor
 
             var terminalLandmark = new GameObject("TITLE TERMINAL - opaque cover landmark");
             terminalLandmark.transform.SetParent(root.transform);
-            terminalLandmark.transform.position = new Vector3(0f, 1.7f, -3.25f);
+            terminalLandmark.transform.position = new Vector3(0f, 1.7f, -3.8f);
             titleStart.firstLandmark = terminalLandmark.transform;
             var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/QuantumEcho/Fonts/NotoSansSC-Dynamic.asset");
-            CreateText(terminalLandmark.transform, "Title", "量 子 回 声", new Vector3(0f, 0.77f, 0f), 4.8f, Color.white, font);
-            CreateText(terminalLandmark.transform, "Subtitle", "QUANTUM ECHO  /  空间解密实验", new Vector3(0f, 0.34f, 0f), 1.6f, Cyan, font);
-            CreateText(terminalLandmark.transform, "Description", "以回声记录路径，穿越四间量子实验舱", new Vector3(0f, -0.08f, 0f), 1.3f, new Color(0.72f, 0.86f, 0.9f), font);
-            CreateText(terminalLandmark.transform, "Start Label", "开始同步", new Vector3(0f, -0.65f, 0f), 2.8f, Amber, font);
-            CreateText(terminalLandmark.transform, "Start Hint", "ENTER / E  或 右手扳机", new Vector3(0f, -0.98f, 0f), 1.05f, new Color(0.76f, 0.85f, 0.88f), font);
-            CreateText(terminalLandmark.transform, "Exit Label", "ESC / EXIT", new Vector3(0f, -1.26f, 0f), 0.9f, new Color(0.45f, 0.56f, 0.6f), font);
-
-            var startTarget = CreateCube(terminalLandmark.transform, "START TARGET - world-space trigger", new Vector3(0f, -0.66f, 0.035f), new Vector3(2.15f, 0.52f, 0.10f), Amber, true);
-            startTarget.GetComponent<Renderer>().enabled = false;
-            var exitTarget = CreateCube(terminalLandmark.transform, "EXIT TARGET - world-space trigger", new Vector3(0f, -1.26f, 0.035f), new Vector3(1.25f, 0.22f, 0.1f), Void, true);
-            exitTarget.GetComponent<Renderer>().enabled = false;
+            // THESIS: Time echoes become the monumental cinematic key art, with
+            // a custom two-line logotype and a precise left menu (user reference).
+            // OWN-WORLD: Ink navy, pearl type, steel, cyan apertures, violet echoes.
+            // STORY: See the past self, choose START, enter the spatial puzzle.
+            // FIRST VIEWPORT: Wordmark upper-left; live equal-width menu beneath;
+            // drone and temporal path own the right half. No bulky 3D button slabs.
+            // FORM: User-pinned cinematic game menu, replacing V5's tiny logo.
+            // Provenance: concept-seed was invoked but returned no output/seed;
+            // the user's supplied game references are the explicit fallback.
+            // FINISH: unreviewed and undocumented is unfinished; this build ends
+            // with the finish review, the verdict, and DESIGN.md.
+            var menu = new GameObject("TITLE MENU - authored 1600x900 layout", typeof(RectTransform), typeof(Canvas));
+            var menuRect = menu.GetComponent<RectTransform>();
+            menuRect.SetParent(terminalLandmark.transform, false);
+            menuRect.localPosition = new Vector3(0f, 0f, 0.075f);
+            menuRect.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            menuRect.localScale = Vector3.one * 0.003f;
+            menuRect.sizeDelta = new Vector2(1600f, 900f);
+            var menuCanvas = menu.GetComponent<Canvas>();
+            menuCanvas.renderMode = RenderMode.WorldSpace;
+            menuCanvas.sortingOrder = 5;
+            var startTarget = CreateMenuAction(menuRect, "START TARGET - world-space trigger", "START GAME", new Vector2(-476f, -116f), font, true);
+            var startButton = startTarget.GetComponent<QuantumTitleMenuButton>();
+            var exitTarget = CreateMenuAction(menuRect, "EXIT TARGET - world-space trigger", "EXIT", new Vector2(-476f, -200f), font, false);
+            var exitButton = exitTarget.GetComponent<QuantumTitleMenuButton>();
+            CreateMenuText(menuRect, "Start Hint", "【右扳机】选择并确认", new Vector2(-476f, -287f), new Vector2(448f, 36f), 24f, new Color(0.80f, 0.89f, 0.94f), font);
 
             var rig = new GameObject("TITLE XR RIG - design start derived");
             rig.transform.SetParent(root.transform);
@@ -80,6 +97,7 @@ namespace QuantumEcho.Editor
             cameraObject.tag = "MainCamera";
             cameraObject.transform.localPosition = Vector3.up * titleStart.xrEyeHeight;
             var camera = cameraObject.AddComponent<Camera>();
+            camera.fieldOfView = 44f;
             camera.nearClipPlane = 0.05f;
             camera.farClipPlane = 40f;
             camera.clearFlags = CameraClearFlags.SolidColor;
@@ -111,8 +129,13 @@ namespace QuantumEcho.Editor
             controller.titleCamera = camera;
             controller.rightController = rightController.transform;
             controller.rightRay = ray;
+            controller.titlePresentationRoot = terminalLandmark.transform;
+            controller.opaqueCoverRoot = cover.transform;
+            controller.presentationDistance = 2.70f;
             controller.startTarget = startTarget.GetComponent<Collider>();
             controller.exitTarget = exitTarget.GetComponent<Collider>();
+            controller.startButton = startButton;
+            controller.exitButton = exitButton;
             controller.gameplaySceneName = "QuantumEcho_Main";
 
             EditorSceneManager.SaveScene(scene, TitleScenePath);
@@ -163,7 +186,8 @@ namespace QuantumEcho.Editor
             var gameplayHud = allRoots.SelectMany(root => root.GetComponentsInChildren<QuantumHUD>(true)).ToArray();
             var hasIsolatedTitleRoot = allRoots.Any(root => root.name == "TITLE ROOT - isolated startup phase");
             var valid = title != null && title.designPlayerStart != null && title.startTarget != null &&
-                        title.xrOrigin != null && title.titleCamera != null && hasIsolatedTitleRoot &&
+                        title.xrOrigin != null && title.titleCamera != null && title.titlePresentationRoot != null &&
+                        title.opaqueCoverRoot != null && hasIsolatedTitleRoot &&
                         gameplayObjects.Length == 0 && gameplayHud.Length == 0;
             // Some ASCII staging copies hit a Unity batch-mode serialization race:
             // the hierarchy opens but editor type discovery temporarily returns no
@@ -178,7 +202,8 @@ namespace QuantumEcho.Editor
             {
                 Debug.LogError($"Quantum title audit detail: controller={(title != null)}, start={(title != null && title.designPlayerStart != null)}, " +
                                $"startTarget={(title != null && title.startTarget != null)}, xrOrigin={(title != null && title.xrOrigin != null)}, " +
-                               $"camera={(title != null && title.titleCamera != null)}, titleRoot={hasIsolatedTitleRoot}, " +
+                               $"camera={(title != null && title.titleCamera != null)}, presentation={(title != null && title.titlePresentationRoot != null)}, " +
+                               $"opaqueCover={(title != null && title.opaqueCoverRoot != null)}, titleRoot={hasIsolatedTitleRoot}, " +
                                $"gameManagers={gameplayObjects.Length}, huds={gameplayHud.Length}, roots=[{string.Join(", ", allRoots.Select(root => root.name))}]");
                 issue = "title must contain a design start and entry target, and no gameplay manager or HUD";
             }
@@ -207,7 +232,9 @@ namespace QuantumEcho.Editor
                 Regex.IsMatch(controllerBlock.Groups["body"].Value, @"designPlayerStart: \{fileID: (?!0\})") &&
                 Regex.IsMatch(controllerBlock.Groups["body"].Value, @"startTarget: \{fileID: (?!0\})") &&
                 Regex.IsMatch(controllerBlock.Groups["body"].Value, @"xrOrigin: \{fileID: (?!0\})") &&
-                Regex.IsMatch(controllerBlock.Groups["body"].Value, @"titleCamera: \{fileID: (?!0\})");
+                Regex.IsMatch(controllerBlock.Groups["body"].Value, @"titleCamera: \{fileID: (?!0\})") &&
+                Regex.IsMatch(controllerBlock.Groups["body"].Value, @"titlePresentationRoot: \{fileID: (?!0\})") &&
+                Regex.IsMatch(controllerBlock.Groups["body"].Value, @"opaqueCoverRoot: \{fileID: (?!0\})");
             detail = $"root={hasRoot}, controller={hasController}, designStart={hasStart}, refs={hasAssignedReferences}, gameplayRefs={hasGameplay}";
             return hasRoot && hasController && hasStart && hasAssignedReferences && !hasGameplay;
         }
@@ -228,7 +255,8 @@ namespace QuantumEcho.Editor
             var gameplayHud = allRoots.SelectMany(root => root.GetComponentsInChildren<QuantumHUD>(true)).ToArray();
             var hasIsolatedTitleRoot = allRoots.Any(root => root.name == "TITLE ROOT - isolated startup phase");
             var valid = title != null && title.designPlayerStart != null && title.startTarget != null &&
-                        title.xrOrigin != null && title.titleCamera != null && hasIsolatedTitleRoot &&
+                        title.xrOrigin != null && title.titleCamera != null && title.titlePresentationRoot != null &&
+                        title.opaqueCoverRoot != null && hasIsolatedTitleRoot &&
                         gameplayObjects.Length == 0 && gameplayHud.Length == 0;
             if (!valid) issue = "title must contain a design start and entry target, and no gameplay manager or HUD";
             return valid;
@@ -256,7 +284,57 @@ namespace QuantumEcho.Editor
             line.GetComponent<Renderer>().sharedMaterial = material;
         }
 
-        static void CreateText(Transform parent, string name, string content, Vector3 localPosition, float size, Color color, TMP_FontAsset font)
+        static GameObject CreateMenuAction(RectTransform parent, string name, string label, Vector2 position, TMP_FontAsset font, bool primary)
+        {
+            var root = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(BoxCollider), typeof(QuantumTitleMenuButton));
+            var rect = root.GetComponent<RectTransform>();
+            rect.SetParent(parent, false);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = new Vector2(448f, 62f);
+            var plate = root.GetComponent<Image>();
+            plate.color = primary ? new Color(0.83f, 0.92f, 0.94f, 1f) : new Color(0.035f, 0.060f, 0.078f, 0.93f);
+            plate.raycastTarget = false;
+            root.GetComponent<BoxCollider>().size = new Vector3(448f, 62f, 5f);
+            var text = CreateMenuText(rect, primary ? "Start Label" : "Exit Label", label, new Vector2(0f, 0f), new Vector2(392f, 62f), 29f,
+                primary ? new Color(0.02f, 0.045f, 0.060f) : new Color(0.85f, 0.92f, 0.95f), font);
+            text.fontStyle = FontStyles.Bold;
+            text.characterSpacing = 4f;
+            var rule = new GameObject("Focus underline", typeof(RectTransform), typeof(Image));
+            var ruleRect = rule.GetComponent<RectTransform>();
+            ruleRect.SetParent(rect, false);
+            ruleRect.anchoredPosition = new Vector2(0f, -30f);
+            ruleRect.sizeDelta = new Vector2(448f, 2f);
+            rule.GetComponent<Image>().color = new Color(0.40f, 0.88f, 0.90f);
+            rule.GetComponent<Image>().raycastTarget = false;
+            var button = root.GetComponent<QuantumTitleMenuButton>();
+            button.action = primary ? QuantumTitleMenuButton.ActionKind.Start : QuantumTitleMenuButton.ActionKind.Exit;
+            button.backingImage = plate;
+            button.label = text;
+            button.focusRule = rule.GetComponent<Image>();
+            button.isPrimary = primary;
+            button.hoverScale = 1.015f;
+            return root;
+        }
+
+        static TextMeshProUGUI CreateMenuText(RectTransform parent, string name, string content, Vector2 position, Vector2 size, float fontSize, Color color, TMP_FontAsset font)
+        {
+            var root = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI));
+            var rect = root.GetComponent<RectTransform>();
+            rect.SetParent(parent, false);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+            var text = root.GetComponent<TextMeshProUGUI>();
+            text.font = font;
+            text.text = content;
+            text.fontSize = fontSize;
+            text.color = color;
+            text.alignment = TextAlignmentOptions.MidlineLeft;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
+            text.raycastTarget = false;
+            return text;
+        }
+
+        static void CreateText(Transform parent, string name, string content, Vector3 localPosition, float size, Color color, TMP_FontAsset font, Vector2? dimensions = null, TextAlignmentOptions alignment = TextAlignmentOptions.Center)
         {
             var textObject = new GameObject(name);
             textObject.transform.SetParent(parent, false);
@@ -267,9 +345,29 @@ namespace QuantumEcho.Editor
             text.text = content;
             text.fontSize = size;
             text.color = color;
-            text.alignment = TextAlignmentOptions.Center;
-            text.textWrappingMode = TextWrappingModes.NoWrap;
-            text.rectTransform.sizeDelta = new Vector2(6.5f, 0.8f);
+            text.alignment = alignment;
+            text.textWrappingMode = content.Contains("\n") ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
+            text.overflowMode = TextOverflowModes.Overflow;
+            text.enableAutoSizing = false;
+            text.rectTransform.sizeDelta = dimensions ?? new Vector2(6.5f, 0.8f);
+        }
+
+        static Material CreateCoverMaterial()
+        {
+            var shader = Shader.Find("QuantumEcho/CoverFeather");
+            if (shader == null) throw new BuildFailedException("Cover feather shader is missing");
+            var material = AssetDatabase.LoadAssetAtPath<Material>(CoverMaterialPath);
+            if (material == null)
+            {
+                material = new Material(shader);
+                AssetDatabase.CreateAsset(material, CoverMaterialPath);
+            }
+            else material.shader = shader;
+            material.mainTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(CoverArtworkPath);
+            material.color = Color.white;
+            material.SetFloat("_Feather", 0.20f);
+            EditorUtility.SetDirty(material);
+            return material;
         }
 
         static Material LoadMaterial(string path, Color fallback)

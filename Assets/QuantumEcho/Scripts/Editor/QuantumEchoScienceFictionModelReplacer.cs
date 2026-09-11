@@ -324,7 +324,8 @@ namespace QuantumEcho.Editor
                 {
                     var zone = level.lureZones[index];
                     if (zone == null) continue;
-                    Place(lureSet, 21, $"Echo Lure Beacon {index + 1:00} - model 21", zone.localPosition + new Vector3(0f, DeckSurfaceY - zone.localPosition.y, 0f), 1.35f, Vector3.zero);
+                    var beacon = Place(lureSet, 21, $"Echo Lure Beacon {index + 1:00} - model 21", zone.localPosition + new Vector3(0f, DeckSurfaceY - zone.localPosition.y, 0f), 1.35f, Vector3.zero);
+                    RemoveColliders(beacon);
                 }
             }
 
@@ -557,7 +558,13 @@ namespace QuantumEcho.Editor
 
         static void DisableColliders(GameObject root)
         {
-            foreach (var collider in root.GetComponentsInChildren<Collider>(true)) collider.enabled = false;
+            RemoveColliders(root);
+        }
+
+        static void RemoveColliders(GameObject root)
+        {
+            if (root == null) return;
+            foreach (var collider in root.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(collider, true);
         }
 
         static void DisableRootVisualAndColliders(Transform root)

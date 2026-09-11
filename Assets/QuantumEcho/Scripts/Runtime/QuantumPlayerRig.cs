@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.XR;
 using XRInputDevice = UnityEngine.XR.InputDevice;
@@ -80,6 +81,8 @@ namespace QuantumEcho
         public QuantumDesignPlayerStart DesignStart => designPlayerStart;
 
         CharacterController _characterController;
+        CapsuleCollider _penetrationShape;
+        readonly Collider[] _solidOverlaps = new Collider[64];
         XRInputDevice _headDevice;
         XRInputDevice _leftDevice;
         XRInputDevice _rightDevice;
@@ -87,6 +90,7 @@ namespace QuantumEcho
         bool _previousXRCommit;
         bool _previousXRUndo;
         bool _previousXRMenu;
+        bool _reportedControllerBinding;
         bool _snapReady = true;
         float _desktopPitch;
         float _verticalVelocity;
@@ -98,6 +102,7 @@ namespace QuantumEcho
         void Awake()
         {
             _characterController = GetComponent<CharacterController>();
+            ConfigureBodyCollider(_characterController);
             // The desktop camera obtains its distance/height from the active design
             // marker. PICO has no artificial camera pull-back: the tracked eye starts
             // at that same floor marker, which keeps controller rays and physical
@@ -124,6 +129,53 @@ namespace QuantumEcho
             UpdateRays();
         }
 
+        void LateUpdate()
+        {
+            // Gates, trains and hunters animate after locomotion in Update.
+            // Resolve their contact even when the player supplies no input.
+            var controller = UsesComfortAvatarLocomotion ? xrAvatarController : _characterController;
+            if (controller == null || !controller.enabled) return;
+            if (_penetrationShape == null)
+            {
+                var query = new GameObject("Avatar penetration query - non-solid trigger");
+                query.transform.SetParent(transform, false);
+                _penetrationShape = query.AddComponent<CapsuleCollider>();
+                _penetrationShape.isTrigger = true;
+                _penetrationShape.radius = controller.radius;
+                _penetrationShape.height = controller.height;
+                _penetrationShape.center = controller.center;
+            }
+            var before = controller.transform.position;
+            Physics.SyncTransforms();
+            for (var iteration = 0; iteration < 4; iteration++)
+            {
+                var centre = controller.transform.TransformPoint(controller.center);
+                var axis = Vector3.up * Mathf.Max(0f, controller.height * 0.5f - controller.radius);
+                var count = Physics.OverlapCapsuleNonAlloc(centre-axis, centre+axis,
+                    controller.radius, _solidOverlaps, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+                var corrected = false;
+                for (var i = 0; i < count; i++)
+                {
+                    var solid = _solidOverlaps[i];
+                    if (solid == controller || solid.transform.IsChildOf(transform)) continue;
+                    if (!Physics.ComputePenetration(_penetrationShape, controller.transform.position,
+                        controller.transform.rotation, solid, solid.transform.position, solid.transform.rotation,
+                        out var direction, out var depth) || depth <= controller.skinWidth + 0.005f) continue;
+                    // Move() can reject every direction when a kinematic hull
+                    // has already enveloped a stationary controller. Apply the
+                    // minimum separating translation, then query neighbours again.
+                    controller.enabled = false;
+                    controller.transform.position += direction * (depth + 0.002f);
+                    controller.enabled = true;
+                    Physics.SyncTransforms();
+                    corrected = true;
+                }
+                if (!corrected) break;
+                Physics.SyncTransforms();
+            }
+            if (UsesComfortAvatarLocomotion) FollowAvatarTranslation(before);
+        }
+
         void UpdateComfortControllers()
         {
             if (_characterController == null) return;
@@ -148,11 +200,20 @@ namespace QuantumEcho
             if (operationBodyVisual == null || operationBodyVisual == transform) return;
             if (xrAvatarController == null) xrAvatarController = operationBodyVisual.GetComponent<CharacterController>();
             if (xrAvatarController == null) xrAvatarController = operationBodyVisual.gameObject.AddComponent<CharacterController>();
-            xrAvatarController.height = 1.8f;
-            xrAvatarController.radius = 0.28f;
-            xrAvatarController.center = new Vector3(0f, 0.9f, 0f);
-            xrAvatarController.stepOffset = 0.25f;
-            xrAvatarController.minMoveDistance = 0f;
+            ConfigureBodyCollider(xrAvatarController);
+        }
+
+        public static void ConfigureBodyCollider(CharacterController controller)
+        {
+            if (controller == null) return;
+            // The visible model is 1.80 m wide; the old 0.28 m radius let most
+            // of its shell pass through walls. Cover its turning silhouette.
+            controller.radius = 0.96f;
+            controller.height = 1.92f;
+            controller.center = new Vector3(0f, 0.96f, 0f);
+            controller.skinWidth = 0.015f;
+            controller.stepOffset = 0.20f;
+            controller.minMoveDistance = 0f;
         }
 
         void RefreshDevices()
@@ -171,10 +232,27 @@ namespace QuantumEcho
             var desktopUndo = keyboard != null && keyboard.zKey.wasPressedThisFrame;
             var desktopReset = keyboard != null && keyboard.rKey.wasPressedThisFrame;
 
-            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out var xrInteract);
-            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out var xrCommit);
-            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out var xrUndo);
+            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out var legacyTrigger);
+            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out var rightPrimary);
+            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out var rightSecondary);
+            _leftDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out var leftPrimary);
+            _leftDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out var leftSecondary);
+            _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out var rightGrip);
+            _leftDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out var leftGrip);
             _leftDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out var xrMenu);
+
+            // PICO Integration SDK 6 exposes the controller through the Input System
+            // as PXR_Controller. Some firmware/runtime combinations update that path
+            // one frame earlier than the legacy XR CommonUsages path, so read both.
+            // A/X always means "save this echo" and B/Y always means "undo" on
+            // either hand. This also makes the mapping portable between PICO models.
+            var inputSystemTrigger = ReadXRButton("triggerPressed", true) || ReadXRButton("triggerButton", true);
+            var inputSystemPrimary = ReadXRButton("primaryButton", false);
+            var inputSystemSecondary = ReadXRButton("secondaryButton", false);
+            var inputSystemGrip = ReadXRButton("gripPressed", false) || ReadXRButton("gripButton", false);
+            var xrInteract = legacyTrigger || inputSystemTrigger;
+            var xrCommit = rightPrimary || leftPrimary || rightGrip || leftGrip || inputSystemPrimary || inputSystemGrip;
+            var xrUndo = rightSecondary || leftSecondary || inputSystemSecondary;
 
             InteractHeld = desktopInteract || xrInteract;
             InteractPressed = desktopInteractPressed || xrInteract && !_previousXRInteract;
@@ -196,6 +274,39 @@ namespace QuantumEcho
             _previousXRCommit = xrCommit;
             _previousXRUndo = xrUndo;
             _previousXRMenu = xrMenu;
+
+            if (IsXRActive && !_reportedControllerBinding && (_leftDevice.isValid || _rightDevice.isValid))
+            {
+                Debug.Log($"PICO INPUT ready: left={_leftDevice.name} right={_rightDevice.name}; Trigger=interact/hold, Grip or A/X=commit echo, B/Y=undo echo, Menu=reset.");
+                _reportedControllerBinding = true;
+            }
+        }
+
+        /// <summary>
+        /// Reads a named button from every active Input-System XR controller.
+        /// PICO's official layout names are primaryButton, secondaryButton and
+        /// triggerPressed. Trigger remains right-hand-only because the interaction
+        /// ray is deliberately attached to the right controller.
+        /// </summary>
+        static bool ReadXRButton(string controlName, bool rightHandOnly)
+        {
+            foreach (var device in InputSystem.devices)
+            {
+                if (device is not XRController) continue;
+                if (rightHandOnly && !HasUsage(device, UnityEngine.InputSystem.CommonUsages.RightHand)) continue;
+                var button = device.TryGetChildControl<ButtonControl>(controlName);
+                if (button != null && button.isPressed) return true;
+            }
+            return false;
+        }
+
+        static bool HasUsage(UnityEngine.InputSystem.InputDevice device, UnityEngine.InputSystem.Utilities.InternedString usage)
+        {
+            for (var index = 0; index < device.usages.Count; index++)
+            {
+                if (device.usages[index].ToString() == usage.ToString()) return true;
+            }
+            return false;
         }
 
         void UpdateTrackedPoses()

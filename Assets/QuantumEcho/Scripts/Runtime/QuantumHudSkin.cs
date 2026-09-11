@@ -38,7 +38,10 @@ namespace QuantumEcho
             var target = FindChild(transform, objectName);
             if (target == null) return;
             var oldImage = target.GetComponent<Image>();
-            if (oldImage != null) oldImage.enabled = false;
+            if (oldImage != null)
+            {
+                QuantumGeneratedPanelSkin.Apply(oldImage, opacity);
+            }
 
             var visual = target.Find("Instrument Panel Visual");
             if (visual == null)
@@ -55,14 +58,7 @@ namespace QuantumEcho
             visualRect.offsetMax = Vector2.zero;
 
             var panel = visual.GetComponent<QuantumHudPanelGraphic>();
-            if (panel == null) panel = visual.gameObject.AddComponent<QuantumHudPanelGraphic>();
-            panel.color = new Color(0.018f, 0.055f, 0.072f, opacity);
-            panel.borderColor = accent;
-            panel.accentColor = accent;
-            panel.cutSize = cut;
-            panel.borderWidth = 2f;
-            panel.raycastTarget = false;
-            panel.SetVerticesDirty();
+            if (panel != null) panel.enabled = false;
         }
 
         static Transform FindChild(Transform root, string objectName)

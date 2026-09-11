@@ -732,12 +732,13 @@ namespace QuantumEcho.Editor
             hud.echoCountText = Text(echoPanel.transform, "Echo Count", "回声序列  0 / 4", 18, TextAnchor.MiddleCenter, Magenta);
 
             var promptPanel = Panel(canvasObject.transform, "Context Prompt", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-330f, 84f), new Vector2(660f, 66f));
-            hud.promptKeyText = Text(promptPanel.transform, "Prompt Key", "Q / A", 20, TextAnchor.MiddleCenter, Cyan, new Vector2(16f, -13f), new Vector2(110f, 40f));
-            hud.promptText = Text(promptPanel.transform, "Prompt Text", "封存当前动作并开始下一回路", 21, TextAnchor.MiddleLeft, Color.white, new Vector2(136f, -13f), new Vector2(500f, 40f));
+            hud.promptKeyText = Text(promptPanel.transform, "Prompt Key", "【握把 / A / X】", 18, TextAnchor.MiddleCenter, Cyan, new Vector2(16f, -13f), new Vector2(180f, 40f));
+            hud.promptKeyText.textWrappingMode = TextWrappingModes.NoWrap;
+            hud.promptText = Text(promptPanel.transform, "Prompt Text", "封存当前动作并开始下一回路", 21, TextAnchor.MiddleLeft, Color.white, new Vector2(206f, -13f), new Vector2(430f, 40f));
 
             var progress = Panel(canvasObject.transform, "Hold Progress", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-250f, 168f), new Vector2(500f, 92f));
             hud.progressPanel = progress;
-            hud.progressLabelText = Text(progress.transform, "Progress Label", "长按 E 回收", 18, TextAnchor.UpperLeft, Color.white, new Vector2(18f, -13f), new Vector2(360f, 30f));
+            hud.progressLabelText = Text(progress.transform, "Progress Label", "【右扳机·持续按住】回收", 18, TextAnchor.UpperLeft, Color.white, new Vector2(18f, -13f), new Vector2(360f, 30f));
             hud.progressValueText = Text(progress.transform, "Progress Value", "0%", 20, TextAnchor.UpperRight, Cyan, new Vector2(390f, -11f), new Vector2(90f, 32f));
             hud.progressFill = Bar(progress.transform, "Progress Bar", new Vector2(18f, -57f), new Vector2(464f, 9f), Cyan);
 
@@ -793,8 +794,7 @@ namespace QuantumEcho.Editor
             rect.anchoredPosition = position;
             rect.sizeDelta = size;
             var image = panel.AddComponent<Image>();
-            image.color = new Color(0.018f, 0.045f, 0.052f, 0.92f);
-            image.raycastTarget = false;
+            QuantumGeneratedPanelSkin.Apply(image, 0.96f);
             return panel;
         }
 
@@ -991,6 +991,7 @@ namespace QuantumEcho.Editor
             if (generalSettings == null || generalSettings.AssignedSettings == null || !generalSettings.AssignedSettings.activeLoaders.Any(loader => loader is PXR_Loader)) issues.Add("PXR_Loader is not assigned for Android");
             if (!File.Exists("Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity")) issues.Add("Main scene is missing");
             if (!QuantumEchoTitleSceneBuilder.VerifyTitleScene(out var titleIssue)) issues.Add("isolated title scene: " + titleIssue);
+            VerifyControllerOnlyPlayerText(issues);
             var buildScenes = EditorBuildSettings.scenes;
             if (buildScenes.Length != 2 || buildScenes[0].path != QuantumEchoTitleSceneBuilder.TitleScenePath ||
                 buildScenes[1].path != QuantumEchoTitleSceneBuilder.GameplayScenePath ||
@@ -998,6 +999,25 @@ namespace QuantumEcho.Editor
                 issues.Add("build settings must list isolated title then gameplay scene");
             if (issues.Count > 0) throw new BuildFailedException("PICO verification failed:\n" + string.Join("\n", issues));
             Debug.Log("PICO verification passed: PXR_Loader, Multiview, Input System-only, OpenGLES3, API 29+, ARM64, IL2CPP, Activity and editable scene are configured.");
+        }
+
+        static void VerifyControllerOnlyPlayerText(List<string> issues)
+        {
+            var forbiddenLabels = new[]
+            {
+                "Q / A", "ENTER / E", "ESC / EXIT", "\\u957F\\u6309 E", "长按 E", "按 R 重试"
+            };
+            foreach (var scenePath in new[] { QuantumEchoTitleSceneBuilder.TitleScenePath, QuantumEchoTitleSceneBuilder.GameplayScenePath })
+            {
+                if (!File.Exists(scenePath)) continue;
+                var yaml = File.ReadAllText(scenePath);
+                foreach (var label in forbiddenLabels)
+                {
+                    if (yaml.Contains(label)) issues.Add($"player-facing keyboard label remains in {scenePath}: {label}");
+                }
+            }
+            if (!issues.Any(issue => issue.StartsWith("player-facing keyboard label")))
+                Debug.Log("PICO controller prompt audit passed: title and gameplay scenes contain no legacy keyboard labels.");
         }
 
         /// <summary>

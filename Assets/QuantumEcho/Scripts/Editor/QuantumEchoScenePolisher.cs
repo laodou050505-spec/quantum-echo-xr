@@ -43,6 +43,7 @@ namespace QuantumEcho.Editor
                 EditorUtility.SetDirty(level);
             }
 
+            QuantumEchoCollisionInstaller.ApplyToOpenScene();
             RepairHud();
             RepairVisualQuality();
             SetGameViewScaleToOne();

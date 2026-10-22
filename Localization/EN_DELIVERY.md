@@ -116,8 +116,8 @@
 | 目标路径 | `Builds/EN/QuantumEcho-EN-PICO.apk` |
 | Unity | 6000.5.5f1 batchmode (含图形上下文，支持 RenderTexture 截图) |
 | 状态 | **已完成**（日志：`Builds/EN/build4.log`） |
-| APK SHA-256 | `5865f1e9dda745a84f97f5ef7d4b33141d35a69c8ddd72486d286dda1dab5c8b` |
-| APK 大小 | 76,890,063 字节（73.3 MB） |
+| APK SHA-256 | `c12401ebcfec0f0f82a7a5d938768bcf07f81148f8247e5429ebf655c3432628` |
+| APK 大小 | 76,889,807 字节（73.3 MB） |
 
 ### 返工内容（总控核查后修订，2026-10-22）
 

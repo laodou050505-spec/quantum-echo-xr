@@ -1464,8 +1464,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2417,7 +2417,7 @@ GameObject:
   - component: {fileID: 102185919}
   - component: {fileID: 102185918}
   m_Layer: 0
-  m_Name: "Label - Data Containment Zone"
+  m_Name: Label - Data Containment Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2462,10 +2462,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Data Containment Zone"
+  m_text: Data Containment Zone
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2562,7 +2562,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2993,8 +2993,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 01
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4079,7 +4079,7 @@ GameObject:
   - component: {fileID: 157594981}
   - component: {fileID: 157594980}
   m_Layer: 0
-  m_Name: "Label - Lab 01"
+  m_Name: Label - Lab 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4124,10 +4124,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 01"
+  m_text: Lab 01
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4224,7 +4224,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4392,7 +4392,7 @@ MonoBehaviour:
   levelIndex: 3
   mode: 3
   levelCode: QER-03
-  title: "Don't Let the Hunters Find You"
+  title: Don't Let the Hunters Find You
   description: 
   loopDuration: 18
   designPlayerStart: {fileID: 434657247}
@@ -8037,10 +8037,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Step onto the blue disc and seal it as an Echo."
+  m_text: Step onto the blue disc and seal it as an Echo.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9249,8 +9249,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: QER-00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9468,8 +9468,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 03
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12732,7 +12732,7 @@ GameObject:
   - component: {fileID: 439609401}
   - component: {fileID: 439609400}
   m_Layer: 0
-  m_Name: "Label - Lab 00"
+  m_Name: Label - Lab 00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12777,10 +12777,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 00"
+  m_text: Lab 00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12877,7 +12877,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12913,7 +12913,7 @@ GameObject:
   - component: {fileID: 444779179}
   - component: {fileID: 444779178}
   m_Layer: 0
-  m_Name: "Label - Decoy Zone 2"
+  m_Name: Label - Decoy Zone 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12958,10 +12958,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Decoy Zone 2"
+  m_text: Decoy Zone 2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13058,7 +13058,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13403,7 +13403,7 @@ GameObject:
   - component: {fileID: 455093465}
   - component: {fileID: 455093464}
   m_Layer: 0
-  m_Name: "Label - A // Launch Junction"
+  m_Name: Label - A // Launch Junction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13448,10 +13448,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "A // Launch Junction"
+  m_text: A // Launch Junction
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13548,7 +13548,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16692,10 +16692,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Loop Started"
+  m_text: Loop Started
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -18815,8 +18815,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 01
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -19195,10 +19195,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Core Recovery Complete"
+  m_text: Core Recovery Complete
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -22256,7 +22256,7 @@ GameObject:
   - component: {fileID: 710545226}
   - component: {fileID: 710545225}
   m_Layer: 0
-  m_Name: "Label - Lost Data 1"
+  m_Name: Label - Lost Data 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22301,10 +22301,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lost Data 1 // Hold to Extract"
+  m_text: Lost Data 1 // Hold to Extract
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -22401,7 +22401,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22882,7 +22882,7 @@ GameObject:
   - component: {fileID: 732583472}
   - component: {fileID: 732583471}
   m_Layer: 0
-  m_Name: "Label - Lab 02"
+  m_Name: Label - Lab 02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22927,10 +22927,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 02"
+  m_text: Lab 02
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23027,7 +23027,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -23595,8 +23595,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 20fe40d1abd65470781b6a4b16f6756f, type: 2}
+  m_sharedMaterial: {fileID: -2516867869608360945, guid: 20fe40d1abd65470781b6a4b16f6756f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -26532,7 +26532,7 @@ GameObject:
   - component: {fileID: 841743617}
   - component: {fileID: 841743616}
   m_Layer: 0
-  m_Name: "Label - Phase Train"
+  m_Name: Label - Phase Train
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26577,10 +26577,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Phase Train // Standby"
+  m_text: Phase Train // Standby
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -26677,7 +26677,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -30141,10 +30141,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Loop  01"
+  m_text: Loop  01
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30328,7 +30328,7 @@ GameObject:
   - component: {fileID: 968448652}
   - component: {fileID: 968448651}
   m_Layer: 0
-  m_Name: "Label - B // Stabilizer"
+  m_Name: Label - B // Stabilizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30373,10 +30373,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "B // Stabilizer"
+  m_text: B // Stabilizer
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30473,7 +30473,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -31645,10 +31645,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Echoes  0 / 4"
+  m_text: Echoes  0 / 4
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -32396,7 +32396,7 @@ GameObject:
   - component: {fileID: 1027105822}
   - component: {fileID: 1027105821}
   m_Layer: 0
-  m_Name: "Label - Hunter Matrix"
+  m_Name: Label - Hunter Matrix
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32441,10 +32441,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Hunter Matrix // Record two opposing Decoy Zone routes"
+  m_text: Hunter Matrix // Record two opposing Decoy Zone routes
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -32541,7 +32541,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -34280,7 +34280,7 @@ MonoBehaviour:
   levelIndex: 0
   mode: 0
   levelCode: QER-00
-  title: "Let Your Echo Hold the Door"
+  title: Let Your Echo Hold the Door
   description: 
   loopDuration: 14
   designPlayerStart: {fileID: 1618152282}
@@ -35800,7 +35800,7 @@ GameObject:
   - component: {fileID: 1121581540}
   - component: {fileID: 1121581539}
   m_Layer: 0
-  m_Name: "Label - Dual-Phase Field"
+  m_Name: Label - Dual-Phase Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35845,10 +35845,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Dual-Phase Field"
+  m_text: Dual-Phase Field
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -35945,7 +35945,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -37581,10 +37581,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Seal this action and start the next loop"
+  m_text: Seal this action and start the next loop
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -39051,10 +39051,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "[Grip / A / X]"
+  m_text: '[Grip / A / X]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -39790,7 +39790,7 @@ GameObject:
   - component: {fileID: 1248484216}
   - component: {fileID: 1248484215}
   m_Layer: 0
-  m_Name: "Label - Lost Data 2"
+  m_Name: Label - Lost Data 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39835,10 +39835,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lost Data 2 // Hold to Extract"
+  m_text: Lost Data 2 // Hold to Extract
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -39935,7 +39935,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -41371,7 +41371,7 @@ MonoBehaviour:
   levelIndex: 2
   mode: 2
   levelCode: QER-02
-  title: "Set the Rhythm for the Phase Train"
+  title: Set the Rhythm for the Phase Train
   description: 
   loopDuration: 16
   designPlayerStart: {fileID: 1112197607}
@@ -46192,10 +46192,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Q-RELAY  /  QUANTUM ECHO"
+  m_text: Q-RELAY  /  QUANTUM ECHO
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -46304,7 +46304,7 @@ MonoBehaviour:
   levelIndex: 1
   mode: 1
   levelCode: QER-01
-  title: "One Self, Three Time Slices"
+  title: One Self, Three Time Slices
   description: 
   loopDuration: 12
   designPlayerStart: {fileID: 1111882511}
@@ -47788,10 +47788,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "[R-Trigger · Hold] Extract"
+  m_text: "[R-Trigger \xB7 Hold] Extract"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -48353,10 +48353,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Stand on the Holder"
+  m_text: Stand on the Holder
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -48511,7 +48511,7 @@ GameObject:
   - component: {fileID: 1509281233}
   - component: {fileID: 1509281232}
   m_Layer: 0
-  m_Name: "Label - A // Stabilizer"
+  m_Name: Label - A // Stabilizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48556,10 +48556,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "A // Stabilizer"
+  m_text: A // Stabilizer
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -48656,7 +48656,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -49766,8 +49766,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 14.0s
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 20fe40d1abd65470781b6a4b16f6756f, type: 2}
+  m_sharedMaterial: {fileID: -2516867869608360945, guid: 20fe40d1abd65470781b6a4b16f6756f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -55177,7 +55177,7 @@ GameObject:
   - component: {fileID: 1692691810}
   - component: {fileID: 1692691809}
   m_Layer: 0
-  m_Name: "Label - Decoy Zone 1"
+  m_Name: Label - Decoy Zone 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55222,10 +55222,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Decoy Zone 1"
+  m_text: Decoy Zone 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -55322,7 +55322,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -56137,7 +56137,7 @@ GameObject:
   - component: {fileID: 1716192056}
   - component: {fileID: 1716192055}
   m_Layer: 0
-  m_Name: "Label - Q-00 // Core"
+  m_Name: Label - Q-00 // Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56182,10 +56182,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Q-00 // Core"
+  m_text: Q-00 // Core
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -56282,7 +56282,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -56614,7 +56614,7 @@ GameObject:
   - component: {fileID: 1731343185}
   - component: {fileID: 1731343184}
   m_Layer: 0
-  m_Name: "Label - Lab 03"
+  m_Name: Label - Lab 03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56659,10 +56659,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 03"
+  m_text: Lab 03
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -56759,7 +56759,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -57337,10 +57337,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Tutorial Loop"
+  m_text: Tutorial Loop
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -57468,8 +57468,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 02
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -57718,7 +57718,7 @@ GameObject:
   - component: {fileID: 1748378365}
   - component: {fileID: 1748378364}
   m_Layer: 0
-  m_Name: "Label - Q-01 // Core"
+  m_Name: Label - Q-01 // Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57763,10 +57763,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Q-01 // Core"
+  m_text: Q-01 // Core
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -57863,7 +57863,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -57952,7 +57952,7 @@ GameObject:
   - component: {fileID: 1753245369}
   - component: {fileID: 1753245368}
   m_Layer: 0
-  m_Name: "Label - Tutorial Field"
+  m_Name: Label - Tutorial Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57997,10 +57997,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Tutorial Field"
+  m_text: Tutorial Field
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -58097,7 +58097,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -58597,7 +58597,7 @@ GameObject:
   - component: {fileID: 1772491740}
   - component: {fileID: 1772491739}
   m_Layer: 0
-  m_Name: "Label - Q-02 // Core"
+  m_Name: Label - Q-02 // Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58642,10 +58642,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Q-02 // Core"
+  m_text: Q-02 // Core
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -58742,7 +58742,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -60403,10 +60403,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Echoes  02    Time  00:00"
+  m_text: Echoes  02    Time  00:00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -60514,7 +60514,7 @@ GameObject:
   - component: {fileID: 1830615496}
   - component: {fileID: 1830615495}
   m_Layer: 0
-  m_Name: "Label - Phase Train Dock"
+  m_Name: Label - Phase Train Dock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60559,10 +60559,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Phase Train Dock"
+  m_text: Phase Train Dock
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -60659,7 +60659,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -65361,7 +65361,7 @@ GameObject:
   - component: {fileID: 1988227831}
   - component: {fileID: 1988227830}
   m_Layer: 0
-  m_Name: "Label - B // Switch Junction"
+  m_Name: Label - B // Switch Junction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65406,10 +65406,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "B // Switch Junction"
+  m_text: B // Switch Junction
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -65506,7 +65506,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -66654,7 +66654,7 @@ GameObject:
   - component: {fileID: 2032525170}
   - component: {fileID: 2032525169}
   m_Layer: 0
-  m_Name: "Label - Holder"
+  m_Name: Label - Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66699,10 +66699,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Holder // Stay on It"
+  m_text: Holder // Stay on It
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -66799,7 +66799,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -67839,7 +67839,7 @@ GameObject:
   - component: {fileID: 2085430088}
   - component: {fileID: 2085430087}
   m_Layer: 0
-  m_Name: "Label - Q-03 // Core"
+  m_Name: Label - Q-03 // Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67884,10 +67884,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Q-03 // Core"
+  m_text: Q-03 // Core
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -67984,7 +67984,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  - {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -363,15 +363,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.83, g: 0.92, b: 0.94, a: 1}
+  m_Color: {r: 0.95, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 8c5a29f1b7d34e02a3f6c8b91e7d0a4b, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 3
 --- !u!222 &771270687
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -408,6 +408,9 @@ MonoBehaviour:
   label: {fileID: 2109572901}
   focusLine: {fileID: 0}
   hoverScale: 1.015
+  audioSource: {fileID: 0}
+  hoverClip: {fileID: 8300000, guid: 62767c81f27f54d61b3f821ef6cf3816, type: 3}
+  confirmClip: {fileID: 8300000, guid: 0d2192b530e7c4dad8213ba9f85df361, type: 3}
 --- !u!65 &771270689
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -469,8 +472,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: EXIT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1339,10 +1342,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "[Right Trigger] Select & Confirm"
+  m_text: '[Right Trigger] Select & Confirm'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1492,6 +1495,9 @@ MonoBehaviour:
   label: {fileID: 847011134}
   focusLine: {fileID: 0}
   hoverScale: 1.015
+  audioSource: {fileID: 0}
+  hoverClip: {fileID: 8300000, guid: 62767c81f27f54d61b3f821ef6cf3816, type: 3}
+  confirmClip: {fileID: 8300000, guid: b598a9ab84aaa47c6bc9f7b30aac8bf6, type: 3}
 --- !u!224 &1963225398
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1526,15 +1532,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.035, g: 0.06, b: 0.078, a: 0.93}
+  m_Color: {r: 0.7, g: 0.9, b: 0.92, a: 0.88}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 8c5a29f1b7d34e02a3f6c8b91e7d0a4b, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1542,7 +1548,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 3
 --- !u!222 &1963225400
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1631,8 +1637,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: START GAME
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
-  m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
+  m_sharedMaterial: {fileID: -268215163698234621, guid: 2a77aa8b5f96e40c3895bb348bb94243, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -15,13 +15,12 @@ public static class QuantumEchoENBuilder
     const string TitleScene = "Assets/QuantumEcho/Scenes/QuantumEcho_Title.unity";
     const string MainScene  = "Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity";
 
-    /// <summary>Combined entry: take screenshots then build APK.</summary>
+    /// <summary>Combined entry: take screenshots (Play mode) then build APK.
+    /// Use QuantumEchoQALauncher.CaptureAndBuild for the interactive menu flow.
+    /// This static entry keeps the -executeMethod batchmode hook functional.</summary>
     public static void CaptureAndBuild()
     {
-        // Screenshots first (requires graphical Unity — run without -nographics)
-        try { QuantumEchoScreenshots.CaptureAll(); }
-        catch (System.Exception e) { Debug.LogWarning($"[EN Builder] Screenshot capture error: {e.Message}"); }
-        BuildENAndroid();
+        QuantumEchoQALauncher.CaptureAndBuild();
     }
 
     public static void BuildENAndroid()

@@ -29,11 +29,23 @@ namespace QuantumEcho
         Material _panelMaterial;
         Material _textMaterial;
         Camera _camera;
+        // v3 sci-fi: scanline overlay graphic
+        UnityEngine.UI.RawImage _scanlineOverlay;
+        // v3 sci-fi: divider line between header and body
+        UnityEngine.UI.Image _divider;
+        // v3 sci-fi: accent icon for countdown row
+        TMP_Text _countdownIcon;
         // v2 polish: countdown colour state
         float _countdownRemaining;
+        // v3: scanline animation
+        float _scanlineOffset;
         static readonly Color CountdownNormal = new Color(1f, 0.80f, 0.43f);
         static readonly Color CountdownWarn   = new Color(1f, 0.52f, 0.15f);
         static readonly Color CountdownAlert  = new Color(1f, 0.20f, 0.18f);
+        // v3 color palette
+        static readonly Color CyanBright  = new Color(0.11f, 0.91f, 1.00f, 0.95f);
+        static readonly Color CyanDim     = new Color(0.11f, 0.91f, 1.00f, 0.45f);
+        static readonly Color AmberBright = new Color(1.00f, 0.72f, 0.20f, 0.96f);
         const float PanelWidth = 840f;
         const float CompactHeight = 400f;
         const float ExpandedHeight = 600f;
@@ -82,20 +94,66 @@ namespace QuantumEcho
             hud._panel = rect;
             hud._camera = camera;
             hud.UpdatePlacement();
-            hud._level = AddText(rect, font, "Level", new Vector2(40f, -24f), new Vector2(330f, 42f), 26f, new Color(0.60f, 0.82f, 0.89f));
-            hud._objective = AddText(rect, font, "Objective", new Vector2(40f, -78f), new Vector2(760f, 60f), 40f, Color.white);
-            hud._objective.fontStyle = FontStyles.Bold;
-            hud._detail = AddText(rect, font, "Detail", new Vector2(40f, -148f), new Vector2(760f, 92f), 30f, new Color(0.85f, 0.92f, 0.96f));
-            hud._prompt = AddText(rect, font, "Prompt", new Vector2(40f, -238f), new Vector2(760f, 48f), 30f, new Color(0.60f, 0.95f, 0.93f));
-            hud._countdown = AddText(rect, font, "Echo Countdown", new Vector2(40f, -302f), new Vector2(760f, 38f), 26f, new Color(1f, 0.80f, 0.43f));
-            hud._countdown.text = "Echo ends in 0.0s";
-            hud._helpHint = AddText(rect, font, "Help Hint", new Vector2(390f, -24f), new Vector2(410f, 42f), 25f, new Color(0.71f, 0.82f, 0.88f));
+
+            // v3: divider line between level header and objective body
+            var dividerObj = new GameObject("Header Divider", typeof(RectTransform), typeof(Image));
+            var dividerRect = dividerObj.GetComponent<RectTransform>();
+            dividerRect.SetParent(rect, false);
+            dividerRect.anchorMin = new Vector2(0f, 1f);
+            dividerRect.anchorMax = new Vector2(0f, 1f);
+            dividerRect.pivot = new Vector2(0f, 1f);
+            dividerRect.anchoredPosition = new Vector2(24f, -62f);
+            dividerRect.sizeDelta = new Vector2(792f, 1.5f);
+            var dividerImg = dividerObj.GetComponent<Image>();
+            dividerImg.color = CyanDim;
+            dividerImg.raycastTarget = false;
+            hud._divider = dividerImg;
+
+            // v3: scanline overlay (subtle animated lines over whole panel)
+            var scanObj = new GameObject("Scanline Overlay", typeof(RectTransform), typeof(UnityEngine.UI.RawImage));
+            var scanRect = scanObj.GetComponent<RectTransform>();
+            scanRect.SetParent(rect, false);
+            scanRect.anchorMin = Vector2.zero;
+            scanRect.anchorMax = Vector2.one;
+            scanRect.offsetMin = Vector2.zero;
+            scanRect.offsetMax = Vector2.zero;
+            var scanImg = scanObj.GetComponent<UnityEngine.UI.RawImage>();
+            scanImg.color = new Color(0.12f, 0.92f, 0.96f, 0.045f);
+            scanImg.raycastTarget = false;
+            hud._scanlineOverlay = scanImg;
+
+            // v3: level label uses smaller Orbitron-style monospaced look (track letter-spacing)
+            hud._level = AddText(rect, font, "Level", new Vector2(32f, -18f), new Vector2(420f, 38f), 22f, CyanBright);
+            hud._level.characterSpacing = 3.5f;
+
+            // v3: help hint right-aligned in header row (anchor top-right of panel)
+            hud._helpHint = AddText(rect, font, "Help Hint", new Vector2(390f, -18f), new Vector2(418f, 38f), 19f, new Color(0.60f, 0.80f, 0.86f, 0.80f));
             hud._helpHint.alignment = TextAlignmentOptions.TopRight;
             hud._helpHint.text = "[Press L-Stick] Controls";
-            hud._controls = AddText(rect, font, "PICO Controls", new Vector2(40f, -370f), new Vector2(760f, 172f), 28f, Color.white);
+
+            // v3: objective title - larger, bold, white
+            hud._objective = AddText(rect, font, "Objective", new Vector2(32f, -72f), new Vector2(776f, 62f), 38f, Color.white);
+            hud._objective.fontStyle = FontStyles.Bold;
+            hud._objective.characterSpacing = 1f;
+
+            // v3: detail text with slightly tinted color
+            hud._detail = AddText(rect, font, "Detail", new Vector2(32f, -144f), new Vector2(776f, 96f), 27f, new Color(0.80f, 0.91f, 0.94f));
+            hud._detail.lineSpacing = 6f;
+
+            // v3: prompt with cyan-green tint and controller key prefix icon
+            hud._prompt = AddText(rect, font, "Prompt", new Vector2(32f, -248f), new Vector2(776f, 48f), 27f, new Color(0.55f, 0.96f, 0.90f));
+
+            // v3: countdown row - amber icon + text
+            hud._countdownIcon = AddText(rect, font, "Echo Icon", new Vector2(32f, -308f), new Vector2(32f, 38f), 22f, AmberBright);
+            hud._countdownIcon.text = "⬡";
+            hud._countdown = AddText(rect, font, "Echo Countdown", new Vector2(70f, -308f), new Vector2(720f, 38f), 23f, AmberBright);
+            hud._countdown.text = "Echo ends in 0.0s";
+            hud._countdown.characterSpacing = 1.5f;
+
+            hud._controls = AddText(rect, font, "PICO Controls", new Vector2(32f, -368f), new Vector2(776f, 172f), 26f, Color.white);
             hud._controls.text = "[L-Stick] Move\n[R-Trigger] Interact / Hold to Extract\n[Grip / A / X] Seal Echo\n[B / Y] Undo   [Menu] Reset";
             hud._controls.gameObject.SetActive(false);
-            hud._feedback = AddText(rect, font, "Action Feedback", new Vector2(40f, -256f), new Vector2(760f, 70f), 30f, new Color(1f, 0.80f, 0.43f));
+            hud._feedback = AddText(rect, font, "Action Feedback", new Vector2(32f, -256f), new Vector2(776f, 70f), 27f, AmberBright);
             hud._feedback.gameObject.SetActive(false);
             return hud;
         }
@@ -128,6 +186,13 @@ namespace QuantumEcho
                 var pulse = 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * Mathf.PI * 3.2f));
                 var c = _countdown.color;
                 _countdown.color = new Color(c.r, c.g, c.b, pulse);
+                if (_countdownIcon != null) _countdownIcon.color = new Color(c.r, c.g, c.b, pulse);
+            }
+            // v3: animate scanline UV offset for a subtle moving-scanline effect
+            if (_scanlineOverlay != null)
+            {
+                _scanlineOffset = (_scanlineOffset + Time.unscaledDeltaTime * 0.08f) % 1f;
+                _scanlineOverlay.uvRect = new Rect(0f, _scanlineOffset, 1f, 1f);
             }
         }
 

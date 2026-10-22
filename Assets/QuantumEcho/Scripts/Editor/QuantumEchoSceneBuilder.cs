@@ -946,18 +946,34 @@ namespace QuantumEcho.Editor
 
         static TextMeshPro CreateWorldLabel(Transform parent, string value, Vector3 localPosition, Color color)
         {
-            var label = Child(parent, "Label - " + value);
-            label.transform.localPosition = localPosition;
-            // The player starts on the +Z side and looks toward -Z.  TextMesh fronts
-            // otherwise face the far wall and read mirrored from the gameplay view.
-            label.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-            var text = label.AddComponent<TextMeshPro>();
-            text.font = _font;
-            text.text = value;
-            text.fontSize = 1.55f;
-            text.alignment = TextAlignmentOptions.Center;
-            text.textWrappingMode = TextWrappingModes.NoWrap;
-            text.color = color;
+            // v3: Use holographic plaque labels with backing plate and billboard.
+            // Split "//" separator into two lines for cleaner two-row layout.
+            var labelRoot = Child(parent, "Label - " + value);
+            labelRoot.transform.localPosition = localPosition;
+            // Face the player (player looks toward -Z from +Z side)
+            labelRoot.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+
+            var parts = value.Split(new[] { " // " }, System.StringSplitOptions.None);
+            var primaryLine   = parts[0].Trim();
+            var secondaryLine = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
+            var holoLabel = labelRoot.AddComponent<QuantumHologramWorldLabel>();
+            holoLabel.primaryText   = primaryLine;
+            holoLabel.secondaryText = secondaryLine;
+            holoLabel.accentColor   = color;
+            holoLabel.font          = _font;
+            // Labels are fixed in the level layout; camera faces -Z so billboard
+            // is disabled to maintain the authored 180-degree facing.
+            holoLabel.billboard = false;
+
+            // Return a dummy TMP_Text component for call-site compatibility.
+            // The actual rendering is handled by QuantumHologramWorldLabel.
+            var text = labelRoot.AddComponent<TextMeshPro>();
+            text.font  = _font;
+            text.text  = value;
+            text.fontSize = 0.01f;       // near-invisible; hologram label is visible
+            text.color = Color.clear;
+            text.enabled = false;
             return text;
         }
     }

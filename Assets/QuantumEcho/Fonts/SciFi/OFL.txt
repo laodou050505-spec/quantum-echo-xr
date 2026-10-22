@@ -1,0 +1,10 @@
+SIL OPEN FONT LICENSE (OFL-1.1)
+
+This license applies to the following fonts included in this directory:
+- Orbitron (Copyright 2010 The League of Moveable Type, v35 Google Fonts)
+  Source: https://fonts.google.com/specimen/Orbitron
+- ShareTechMono-Regular (Copyright 2012 Julieta Ulanovsky)
+  Source: https://fonts.google.com/specimen/Share+Tech+Mono
+
+Both fonts are licensed under the SIL Open Font License, Version 1.1.
+See https://scripts.sil.org/OFL for full license text.

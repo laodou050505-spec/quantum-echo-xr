@@ -57,7 +57,9 @@ namespace QuantumEcho.Editor
             terminalLandmark.transform.SetParent(root.transform);
             terminalLandmark.transform.position = new Vector3(0f, 1.7f, -3.8f);
             titleStart.firstLandmark = terminalLandmark.transform;
-            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/QuantumEcho/Fonts/NotoSansSC-Dynamic.asset");
+            // v3: Prefer Orbitron sci-fi font for title UI; fall back to NotoSansSC.
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/QuantumEcho/Fonts/SciFi/Orbitron-Dynamic.asset")
+                    ?? AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/QuantumEcho/Fonts/NotoSansSC-Dynamic.asset");
             // THESIS: Time echoes become the monumental cinematic key art, with
             // a custom two-line logotype and a precise left menu (user reference).
             // OWN-WORLD: Ink navy, pearl type, steel, cyan apertures, violet echoes.
@@ -79,11 +81,27 @@ namespace QuantumEcho.Editor
             var menuCanvas = menu.GetComponent<Canvas>();
             menuCanvas.renderMode = RenderMode.WorldSpace;
             menuCanvas.sortingOrder = 5;
+            // v3: shared audio source on the menu for hover / press sounds
+            var menuAudio = menu.AddComponent<AudioSource>();
+            menuAudio.spatialBlend = 0f;
+            menuAudio.volume = 1f;
+            menuAudio.playOnAwake = false;
+            var hoverClip   = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/QuantumEcho/Audio/ui_hover_scifi.mp3");
+            var confirmClip = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/QuantumEcho/Audio/ui_confirm_scifi.mp3");
+
             var startTarget = CreateMenuAction(menuRect, "START TARGET - world-space trigger", "START GAME", new Vector2(-476f, -116f), font, true);
             var startButton = startTarget.GetComponent<QuantumTitleMenuButton>();
+            startButton.audioSource = menuAudio;
+            startButton.hoverClip   = hoverClip;
+            startButton.confirmClip = confirmClip;
+
             var exitTarget = CreateMenuAction(menuRect, "EXIT TARGET - world-space trigger", "EXIT", new Vector2(-476f, -200f), font, false);
             var exitButton = exitTarget.GetComponent<QuantumTitleMenuButton>();
-            CreateMenuText(menuRect, "Start Hint", "[Right Trigger] Select & Confirm", new Vector2(-476f, -287f), new Vector2(448f, 36f), 24f, new Color(0.80f, 0.89f, 0.94f), font);
+            exitButton.audioSource = menuAudio;
+            exitButton.hoverClip   = hoverClip;
+            exitButton.confirmClip = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/QuantumEcho/Audio/ui_confirm_hard.mp3");
+
+            CreateMenuText(menuRect, "Start Hint", "[Right Trigger] Select & Confirm", new Vector2(-476f, -287f), new Vector2(448f, 36f), 22f, new Color(0.65f, 0.82f, 0.88f, 0.75f), font);
 
             var rig = new GameObject("TITLE XR RIG - design start derived");
             rig.transform.SetParent(root.transform);
@@ -286,26 +304,43 @@ namespace QuantumEcho.Editor
 
         static GameObject CreateMenuAction(RectTransform parent, string name, string label, Vector2 position, TMP_FontAsset font, bool primary)
         {
+            // v3: Use holographic button sprite; fall back to flat color if not imported yet.
             var root = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(BoxCollider), typeof(QuantumTitleMenuButton));
             var rect = root.GetComponent<RectTransform>();
             rect.SetParent(parent, false);
             rect.anchoredPosition = position;
-            rect.sizeDelta = new Vector2(448f, 62f);
+            rect.sizeDelta = new Vector2(480f, 70f);
             var plate = root.GetComponent<Image>();
-            plate.color = primary ? new Color(0.83f, 0.92f, 0.94f, 1f) : new Color(0.035f, 0.060f, 0.078f, 0.93f);
+            var holoSprite = AssetDatabase.LoadAssetAtPath<Sprite>(
+                "Assets/QuantumEcho/UI/Generated/ButtonV3/QuantumHologramButton.png");
+            if (holoSprite != null)
+            {
+                plate.sprite = holoSprite;
+                plate.type = Image.Type.Sliced;
+                plate.pixelsPerUnitMultiplier = 3f;
+                // Primary: brighter tint; secondary: standard tint
+                plate.color = primary ? new Color(0.95f, 1.00f, 1.00f, 1f) : new Color(0.70f, 0.90f, 0.92f, 0.88f);
+            }
+            else
+            {
+                plate.color = primary ? new Color(0.83f, 0.92f, 0.94f, 1f) : new Color(0.035f, 0.060f, 0.078f, 0.93f);
+            }
             plate.raycastTarget = false;
-            root.GetComponent<BoxCollider>().size = new Vector3(448f, 62f, 5f);
-            var text = CreateMenuText(rect, primary ? "Start Label" : "Exit Label", label, new Vector2(0f, 0f), new Vector2(392f, 62f), 29f,
-                primary ? new Color(0.02f, 0.045f, 0.060f) : new Color(0.85f, 0.92f, 0.95f), font);
+            root.GetComponent<BoxCollider>().size = new Vector3(480f, 70f, 5f);
+            // v3: text color: primary gets dark label on bright button; secondary gets cyan-white
+            var textColor = primary ? new Color(0.04f, 0.08f, 0.10f) : new Color(0.85f, 0.97f, 1.00f);
+            var text = CreateMenuText(rect, primary ? "Start Label" : "Exit Label", label, new Vector2(12f, 0f), new Vector2(440f, 70f), 30f, textColor, font);
             text.fontStyle = FontStyles.Bold;
-            text.characterSpacing = 4f;
+            text.characterSpacing = 5f;
+            // v3: focus underline is a thin cyan line at bottom of button
             var rule = new GameObject("Focus underline", typeof(RectTransform), typeof(Image));
             var ruleRect = rule.GetComponent<RectTransform>();
             ruleRect.SetParent(rect, false);
-            ruleRect.anchoredPosition = new Vector2(0f, -30f);
-            ruleRect.sizeDelta = new Vector2(448f, 2f);
-            rule.GetComponent<Image>().color = new Color(0.40f, 0.88f, 0.90f);
-            rule.GetComponent<Image>().raycastTarget = false;
+            ruleRect.anchoredPosition = new Vector2(0f, -33f);
+            ruleRect.sizeDelta = new Vector2(480f, 2.5f);
+            var ruleImg = rule.GetComponent<Image>();
+            ruleImg.color = new Color(0.18f, 0.93f, 1f, 0.90f);
+            ruleImg.raycastTarget = false;
             var button = root.GetComponent<QuantumTitleMenuButton>();
             button.action = primary ? QuantumTitleMenuButton.ActionKind.Start : QuantumTitleMenuButton.ActionKind.Exit;
             button.backingImage = plate;

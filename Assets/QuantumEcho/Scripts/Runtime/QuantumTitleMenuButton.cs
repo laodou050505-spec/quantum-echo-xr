@@ -1,13 +1,14 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 namespace QuantumEcho
 {
     /// <summary>
     /// World-space title action with an authored four-state response:
-    /// idle, ray-hover, trigger-press and confirmed.  The artwork stays clean;
-    /// only the live button treatment changes.
+    /// idle, ray-hover, trigger-press and confirmed.
+    /// v3: Adds haptic feedback and sci-fi UI audio on hover and press.
     /// </summary>
     public sealed class QuantumTitleMenuButton : MonoBehaviour
     {
@@ -21,6 +22,10 @@ namespace QuantumEcho
         public TMP_Text label;
         public LineRenderer focusLine;
         public float hoverScale = 1.035f;
+        [Header("v3: Sci-fi Audio")]
+        public AudioSource audioSource;
+        public AudioClip hoverClip;
+        public AudioClip confirmClip;
 
         Material _material;
         Vector3 _idleScale;
@@ -28,6 +33,7 @@ namespace QuantumEcho
         Color _hoverColor = new Color(0.20f, 1f, 0.95f, 1f);
         Color _pressedColor = new Color(1f, 0.68f, 0.22f, 1f);
         bool _hovered;
+        bool _previousHovered;
         float _pressedUntil;
 
         public bool IsHovered => _hovered;
@@ -57,6 +63,7 @@ namespace QuantumEcho
 
         public void SetFocused(bool focused)
         {
+            var wasHovered = _hovered;
             _hovered = focused;
             if (_pressedUntil > 0f) return;
             transform.localScale = focused ? _idleScale * hoverScale : _idleScale;
@@ -64,6 +71,12 @@ namespace QuantumEcho
             if (label != null) label.color = focused || isPrimary ? new Color(0.02f, 0.045f, 0.060f) : new Color(0.85f, 0.92f, 0.95f);
             if (focusLine != null) focusLine.enabled = focused;
             if (focusRule != null) focusRule.enabled = focused;
+            // v3: play hover sound and gentle haptic on new hover entry
+            if (focused && !wasHovered)
+            {
+                PlayClip(hoverClip, 0.55f);
+                SendHaptic(0.15f, 0.020f);
+            }
         }
 
         public void Press()
@@ -72,6 +85,37 @@ namespace QuantumEcho
             transform.localScale = _idleScale * 0.965f;
             SetColor(_pressedColor);
             if (label != null) label.color = new Color(0.02f, 0.045f, 0.060f);
+            // v3: play confirm sound and stronger haptic on press
+            PlayClip(confirmClip, 0.85f);
+            SendHaptic(0.40f, 0.040f);
+        }
+
+        // v3: play audio through shared AudioSource on parent canvas/rig
+        void PlayClip(AudioClip clip, float volume)
+        {
+            if (clip == null) return;
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot(clip, volume);
+                return;
+            }
+            // Fallback: find or create an AudioSource anywhere in the scene
+            var go = new GameObject("~TitleAudio");
+            var src = go.AddComponent<AudioSource>();
+            src.spatialBlend = 0f;
+            src.PlayOneShot(clip, volume);
+            Destroy(go, clip.length + 0.2f);
+        }
+
+        // v3: brief haptic on both controllers (PICO/OpenXR)
+        static void SendHaptic(float amplitude, float duration)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            var left = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+            var right = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+            if (left.isValid) left.SendHapticImpulse(0, amplitude, duration);
+            if (right.isValid) right.SendHapticImpulse(0, amplitude, duration);
+#endif
         }
 
         void SetColor(Color color)

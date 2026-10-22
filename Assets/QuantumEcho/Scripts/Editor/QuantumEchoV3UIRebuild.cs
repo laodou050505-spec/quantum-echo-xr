@@ -46,6 +46,8 @@ namespace QuantumEcho.Editor
 
             Step1_GenerateFontAssets();
             Step2_ImportHologramSprites();
+            Step1b_RewireAtlasTextures();   // re-wire after sprite reimports
+            AssetDatabase.Refresh();        // flush rewire so LoadAssetAtPath sees the updated asset
             Step3_RebuildTitleScene();
             Step4_RebuildMainScene();
             Step5_SaveAll();
@@ -54,84 +56,478 @@ namespace QuantumEcho.Editor
             PrintFontSizeReport();
         }
 
+        /// <summary>
+        /// Batchmode entry: rebuild + screenshots (run WITHOUT -nographics so rendering works).
+        /// lockf /tmp/en-unity-A.lock Unity -batchmode -buildTarget Android -executeMethod QuantumEcho.Editor.QuantumEchoV3UIRebuild.RebuildAndScreenshot -quit
+        /// </summary>
+        [MenuItem("Quantum Echo/v3 Rebuild + Screenshots")]
+        public static void RebuildAndScreenshot()
+        {
+            RebuildAll();
+            CaptureScreenshots();
+        }
+
         // ────────────────────────────────────────────────────────────────────
         // Step 1: Generate TMP FontAsset from TTF files
+        // Requires Unity to be launched WITHOUT -nographics so FreeType works.
+        // Uses AtlasPopulationMode.Dynamic so atlas is populated at runtime —
+        // clean asset, no residual Noto glyph tables.
         // ────────────────────────────────────────────────────────────────────
         static void Step1_GenerateFontAssets()
         {
-            Debug.Log("[QE-v3] Step 1: Generating TMP font assets…");
+            Debug.Log("[QE-v3] Step 1: Generating TMP font assets (Dynamic mode)…");
 
-            // Initialize FontEngine (required in batchmode / -nographics)
-            var initErr = FontEngine.InitializeFontEngine();
-            if (initErr != FontEngineError.Success)
-                Debug.LogWarning($"[QE-v3] FontEngine.InitializeFontEngine() returned: {initErr}");
-            else
-                Debug.Log("[QE-v3] FontEngine initialized.");
-
-            GenerateFontAsset(OrbitronTtfPath, OrbitronAssetPath, samplingPointSize: 90, atlasWidth: 1024, atlasHeight: 1024);
-            GenerateFontAsset(MonoTtfPath, MonoAssetPath, samplingPointSize: 72, atlasWidth: 1024, atlasHeight: 1024);
+            GenerateDynamicFontAsset(OrbitronTtfPath, OrbitronAssetPath, samplingPointSize: 90, atlasWidth: 1024, atlasHeight: 1024);
+            GenerateDynamicFontAsset(MonoTtfPath,    MonoAssetPath,    samplingPointSize: 72, atlasWidth: 1024, atlasHeight: 1024);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[QE-v3] Font assets generated.");
         }
 
-        static void GenerateFontAsset(string ttfPath, string assetPath, int samplingPointSize, int atlasWidth, int atlasHeight)
+        // Characters pre-baked into the atlas so screenshots work in Edit mode
+        // (Dynamic font Awake() is not called in Edit mode, so we bake glyphs upfront)
+        const string BakeCharSet =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+            "0123456789 !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" +
+            "▶";   // U+25B6 — used as countdown prefix icon
+
+        /// <summary>
+        /// Creates a clean Dynamic TMP_FontAsset from a TTF and immediately pre-bakes
+        /// BakeCharSet into the atlas so the font renders correctly in Edit-mode screenshots.
+        ///
+        /// Strategy A: TMP_FontAsset.CreateFontAsset (needs FreeType; may fail in batchmode).
+        /// Strategy B: FontEngine.LoadFontFace(filePath) + manual asset init via reflection.
+        ///
+        /// Always recreates to guarantee a clean asset with no residual Noto glyph tables.
+        /// </summary>
+        static void GenerateDynamicFontAsset(string ttfPath, string assetPath,
+            int samplingPointSize, int atlasWidth, int atlasHeight)
         {
-            // Check if asset already exists
-            var existing = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
-            if (existing != null)
+            // Force-delete existing asset so we always start clean
+            if (File.Exists(Path.Combine(Application.dataPath, "..",
+                    assetPath.Replace('/', Path.DirectorySeparatorChar))))
             {
-                Debug.Log($"[QE-v3] Font asset already exists: {assetPath}");
-                return;
+                AssetDatabase.DeleteAsset(assetPath);
+                Debug.Log($"[QE-v3] Deleted old font asset: {assetPath}");
             }
 
-            // Load the Unity Font asset
             var ttf = AssetDatabase.LoadAssetAtPath<Font>(ttfPath);
             if (ttf == null)
             {
-                Debug.LogWarning($"[QE-v3] TTF not found at {ttfPath}, skipping font generation.");
+                Debug.LogWarning($"[QE-v3] TTF not found at {ttfPath}, skipping.");
                 return;
             }
 
-            // First, try static atlas creation (may fail in -nographics batchmode due to FreeType)
+            // ── Strategy A: standard TMP API (works when FreeType is available) ──
             var fontAsset = TMP_FontAsset.CreateFontAsset(
-                ttf,
-                samplingPointSize,
-                atlasPadding: 9,
+                ttf, samplingPointSize, atlasPadding: 9,
                 renderMode: GlyphRenderMode.SDFAA,
-                atlasWidth, atlasHeight);
+                atlasWidth, atlasHeight,
+                atlasPopulationMode: AtlasPopulationMode.Dynamic);
 
             if (fontAsset != null)
             {
                 fontAsset.name = Path.GetFileNameWithoutExtension(assetPath);
                 AssetDatabase.CreateAsset(fontAsset, assetPath);
-                Debug.Log($"[QE-v3] Created static font asset: {assetPath}");
+                // Pre-bake glyphs so Edit-mode screenshots render text
+                bool allAdded = fontAsset.TryAddCharacters(BakeCharSet);
+                EditorUtility.SetDirty(fontAsset);
+                AssetDatabase.SaveAssets();
+                Debug.Log($"[QE-v3] [StrategyA] Dynamic font asset: {assetPath} — glyphs pre-baked: {allAdded}");
                 return;
             }
 
-            // Fallback: duplicate NotoSansSC-Dynamic.asset (already properly initialized)
-            // and re-point its sourceFontFile to the target TTF.
-            // This avoids FreeType requirements in -nographics batchmode.
-            const string templateAsset = "Assets/QuantumEcho/Fonts/NotoSansSC-Dynamic.asset";
-            Debug.LogWarning($"[QE-v3] Static creation failed (nographics FreeType limitation). Duplicating {templateAsset} for {ttfPath}");
-            AssetDatabase.CopyAsset(templateAsset, assetPath);
-            AssetDatabase.Refresh();
-            var dynamicAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
-            if (dynamicAsset == null)
+            // ── Strategy B: FontEngine from file path + manual asset init ──
+            // In batchmode, FontEngine.LoadFontFace(Font) fails because Unity's
+            // Font.fontData is empty; loading from the raw file path works.
+            Debug.LogWarning($"[QE-v3] Strategy A failed (batchmode FreeType limit). Trying Strategy B for {ttfPath}");
+
+            FontEngine.InitializeFontEngine();
+            var projectRoot = Path.GetDirectoryName(Application.dataPath);
+            var fullPath    = Path.Combine(projectRoot, ttfPath.Replace('/', Path.DirectorySeparatorChar));
+            var faceErr = FontEngine.LoadFontFace(fullPath, samplingPointSize);
+            if (faceErr != FontEngineError.Success)
             {
-                Debug.LogError($"[QE-v3] Failed to duplicate template font asset to {assetPath}");
+                Debug.LogError($"[QE-v3] FontEngine.LoadFontFace({fullPath}) failed: {faceErr}. Cannot create font asset.");
                 return;
             }
-            // Update name and source font reference
-            dynamicAsset.name = Path.GetFileNameWithoutExtension(assetPath);
-            var sourceFontProp = typeof(TMP_FontAsset).GetField("m_SourceFontFile",
+
+            var faceInfo = FontEngine.GetFaceInfo();
+            Debug.Log($"[QE-v3] Loaded font face: {faceInfo.familyName} {faceInfo.styleName} pt{samplingPointSize}");
+
+            // Construct a clean Dynamic TMP_FontAsset via reflection.
+            fontAsset = ScriptableObject.CreateInstance<TMP_FontAsset>();
+            fontAsset.name = Path.GetFileNameWithoutExtension(assetPath);
+
+            var bf = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            SetField(fontAsset, "m_SourceFontFile",       bf, ttf);
+            // KEY FIX: set the file-path fallback so LoadFontFace() succeeds in batchmode.
+            // TMP_FontAsset.LoadFontFace() tries FontEngine.LoadFontFace(Font, …) first; if
+            // that fails (batchmode, empty fontData), it falls back to LoadFontFace(filePath).
+            // Without this field, TryAddCharacters silently fails with all characters missing.
+            SetField(fontAsset, "m_SourceFontFilePath",   bf, fullPath);
+            SetField(fontAsset, "m_AtlasPopulationMode",  bf, (int)AtlasPopulationMode.Dynamic);
+            SetField(fontAsset, "m_FaceInfo",             bf, faceInfo);
+            SetField(fontAsset, "m_AtlasWidth",           bf, atlasWidth);
+            SetField(fontAsset, "m_AtlasHeight",          bf, atlasHeight);
+            SetField(fontAsset, "m_AtlasPadding",         bf, 9);
+            SetField(fontAsset, "m_AtlasRenderMode",      bf, (int)GlyphRenderMode.SDFAA);
+            // KEY FIX: set version so TMP.ReadFontAssetDefinition() does NOT run UpgradeFontAsset()
+            // Condition is: material != null && m_Version == "" → UpgradeFontAsset → NRE (m_fontInfo null)
+            // CreateFontAssetInstance sets this to "1.1.0"; our manual path must also set it.
+            SetField(fontAsset, "m_Version",              bf, "1.1.0");
+            SetField(fontAsset, "m_GlyphTable",             bf, new System.Collections.Generic.List<UnityEngine.TextCore.Glyph>());
+            SetField(fontAsset, "m_CharacterTable",         bf, new System.Collections.Generic.List<TMP_Character>());
+            SetField(fontAsset, "m_GlyphLookupDictionary",  bf, new System.Collections.Generic.Dictionary<uint, UnityEngine.TextCore.Glyph>());
+            SetField(fontAsset, "m_CharacterLookupDictionary", bf, new System.Collections.Generic.Dictionary<uint, TMP_Character>());
+            // Needed by TryAddGlyphsToTexture; freeGlyphRects/usedGlyphRects are internal so use reflection.
+            // GlyphRect is in UnityEngine.TextCore (not LowLevel).
+            SetField(fontAsset, "m_FreeGlyphRects", bf,
+                new System.Collections.Generic.List<UnityEngine.TextCore.GlyphRect>
+                    { new UnityEngine.TextCore.GlyphRect(0, 0, atlasWidth - 1, atlasHeight - 1) });
+            SetField(fontAsset, "m_UsedGlyphRects", bf,
+                new System.Collections.Generic.List<UnityEngine.TextCore.GlyphRect>());
+
+            // CRITICAL: inject a valid atlas texture BEFORE calling TryAddCharacters.
+            // TryAddCharacters calls FontEngine.RenderGlyphsToTexture(m_AtlasTextures[0], …).
+            // If m_AtlasTextures is null, the call silently fails with all chars "missing".
+            var atlasTex = new Texture2D(atlasWidth, atlasHeight, TextureFormat.Alpha8, false, true);
+            atlasTex.name = fontAsset.name + " Atlas";
+            atlasTex.Apply(false, false);   // upload blank pixels; keeps texture accessible from CPU
+            SetField(fontAsset, "m_AtlasTextures", bf, new Texture2D[] { atlasTex });
+
+            // Pre-bake glyphs while FontEngine still has the face loaded
+            string missing;
+            bool bakeOk = fontAsset.TryAddCharacters(BakeCharSet, out missing);
+            Debug.Log($"[QE-v3] [StrategyB] TryAddCharacters: ok={bakeOk}, missing='{missing}', glyphs={fontAsset.glyphTable?.Count}");
+
+            // Step 1: persist the main asset to disk.
+            // At this point m_AtlasTextures[0] = atlasTex (in-memory); Unity will serialize
+            // it as null until we AddObjectToAsset and re-wire below.
+            AssetDatabase.CreateAsset(fontAsset, assetPath);
+
+            // Step 2: add the atlas texture as a named sub-asset
+            AssetDatabase.AddObjectToAsset(atlasTex, assetPath);
+            AssetDatabase.SaveAssets();
+
+            // Step 3: re-load the persisted asset AND the persisted sub-asset texture,
+            // then wire atlasTextures[0] via SerializedObject for correct internal reference.
+            var persistedAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
+            Texture2D persistedTex = null;
+            var allObjs = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+            foreach (var obj in allObjs)
+                if (obj is Texture2D t) { persistedTex = t; break; }
+
+            if (persistedAsset != null && persistedTex != null)
+            {
+                var so = new SerializedObject(persistedAsset);
+                var texArray = so.FindProperty("m_AtlasTextures");
+                if (texArray != null)
+                {
+                    texArray.arraySize = 1;
+                    texArray.GetArrayElementAtIndex(0).objectReferenceValue = persistedTex;
+                    so.ApplyModifiedProperties();
+                }
+                else
+                {
+                    Debug.LogWarning("[QE-v3] [StrategyB] m_AtlasTextures SerializedProperty not found; using public setter.");
+                    persistedAsset.atlasTextures = new Texture2D[] { persistedTex };
+                    EditorUtility.SetDirty(persistedAsset);
+                }
+
+                // Explicitly create the atlas material so TMP_Text.fontSharedMaterial is non-null
+                // when ForceMeshUpdate is called in Edit mode (where Awake() may not fully init it).
+                // Without this, ForceMeshUpdate throws NullReferenceException and text is invisible.
+                var sdfShader = Shader.Find("TextMeshPro/Distance Field");
+                if (sdfShader == null) sdfShader = Shader.Find("TextMeshPro/Mobile/Distance Field");
+                if (sdfShader != null)
+                {
+                    var atlasMat = new Material(sdfShader);
+                    atlasMat.name = persistedAsset.name + " Atlas Material";
+                    atlasMat.SetTexture(ShaderUtilities.ID_MainTex, persistedTex);
+                    ShaderUtilities.GetShaderPropertyIDs();
+                    AssetDatabase.AddObjectToAsset(atlasMat, assetPath);
+                    persistedAsset.material = atlasMat;
+                    Debug.Log($"[QE-v3] [StrategyB] Created atlas material: {atlasMat.name}");
+                }
+                else
+                {
+                    Debug.LogWarning("[QE-v3] [StrategyB] TextMeshPro/Distance Field shader not found; material NOT created.");
+                }
+
+                AssetDatabase.SaveAssets();
+                var verify = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
+                Debug.Log($"[QE-v3] [StrategyB] atlas wired: {verify?.atlasTexture?.name ?? "NULL"} | glyphs={verify?.glyphTable?.Count} | mat={verify?.material?.name ?? "NULL"}");
+                Debug.Log($"[QE-v3] [StrategyB] Created dynamic font asset: {assetPath} ({faceInfo.familyName})");
+            }
+            else
+            {
+                Debug.LogError($"[QE-v3] [StrategyB] atlas wiring failed. persistedAsset={persistedAsset != null}, persistedTex={persistedTex != null}");
+            }
+        }
+
+        static void SetField(object obj, string name, System.Reflection.BindingFlags bf, object value)
+        {
+            // Walk the inheritance chain so base-class private/internal fields are found.
+            // e.g. m_Version is declared on TMP_Asset (base of TMP_FontAsset).
+            var type = obj.GetType();
+            System.Reflection.FieldInfo field = null;
+            while (type != null && field == null)
+            {
+                field = type.GetField(name, bf);
+                type = type.BaseType;
+            }
+            if (field != null) field.SetValue(obj, value);
+            else Debug.LogWarning($"[QE-v3] SetField: field '{name}' not found on {obj.GetType().Name} or any base class");
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        // Screenshots: render each scene's main camera to PNG files
+        // Must be called in a batchmode session WITHOUT -nographics
+        // Output directory: Builds/EN/Screenshots/
+        // ────────────────────────────────────────────────────────────────────
+        [MenuItem("Quantum Echo/v3 Capture Screenshots")]
+        public static void CaptureScreenshots()
+        {
+            Debug.Log("[QE-v3] Capturing screenshots…");
+            var outDir = "Builds/EN/Screenshots";
+            if (!Directory.Exists(outDir)) Directory.CreateDirectory(outDir);
+
+            // ── Title menu: normal + hover state ──────────────────────────────
+            // Camera uses the scene's XR Title Camera (tagged MainCamera) at (0,1.65,0)
+            // looking toward the terminal at z=-3.85 with the 4.8×2.7 cover art.
+            CaptureTitleScene(false, outDir + "/title_normal.png", 1920, 1080);
+            CaptureTitleScene(true,  outDir + "/title_hover.png",  1920, 1080);
+
+            // ── Gameplay HUD: collapsed + expanded ────────────────────────────
+            // HUD canvas is at WorldTaskTerminalAnchor (-5.45, 1.62, 2.25).
+            // Screenshot camera looks at that point from 1.8 m away.
+            CaptureHUD(false, outDir + "/hud_collapsed.png", 1920, 1080);
+            CaptureHUD(true,  outDir + "/hud_expanded.png",  1920, 1080);
+
+            // ── World labels close-up ─────────────────────────────────────────
+            // "Tutorial Field" cyan label at (0, 2.35, -0.72) and
+            // "Q-00 // Core" at (0, 2.65, -4.15) — camera stands at (0, 2.5, 2.5)
+            // and looks toward (0, 2.5, -2.0) to frame both labels in a wide shot.
+            CaptureWorldLabels(outDir + "/world_labels.png", 1920, 1080);
+
+            // ── Gameplay overview (unchanged) ─────────────────────────────────
+            CaptureGameplayScene("Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity",
+                outDir + "/gameplay_hud.png", 1920, 1080);
+
+            Debug.Log($"[QE-v3] Screenshots saved to {outDir}/");
+        }
+
+        // Force every TMP_Text in the loaded scene to rebuild its mesh with the current
+        // font asset. Needed in Edit-mode because TMP_FontAsset.Awake() never fires,
+        // so glyphs are not added to the atlas automatically.
+        static void ForceTMPMeshUpdates()
+        {
+            foreach (var tm in Object.FindObjectsByType<TMPro.TMP_Text>(FindObjectsSortMode.None))
+            {
+                try { tm.ForceMeshUpdate(true, true); }
+                catch (System.Exception ex)
+                {
+                    Debug.LogWarning($"[QE-v3] ForceMeshUpdate on '{tm.gameObject.name}': {ex.Message}");
+                }
+            }
+            UnityEngine.Canvas.ForceUpdateCanvases();
+        }
+
+        // Title scene: normal or hover state.
+        // Always creates a dedicated camera at player eye height (1.65 m) looking toward
+        // the cover-art terminal at z ≈ -3.85. The XR Camera.main has a TrackedPoseDriver
+        // that stays at (0,0,0) in batchmode (no HMD), so we bypass it entirely.
+        static void CaptureTitleScene(bool hoverStartButton, string outPng, int w, int h)
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                "Assets/QuantumEcho/Scenes/QuantumEcho_Title.unity",
+                UnityEditor.SceneManagement.OpenSceneMode.Single);
+
+            // Dedicated screenshot camera — do NOT use Camera.main here because the
+            // TrackedPoseDriver doesn't run in batchmode.
+            var camGO = new GameObject("~SS_Cam");
+            var cam = camGO.AddComponent<Camera>();
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.008f, 0.014f, 0.022f);
+            cam.fieldOfView = 44f;
+            cam.nearClipPlane = 0.05f;
+            cam.farClipPlane = 40f;
+            // Player spawn is at (0,0,0); eye height 1.65 m; face the terminal panel.
+            camGO.transform.position = new Vector3(0f, 1.65f, 0f);
+            camGO.transform.LookAt(new Vector3(0f, 1.65f, -3.85f));
+
+            // Assign camera to WorldSpace canvases so they render
+            foreach (var canvas in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+                if (canvas.renderMode == RenderMode.WorldSpace)
+                    canvas.worldCamera = cam;
+
+            // Optionally put the START GAME button into hover state
+            if (hoverStartButton)
+            {
+                foreach (var btn in Object.FindObjectsByType<QuantumTitleMenuButton>(
+                             FindObjectsInactive.Include, FindObjectsSortMode.None))
+                {
+                    if (btn.name.Contains("START") || btn.name.Contains("Start"))
+                    {
+                        btn.SetFocused(true);
+                        break;
+                    }
+                }
+            }
+
+            ForceTMPMeshUpdates();
+            RenderToCam(cam, outPng, w, h);
+            Object.DestroyImmediate(camGO);
+        }
+
+        // Gameplay HUD: collapsed or expanded.
+        // The HUD terminal is at (-5.45, 1.62, 2.25) facing the player spawn at ≈(0,1.25,0).
+        // Camera sits at the player's eye position (0, 1.5, 0) and looks toward the terminal.
+        static void CaptureHUD(bool expanded, string outPng, int w, int h)
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                "Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity",
+                UnityEditor.SceneManagement.OpenSceneMode.Single);
+
+            var camGO = new GameObject("~HUD_Cam");
+            var cam = camGO.AddComponent<Camera>();
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.008f, 0.014f, 0.022f);
+            cam.fieldOfView = 40f;
+            cam.nearClipPlane = 0.05f;
+            cam.farClipPlane = 30f;
+
+            // Place the camera in front of the HUD's rendered face.
+            // The HUD canvas faces toward the player spawn area; we determine the
+            // correct position by reading the HUD's actual world transform, then
+            // moving 3.5 m along its forward vector so we see the front, not the back.
+            var hud = Object.FindFirstObjectByType<QuantumHUD>();
+            Vector3 hudPos = new Vector3(-5.45f, 1.62f, 2.25f);
+            Vector3 hudFwd = Vector3.forward;
+            if (hud != null) { hudPos = hud.transform.position; hudFwd = hud.transform.forward; }
+            var camPos = hudPos + hudFwd * 3.5f + new Vector3(0f, 0.15f, 0f);
+            camGO.transform.position = camPos;
+            camGO.transform.LookAt(hudPos + new Vector3(0f, 0.15f, 0f));
+
+            // Wire the camera to WorldSpace canvases
+            foreach (var canvas in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+                if (canvas.renderMode == RenderMode.WorldSpace)
+                    canvas.worldCamera = cam;
+
+            // Set sample content so panels are not all blank (hud already found above)
+            if (hud != null)
+            {
+                Debug.Log($"[QE-v3] HUD found at world pos {hud.transform.position} rot {hud.transform.eulerAngles}");
+                hud.SetLevel("Q-00", 1, "Tutorial Loop");
+                hud.SetObjective(0, "Stand on the Holder",
+                    "Step onto the blue disc and seal it as an Echo.");
+                hud.SetEchoCount(0, 4);
+                hud.SetTimer(14f, 30f);
+                hud.SetPrompt("[Grip / A / X]", "Seal this action and start the next loop");
+            }
+            else { Debug.LogWarning("[QE-v3] QuantumHUD not found in scene"); }
+
+            ForceTMPMeshUpdates();
+            RenderToCam(cam, outPng, w, h);
+            Object.DestroyImmediate(camGO);
+        }
+
+        // World labels close-up: frames "Tutorial Field" (0,2.35,-0.72 cyan) and
+        // "Q-00 // Core" (0,2.65,-4.15 cyan) by placing camera at (0,2.5,2.0)
+        // looking toward (0,2.5,-2.0) with a wide FOV.
+        static void CaptureWorldLabels(string outPng, int w, int h)
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                "Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity",
+                UnityEditor.SceneManagement.OpenSceneMode.Single);
+
+            // QuantumHologramWorldLabel.Build() is called from Awake() which does not
+            // fire in Edit mode. Force-initialize every label via reflection.
+            var buildMethod = typeof(QuantumHologramWorldLabel).GetMethod(
+                "Build",
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (sourceFontProp != null) sourceFontProp.SetValue(dynamicAsset, ttf);
-            // Reset glyph tables so TMP re-populates at runtime with the correct font
-            dynamicAsset.ClearFontAssetData(setAtlasSizeToZero: false);
-            EditorUtility.SetDirty(dynamicAsset);
-            Debug.Log($"[QE-v3] Created dynamic font asset (duplicated template): {assetPath}");
+            foreach (var label in Object.FindObjectsByType<QuantumHologramWorldLabel>(
+                         FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                try { buildMethod?.Invoke(label, null); }
+                catch (System.Exception ex)
+                { Debug.LogWarning($"[QE-v3] WorldLabel Build failed on '{label.name}': {ex.Message}"); }
+            }
+
+            var camGO = new GameObject("~Label_Cam");
+            var cam = camGO.AddComponent<Camera>();
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.008f, 0.014f, 0.022f);
+            cam.fieldOfView = 65f;
+            cam.nearClipPlane = 0.05f;
+            cam.farClipPlane = 30f;
+            // Stand a bit in front of the field, aim toward the label area
+            camGO.transform.position = new Vector3(0f, 2.0f, 2.5f);
+            camGO.transform.LookAt(new Vector3(0f, 2.5f, -2.0f));
+
+            foreach (var canvas in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+                if (canvas.renderMode == RenderMode.WorldSpace)
+                    canvas.worldCamera = cam;
+
+            ForceTMPMeshUpdates();
+            RenderToCam(cam, outPng, w, h);
+            Object.DestroyImmediate(camGO);
+        }
+
+        static void CaptureGameplayScene(string scenePath, string outPng, int w, int h)
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                scenePath, UnityEditor.SceneManagement.OpenSceneMode.Single);
+
+            // Use scene's main camera; if none, create one at player eye height (1.5 m)
+            Camera cam = Camera.main;
+            bool createdCam = false;
+            if (cam == null)
+            {
+                var cams = Object.FindObjectsByType<Camera>(FindObjectsSortMode.None);
+                if (cams.Length > 0) cam = cams[0];
+            }
+            if (cam == null)
+            {
+                var camGO = new GameObject("~SS_Cam");
+                cam = camGO.AddComponent<Camera>();
+                cam.clearFlags = CameraClearFlags.Skybox;
+                cam.fieldOfView = 60f;
+                camGO.transform.position = new Vector3(0f, 1.5f, 0f);
+                createdCam = true;
+            }
+            // Assign camera to any un-assigned World Space canvases so they render
+            foreach (var canvas in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+            {
+                if (canvas.renderMode == RenderMode.WorldSpace && canvas.worldCamera == null)
+                    canvas.worldCamera = cam;
+            }
+
+            ForceTMPMeshUpdates();
+            RenderToCam(cam, outPng, w, h);
+            if (createdCam) Object.DestroyImmediate(cam.gameObject);
+        }
+
+        static void RenderToCam(Camera cam, string outPng, int w, int h)
+        {
+            var rt = new RenderTexture(w, h, 24, RenderTextureFormat.ARGB32);
+            rt.antiAliasing = 4;
+            var prevTarget = cam.targetTexture;
+            var prevActive = RenderTexture.active;
+            cam.targetTexture = rt;
+            cam.Render();
+            RenderTexture.active = rt;
+            var tex = new Texture2D(w, h, TextureFormat.ARGB32, false);
+            tex.ReadPixels(new Rect(0, 0, w, h), 0, 0);
+            tex.Apply();
+            cam.targetTexture = prevTarget;
+            RenderTexture.active = prevActive;
+            Object.DestroyImmediate(rt);
+            File.WriteAllBytes(outPng, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            Debug.Log($"[QE-v3] Screenshot saved: {outPng}");
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -171,6 +567,64 @@ namespace QuantumEcho.Editor
             EditorUtility.SetDirty(importer);
             importer.SaveAndReimport();
             Debug.Log($"[QE-v3] Imported sprite: {path}");
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        // Step 1b: Re-wire atlas textures after sprite reimports may have
+        //          invalidated in-memory references (sub-assets survive on
+        //          disk but the m_AtlasTextures reference can become null
+        //          after an AssetDatabase reimport pass).
+        // ────────────────────────────────────────────────────────────────────
+        static void Step1b_RewireAtlasTextures()
+        {
+            Debug.Log("[QE-v3] Step 1b: Re-wiring font atlas textures…");
+            RewireAtlas(OrbitronAssetPath);
+            RewireAtlas(MonoAssetPath);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[QE-v3] Atlas textures re-wired.");
+        }
+
+        static void RewireAtlas(string assetPath)
+        {
+            var fontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
+            if (fontAsset == null)
+            {
+                Debug.LogWarning($"[QE-v3] RewireAtlas: font asset not found at {assetPath}");
+                return;
+            }
+
+            // Find the atlas sub-asset (it survives disk even if the reference is null)
+            Texture2D persistedTex = null;
+            foreach (var obj in AssetDatabase.LoadAllAssetsAtPath(assetPath))
+            {
+                if (obj is Texture2D t) { persistedTex = t; break; }
+            }
+
+            if (persistedTex == null)
+            {
+                Debug.LogWarning($"[QE-v3] RewireAtlas: no Texture2D sub-asset found in {assetPath}");
+                return;
+            }
+
+            // Check if already wired correctly
+            if (fontAsset.atlasTexture != null)
+            {
+                Debug.Log($"[QE-v3] RewireAtlas: {fontAsset.name} already has atlas '{fontAsset.atlasTexture.name}' — skip");
+                return;
+            }
+
+            // Re-wire via SerializedObject
+            var so = new SerializedObject(fontAsset);
+            var texArray = so.FindProperty("m_AtlasTextures");
+            if (texArray == null)
+            {
+                Debug.LogWarning($"[QE-v3] RewireAtlas: m_AtlasTextures not found on {fontAsset.name}");
+                return;
+            }
+            texArray.arraySize = 1;
+            texArray.GetArrayElementAtIndex(0).objectReferenceValue = persistedTex;
+            so.ApplyModifiedProperties();
+            Debug.Log($"[QE-v3] RewireAtlas: {fontAsset.name} → atlas '{persistedTex.name}' (verify: {fontAsset.atlasTexture?.name ?? "NULL"})");
         }
 
         // ────────────────────────────────────────────────────────────────────

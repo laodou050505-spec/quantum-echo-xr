@@ -145,7 +145,7 @@ namespace QuantumEcho
 
             // v3: countdown row - amber icon + text
             hud._countdownIcon = AddText(rect, font, "Echo Icon", new Vector2(32f, -308f), new Vector2(32f, 38f), 22f, AmberBright);
-            hud._countdownIcon.text = "⬡";
+            hud._countdownIcon.text = "▶";
             hud._countdown = AddText(rect, font, "Echo Countdown", new Vector2(70f, -308f), new Vector2(720f, 38f), 23f, AmberBright);
             hud._countdown.text = "Echo ends in 0.0s";
             hud._countdown.characterSpacing = 1.5f;

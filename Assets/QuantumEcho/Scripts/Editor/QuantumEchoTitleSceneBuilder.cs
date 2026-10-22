@@ -327,8 +327,9 @@ namespace QuantumEcho.Editor
             }
             plate.raycastTarget = false;
             root.GetComponent<BoxCollider>().size = new Vector3(480f, 70f, 5f);
-            // v3: text color: primary gets dark label on bright button; secondary gets cyan-white
-            var textColor = primary ? new Color(0.04f, 0.08f, 0.10f) : new Color(0.85f, 0.97f, 1.00f);
+            // v3: text color: both buttons use bright cyan-white so text is legible
+            // against the hologram button's dark scan-line backdrop.
+            var textColor = primary ? new Color(0.95f, 1.00f, 1.00f) : new Color(0.85f, 0.97f, 1.00f);
             var text = CreateMenuText(rect, primary ? "Start Label" : "Exit Label", label, new Vector2(12f, 0f), new Vector2(440f, 70f), 30f, textColor, font);
             text.fontStyle = FontStyles.Bold;
             text.characterSpacing = 5f;
@@ -359,7 +360,7 @@ namespace QuantumEcho.Editor
             rect.anchoredPosition = position;
             rect.sizeDelta = size;
             var text = root.GetComponent<TextMeshProUGUI>();
-            text.font = font;
+            if (font != null) text.font = font;
             text.text = content;
             text.fontSize = fontSize;
             text.color = color;
@@ -376,7 +377,7 @@ namespace QuantumEcho.Editor
             textObject.transform.localPosition = localPosition + Vector3.forward * 0.075f;
             textObject.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
             var text = textObject.AddComponent<TextMeshPro>();
-            text.font = font;
+            if (font != null) text.font = font;
             text.text = content;
             text.fontSize = size;
             text.color = color;

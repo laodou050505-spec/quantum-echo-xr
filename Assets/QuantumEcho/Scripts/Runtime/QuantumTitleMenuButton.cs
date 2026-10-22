@@ -68,7 +68,8 @@ namespace QuantumEcho
             if (_pressedUntil > 0f) return;
             transform.localScale = focused ? _idleScale * hoverScale : _idleScale;
             SetColor(focused ? _hoverColor : _idleColor);
-            if (label != null) label.color = focused || isPrimary ? new Color(0.02f, 0.045f, 0.060f) : new Color(0.85f, 0.92f, 0.95f);
+            // 全息深色底：常态用淡青白（可见），悬停时用纯白（更亮）
+            if (label != null) label.color = focused ? new Color(0.98f, 1f, 1f, 1f) : new Color(0.78f, 0.95f, 1f, 1f);
             if (focusLine != null) focusLine.enabled = focused;
             if (focusRule != null) focusRule.enabled = focused;
             // v3: play hover sound and gentle haptic on new hover entry
@@ -84,7 +85,7 @@ namespace QuantumEcho
             _pressedUntil = Time.unscaledTime + 0.12f;
             transform.localScale = _idleScale * 0.965f;
             SetColor(_pressedColor);
-            if (label != null) label.color = new Color(0.02f, 0.045f, 0.060f);
+            if (label != null) label.color = new Color(1f, 0.82f, 0.30f, 1f);  // 琥珀色闪光（深底可见）
             // v3: play confirm sound and stronger haptic on press
             PlayClip(confirmClip, 0.85f);
             SendHaptic(0.40f, 0.040f);

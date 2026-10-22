@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 using TMPro;
 using UnityEngine.UI;
 
@@ -50,6 +51,7 @@ namespace QuantumEcho.Editor
             Step5_SaveAll();
 
             Debug.Log("[QE-v3] UI rebuild complete.");
+            PrintFontSizeReport();
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -58,6 +60,13 @@ namespace QuantumEcho.Editor
         static void Step1_GenerateFontAssets()
         {
             Debug.Log("[QE-v3] Step 1: Generating TMP font assets…");
+
+            // Initialize FontEngine (required in batchmode / -nographics)
+            var initErr = FontEngine.InitializeFontEngine();
+            if (initErr != FontEngineError.Success)
+                Debug.LogWarning($"[QE-v3] FontEngine.InitializeFontEngine() returned: {initErr}");
+            else
+                Debug.Log("[QE-v3] FontEngine initialized.");
 
             GenerateFontAsset(OrbitronTtfPath, OrbitronAssetPath, samplingPointSize: 90, atlasWidth: 1024, atlasHeight: 1024);
             GenerateFontAsset(MonoTtfPath, MonoAssetPath, samplingPointSize: 72, atlasWidth: 1024, atlasHeight: 1024);
@@ -69,13 +78,6 @@ namespace QuantumEcho.Editor
 
         static void GenerateFontAsset(string ttfPath, string assetPath, int samplingPointSize, int atlasWidth, int atlasHeight)
         {
-            var ttf = AssetDatabase.LoadAssetAtPath<Font>(ttfPath);
-            if (ttf == null)
-            {
-                Debug.LogWarning($"[QE-v3] TTF not found at {ttfPath}, skipping font generation.");
-                return;
-            }
-
             // Check if asset already exists
             var existing = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
             if (existing != null)
@@ -84,23 +86,52 @@ namespace QuantumEcho.Editor
                 return;
             }
 
-            // Use TMP_FontAsset.CreateFontAsset (Unity 2020+)
-            var fontAsset = TMP_FontAsset.CreateFontAsset(
-                ttf,
-                samplingPointSize,
-                padding: 9,
-                renderMode: GlyphRenderMode.SDFAA,
-                atlasWidth, atlasHeight);
-
-            if (fontAsset == null)
+            // Load the Unity Font asset
+            var ttf = AssetDatabase.LoadAssetAtPath<Font>(ttfPath);
+            if (ttf == null)
             {
-                Debug.LogError($"[QE-v3] Failed to create font asset from {ttfPath}");
+                Debug.LogWarning($"[QE-v3] TTF not found at {ttfPath}, skipping font generation.");
                 return;
             }
 
-            fontAsset.name = Path.GetFileNameWithoutExtension(assetPath);
-            AssetDatabase.CreateAsset(fontAsset, assetPath);
-            Debug.Log($"[QE-v3] Created font asset: {assetPath}");
+            // First, try static atlas creation (may fail in -nographics batchmode due to FreeType)
+            var fontAsset = TMP_FontAsset.CreateFontAsset(
+                ttf,
+                samplingPointSize,
+                atlasPadding: 9,
+                renderMode: GlyphRenderMode.SDFAA,
+                atlasWidth, atlasHeight);
+
+            if (fontAsset != null)
+            {
+                fontAsset.name = Path.GetFileNameWithoutExtension(assetPath);
+                AssetDatabase.CreateAsset(fontAsset, assetPath);
+                Debug.Log($"[QE-v3] Created static font asset: {assetPath}");
+                return;
+            }
+
+            // Fallback: duplicate NotoSansSC-Dynamic.asset (already properly initialized)
+            // and re-point its sourceFontFile to the target TTF.
+            // This avoids FreeType requirements in -nographics batchmode.
+            const string templateAsset = "Assets/QuantumEcho/Fonts/NotoSansSC-Dynamic.asset";
+            Debug.LogWarning($"[QE-v3] Static creation failed (nographics FreeType limitation). Duplicating {templateAsset} for {ttfPath}");
+            AssetDatabase.CopyAsset(templateAsset, assetPath);
+            AssetDatabase.Refresh();
+            var dynamicAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(assetPath);
+            if (dynamicAsset == null)
+            {
+                Debug.LogError($"[QE-v3] Failed to duplicate template font asset to {assetPath}");
+                return;
+            }
+            // Update name and source font reference
+            dynamicAsset.name = Path.GetFileNameWithoutExtension(assetPath);
+            var sourceFontProp = typeof(TMP_FontAsset).GetField("m_SourceFontFile",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (sourceFontProp != null) sourceFontProp.SetValue(dynamicAsset, ttf);
+            // Reset glyph tables so TMP re-populates at runtime with the correct font
+            dynamicAsset.ClearFontAssetData(setAtlasSizeToZero: false);
+            EditorUtility.SetDirty(dynamicAsset);
+            Debug.Log($"[QE-v3] Created dynamic font asset (duplicated template): {assetPath}");
         }
 
         // ────────────────────────────────────────────────────────────────────

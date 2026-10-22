@@ -115,9 +115,9 @@
 | 构建方法 | `QuantumEchoENBuilder.BuildENAndroid`（新建脚本，跳过 PXR SDK 依赖验证） |
 | 目标路径 | `Builds/EN/QuantumEcho-EN-PICO.apk` |
 | Unity | 6000.5.5f1 batchmode (`-nographics -quit`) |
-| 状态 | **构建中**（后台进行，日志：`Builds/EN/build.log`） |
-| APK SHA-256 | *构建完成后补充* |
-| APK 大小 | *构建完成后补充* |
+| 状态 | **构建成功** ✓（2026-10-22，日志：`Builds/EN/build.log`） |
+| APK SHA-256 | `f61953343e26109d3f5fa1a2e30c41b21290a63d1799c64035f0d0eebc717eb9` |
+| APK 大小 | 75,907,507 字节（约 72 MB） |
 
 ---
 

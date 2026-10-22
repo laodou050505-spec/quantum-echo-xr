@@ -1,0 +1,19 @@
+{
+  "task_id": "14427d31-efb6-40eb-991e-9d744db78486",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Transform this actual game scene into premium cinematic key art for a sophisticated PICO XR spatial puzzle game. Keep the recognizable floating white-and-magenta spherical player drone as the hero, a cyan quantum containment core, transparent force gate, small blue crystal data fragments, maglev rail geometry and ghostlike violet echo paths. Deep-space research chamber, restrained navy black field, ion cyan rim light, subtle echo-violet volumetric trails, one warm amber interaction beacon. Strong depth, elegant asymmetrical composition, calm museum-grade sci-fi, polished console game cover quality, comfortable contrast, crisp shapes, no bloom clipping. Leave a clean dark negative-space area across the upper center and lower center for Unity title and buttons. Remove every existing interface panel, label and overlay. Absolutely no text, no letters, no numbers, no logos, no watermark, no border, no device mockup.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260907/14427d31-efb6-40eb-991e-9d744db78486/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDcvMTQ0MjdkMzEtZWZiNi00MGViLTk5MWUtOWQ3NDRkYjc4NDg2L2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg4NjQ5Mzh9fX1dfQ__&Signature=mhYje4bwUzjFi2kKSRybPcZEx4VxiSqll2wWVR0COUzWfr3IvAnM3TMGyCxwHMtAN7FabVgdg1xzfuLbJwKK7J-bcF~t45FIrw6PiAdqtGe3nssqSL4UcaKmwF2QGPbRxGuWQszH6864pCrv8v~BjRF8BwbwSgGFh89JSRdgOSLPOFLOoP80v~BW4EkRP4k1fCXTGKQTFcnS~l27A1QI0tvkmVqA5NBnEnxs2JNmX9SUHQr-tUilrUtrYh4KKyGOQjAPcduu51yhrSLDpTB4JnI-poFCNep~8msXfyzEXlYrfG-hdFhPvmmXsI0ymKTBYcb5Yc~IadDCeufhChYWWQ__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-07T10:55:15.754795Z",
+  "completed_at": "2026-09-07T10:55:35.651679Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/Cover/01_generated_image_url.png"
+  ]
+}

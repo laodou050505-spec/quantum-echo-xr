@@ -1,0 +1,19 @@
+{
+  "task_id": "7ea900d5-e580-4d79-8886-abcbf6917750",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Create one single premium blank 2D HUD panel skin for the same Quantum Echo PICO XR game, front-facing orthographic asset filling a 16:9 canvas. It must be designed for 9-slice scaling: a wide rectangular panel with generous 100-pixel quiet margins, dark opaque navy-carbon interior, precise chamfered corners, subtle phase-channel grooves and layered anodized-metal depth. Thin ion-cyan path line enters at upper left and exits lower right, one restrained echo-violet junction, one tiny amber status notch. Center 65 percent remains completely empty and uniform for Chinese Unity TMP text. Crisp edges, comfortable contrast, no strong bloom, no glass glare, no perspective, no mockup, no separate panels. Absolutely no text, no letters, no numbers, no symbols, no icons, no logo, no watermark.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260907/7ea900d5-e580-4d79-8886-abcbf6917750/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDcvN2VhOTAwZDUtZTU4MC00ZDc5LTg4ODYtYWJjYmY2OTE3NzUwL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg4NjUyMTN9fX1dfQ__&Signature=fetiyCw8-EJ3m8m~ZGQ0nFXcDz3ap4m1g4PYfRQOf6TvfuQ~NhSw9g-WmXN27mWFHMwJNl~V9wfzKSG6U62qSvAQawkVkIwWnGy9q3P~9qX3U8FSZdehYkkbTAB6WvSWM-r0eVE~qjwQ7oa5Z2U3lQcx9VketR~LfFXhPL0s3p~q9C2dTGN1NP0EXtbDQ9Ig2IZL8ghbKHe9335TOELxgN0zb08QQFi5f7zn6d3Qz0fmRMW7c6OXst6oCMwpd2ShspT2uri~itfDDbbjMFXPPuv0Lwdi57lwCYmQ90ePwM5lA~RXoqOGXDOlvfrc9y-Rn0TSDvx4N4NrryGsf51jVw__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-07T10:59:54.704728Z",
+  "completed_at": "2026-09-07T11:00:13.609783Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/Panels/01_generated_image_url.png"
+  ]
+}

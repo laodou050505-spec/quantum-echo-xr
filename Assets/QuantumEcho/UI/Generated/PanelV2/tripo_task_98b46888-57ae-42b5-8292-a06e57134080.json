@@ -1,0 +1,19 @@
+{
+  "task_id": "98b46888-57ae-42b5-8292-a06e57134080",
+  "status": "success",
+  "type": "text_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Production UI texture asset, ONE single flat rectangular sci-fi interface backing plate, orthographic straight-on full-bleed 16:9 image, absolutely no text. Premium QUANTUM ECHO time-loop puzzle game design: near-black blue graphite, matte ceramic instrument finish, a very fine cool muted cyan hairline inset border with minimally clipped corners. Only two small restrained cyan registration marks at top-left and bottom-right, no lights elsewhere. The interior 90% is perfectly calm, opaque, extremely dark charcoal-blue with imperceptible fine matte material. NO reflections, NO glass shine, NO diagonal streaks, NO glossy patches, NO decorative circuits, NO busy corners, NO neon glow, NO double or triple borders, NO holograms, NO perspective, NO buttons, NO icons, NO symbols, NO text. Thin elegant frame is subordinate to live white text which will be rendered later. Uniform neutral dark backing for maximum legibility over a bright 3D game environment. Plate fills the entire canvas to the edges; no outside background. Restrained polished game interface asset, suitable for nine-slice scaling.",
+    "model_version": "banana_pro"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260908/98b46888-57ae-42b5-8292-a06e57134080/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDgvOThiNDY4ODgtNTdhZS00MmI1LTgyOTItYTA2ZTU3MTM0MDgwL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg5MzUzMDV9fX1dfQ__&Signature=iS1-RXsHEosmUlXB5Z30h5X9la06s487iVQZQI9OOoXGFvkw3brQ17ZD8gnDSrOyIWExfmRaMJQSukjDqSn8eRasdtpHubCrNS-wftI7m2L1M3fmXc-0P3vqLRfC49DCuMhHTomWZovQcI4RkFFHVhh00wOAcp2dNkF8jFzHUpg0DbeizzNTCM3fnTVg5ZWirLw0k~Kbzh9uwariwx80iSRCBZJdVfgJS8JqatLKf7r5ZZkEPndhdRxW5G39xRxbz-zXZg9kx1xpm5GYYajzYrsNOQ-J7FKekuvH6-J9~tGG6~GpeKg5nGELCDpfSNSbK94a9fa-i01nTiRhaPHZhw__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-08T06:27:56.316588Z",
+  "completed_at": "2026-09-08T06:28:22.966984Z",
+  "credits_consumed": 15.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/PanelV2/01_generated_image_url.png"
+  ]
+}

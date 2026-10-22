@@ -1,0 +1,19 @@
+{
+  "task_id": "29e9b9f7-1c3c-4083-9eea-77faf39452be",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Premium key art for the PICO XR spatial puzzle game Quantum Echo, using the actual scene only as design reference. Cinematic asymmetrical composition: keep the LEFT 42 percent as calm deep navy negative space with subtle sparse stars and faint echo contour lines for Unity title typography; place the recognizable floating pearl-white spherical player drone in the lower RIGHT third, facing a luminous cyan quantum core behind a low transparent force gate, with two small blue crystal fragments and one elegant violet echo trail leading through the chamber. Hint at maglev rails and experimental architecture on the right, never clutter the left. Sophisticated science-museum exhibition identity, dark anodized metal, cyan spectral light, restrained echo violet, tiny amber interaction light, crisp silhouette, controlled bloom, deep perspective, premium console cover finish, calm comfortable contrast. Remove all interface panels and overlays. No text, no letters, no numbers, no logo, no watermark, no frame, no border, no device mockup.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260907/29e9b9f7-1c3c-4083-9eea-77faf39452be/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDcvMjllOWI5ZjctMWMzYy00MDgzLTllZWEtNzdmYWYzOTQ1MmJlL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg4NjUwOTh9fX1dfQ__&Signature=fHEqRoN3zpliCtR-SfyKQL-0PJOCvDyDnPOYQV12cy8jv9Exx2sbj7enabZ~Xk~HBVfKSb1poQ44NjpPz57L8GUGCU9J06aaqCYH5MhxN61kIxBtMyvttbJn~4N7qXtkjunPruXqOBm4jtbXwD2H6sR1OydItroMR38bioV7u3jJOvsWJPB3nOdzOw7BcOjFBXkRuIrumKJSrTVmej-81V3z2RK1gUzAaeQv-sgsMxTTmud2QkNMlvi40Lu3F~SDnQnrTuDEwwg7eua7l3E2P~RcGZH-CfsV2Ec-59eZyH7kyMJ~FunWH3rIYsSwRioJpDTbe5Mc9MnIsQOY6wHCMw__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-07T10:57:56.798127Z",
+  "completed_at": "2026-09-07T10:58:15.721354Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/CoverV2/01_generated_image_url.png"
+  ]
+}

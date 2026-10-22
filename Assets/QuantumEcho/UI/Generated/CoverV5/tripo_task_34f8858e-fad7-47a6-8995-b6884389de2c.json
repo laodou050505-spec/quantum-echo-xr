@@ -1,0 +1,19 @@
+{
+  "task_id": "34f8858e-fad7-47a6-8995-b6884389de2c",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Reimagine this as a premium cinematic sci-fi puzzle game cover for QUANTUM ECHO. Preserve the actual gameplay story and composition: a deep-space research chamber, transparent violet energy gate, glowing cyan quantum core, small white spherical player avatar, blue crystal fragments, violet echo trails and floating echo orbs. Make a wide 16:9 composition with the left 38 percent deliberately quiet and dark for a title lockup, while the right side carries the gameplay action. Integrate elegant, minimal English typography in the left quiet area: QUANTUM ECHO in a refined geometric techno display font, with a small subtitle SPATIAL PUZZLE beneath it. Typography must be crisp, correctly spelled, legible, tasteful, and not cover the gameplay elements. High-end game key art, restrained deep navy, ion cyan and echo violet, cinematic volumetric lighting, premium visual hierarchy, no Chinese characters, no UI panels, no logos, no watermark, no extra characters, no clutter.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260908/34f8858e-fad7-47a6-8995-b6884389de2c/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDgvMzRmODg1OGUtZmFkNy00N2E2LTg5OTUtYjY4ODQzODlkZTJjL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg5MzA2NTJ9fX1dfQ__&Signature=dOEbmbnl8XnTCKsklo27EizmR7citQ446XmdaXreFRQ-HC9JY9OY6YOYzkx4S~hDLEmEQ5h4Kf6fh9FEjTlDmVIVFvFv6jwxE-jfKqZ9ygq7EZ34EnnQv8SdoJnQAGc2CQa2idK3hUjgbYexFoKeXXcajWDPlR36UZwl4-tlAcB2A9bBVEAvwh8JDvtaU~kMTSchJIXH2O2Ow441TrW77rPIizPjSjR2vCwkMGIU8ntLFnU-K35jBkcDCvIYzFLZF1vuUkx53cf6NbCmIarbfuYXYs8zXF9twvGITwg3~26-KUtxrZsFzviT0veH6zqtZJs5cix9pSFuQLMm2SkOiw__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-08T05:10:39.689240Z",
+  "completed_at": "2026-09-08T05:10:49.905795Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/CoverV5/01_generated_image_url.png"
+  ]
+}

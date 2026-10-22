@@ -1,0 +1,19 @@
+{
+  "task_id": "e7629381-ec65-459a-b8bd-cd780ac23125",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Finish this exact game cover for production. Keep the composition, large titanium QUANTUM ECHO logotype, the REWRITE THE MOMENT subtitle, architecture, white visor drone and its violet temporal echoes unchanged. REMOVE every tiny grey coordinate annotation, every percentage, every x/y position label, every number anywhere in the image. These are accidental production notes: remove the grey writing beside QUANTUM, under the subtitle, under the drone, and in the lower left corner. Seamlessly restore the dark background in their place. There must be exactly THREE text lines total: QUANTUM, ECHO, REWRITE THE MOMENT. Nothing else. No coordinates, no numbers, no buttons, no borders or additional text. Improve the central cyan aperture by lowering its overexposure a little, preserving a luminous cyan surface with subtle texture. Preserve sharp high-quality custom lettering and all other image details. Finished cinematic sci-fi main-menu background, landscape 16:9.",
+    "model_version": "banana_pro"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260908/e7629381-ec65-459a-b8bd-cd780ac23125/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDgvZTc2MjkzODEtZWM2NS00NTlhLWI4YmQtY2Q3ODBhYzIzMTI1L2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg5MzU2MTR9fX1dfQ__&Signature=LUCqqdIggmCYY07W3bPyjpsUUcoYIhvzuDO13OAx01LHOdJDjcOR35cWh0CLrBKg4SQjm-1SRBCpEbAoOX3sFtggcoyv9xrFbCNWfZ4KUyrKU-FEuFdzvE6sppqeatYEc0S8WB90hmvuG7HfZKRG1rMgd-otizg0ZQM66ZMw5CIdyBEcBDcFoh9aL4QXOLwX9BtMjYBm8yvzPodsKMfPGSuIWbKamz3BZ880V1JiAr4Kc97sz5XZOm75P8Rj-JHJYO6MWRo4uOIJNfWxcXqnI0p6ic1bkFsdRxqaZJ2ey43-9ceSvbjwgJV2inwk9OaN3W8rpIp5HUv9bxzRZtpAWg__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-08T06:32:45.186907Z",
+  "completed_at": "2026-09-08T06:33:31.271353Z",
+  "credits_consumed": 15.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/CoverV6Clean/01_generated_image_url.png"
+  ]
+}

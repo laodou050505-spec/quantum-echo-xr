@@ -1,0 +1,19 @@
+{
+  "task_id": "c8cf66aa-7b1d-424d-982f-20d0cd0e2701",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Premium cinematic 16:9 main-menu artwork for QUANTUM ECHO, a time-loop puzzle game. Image 1 is layout reference only: huge upper-left identity, narrow left menu zone, authored cinematic scene on right. Copy no logos, soldiers, cities or text. Image 2 shows our real spherical white drone with dark horizontal visor and side fins, cyan platforms, purple gates. Image 3 is the REJECTED cover: discard its tiny generic type, atomic rings and glossy overexposure.\nCreate a monumental orbital time chamber: brutalist stepped platforms in midnight space; pearl-white visor drone at x73% y70%, two ghostly violet past copies along an elegant repeated path toward a narrow cyan vertical time aperture at x82% y35%. Small blue crystal shards on ledges. Filmic material, beautiful depth, sweeping composition, clean masses, sharp focal details. Ink navy, desaturated steel, pearl, controlled cyan and violet. Premium sci-fi key art, not a game screenshot.\nOriginal custom game logotype at x8-48%, y18-44%: QUANTUM on line one, ECHO on line two. Huge tall condensed engineered lettering, cut terminals, asymmetrical Q tail, subtle temporal split cuts through ECHO, brushed pearl titanium. Perfect spelling, extremely legible, graphic identity as strong as the reference. No generic thin sans-serif, no blurry glow. Small subtitle REWRITE THE MOMENT at x8% y48%.\nLeft x5-42%, y55-91% MUST be quiet dark negative space for live Unity menu rows. NO buttons, START, EXIT, fake UI, border, frame, watermark or extra words. Background fills edges, no physical monitor or perspective screen. Finished high-end game cover, confident logotype and cinematic environment, 2K 16:9.",
+    "model_version": "banana_pro"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260908/c8cf66aa-7b1d-424d-982f-20d0cd0e2701/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDgvYzhjZjY2YWEtN2IxZC00MjRkLTk4MmYtMjBkMGNkMGUyNzAxL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg5MzU0ODl9fX1dfQ__&Signature=ZbRZuzBya7TlqqnUSFTqx5DeMWnIe9Nrc0hffRKFu1xLmSKhZszI89g0XXlucTIklvEFT-csx0myx7WSGffsbUvn8E~ZN7ZFXuxD9jtc0kUF~FnrxMS8nABVqpa0qwKwDJJO6pdeiAPFz55bnqjeHlhpEPWkvNds0GaEtlAc1lGWsZWTbOPEEYNlWI4SObdLHjDS~E92fnZWv~pvZ1L9mMWs-qLAF~q7PS7GEUA7z~9u952EevlbrK-s-713XmqZ0msRMNKgCUcMJraxyb6DEcoelj9YaBzEtCC59DnE7tsBcG6ZWf89I-womvj8zQdTh--lHLG3GjWg5otfXtKzKA__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-08T06:30:37.607050Z",
+  "completed_at": "2026-09-08T06:31:26.609294Z",
+  "credits_consumed": 15.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-11/unity-pico-xr-pico/解密1/Assets/QuantumEcho/UI/Generated/CoverV6/01_generated_image_url.png"
+  ]
+}

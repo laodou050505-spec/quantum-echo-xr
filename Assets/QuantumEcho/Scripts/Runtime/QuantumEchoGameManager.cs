@@ -99,7 +99,7 @@ namespace QuantumEcho
             if (_won)
             {
                 if (player.CommitPressed || player.UndoPressed)
-                    hud.ShowToast(_currentLevelIndex < levels.Length - 1 ? "本关已完成，正在进入下一关…" : "回声任务已全部完成");
+                    hud.ShowToast(_currentLevelIndex < levels.Length - 1 ? "Level complete — loading next level…" : "All Echo missions complete!");
                 // Earlier levels advance on their own after a short, readable
                 // success beat.  No extra controller button is required, avoiding
                 // a confusing pause between rooms in PICO.
@@ -141,7 +141,7 @@ namespace QuantumEcho
             if (_loopElapsed >= _level.loopDuration)
             {
                 Play(errorClip);
-                hud.ShowToast("回路失稳：当前动作未封存");
+                hud.ShowToast("Loop unstable — action not committed");
                 ResetCycle();
             }
         }
@@ -161,7 +161,7 @@ namespace QuantumEcho
             if (_level.core != null) _level.core.gameObject.SetActive(true);
             hud.HideResult();
             ResetCycle();
-            hud.ShowToast("回路已启动：按左上角面板中的手柄键位操作", 3.2f);
+            hud.ShowToast("Loop started — see the top-left panel for controls", 3.2f);
         }
 
         void ResetExperiment()
@@ -174,7 +174,7 @@ namespace QuantumEcho
             hud.HideResult();
             ResetCycle();
             Play(interactClip);
-            hud.ShowToast("实验已重置");
+            hud.ShowToast("Experiment reset");
         }
 
         void ResetCycle()
@@ -269,13 +269,13 @@ namespace QuantumEcho
             if (_currentRecording.Count < 5 || _loopElapsed < 0.35f)
             {
                 Play(errorClip);
-                hud.ShowToast("当前回路太短，尚未形成稳定回声");
+                hud.ShowToast("Loop too short — no stable Echo formed");
                 return;
             }
             if (_echoRecordings.Count >= MaxEchoes)
             {
                 Play(errorClip);
-                hud.ShowToast("回声槽已满，请撤销一个回声");
+                hud.ShowToast("Echo slots full — undo an Echo first");
                 return;
             }
 
@@ -285,7 +285,7 @@ namespace QuantumEcho
             CreateEchoVisual(recording, _echoRecordings.Count - 1);
             Play(unlockClip);
             player.PulseHaptics(0.55f, 0.10f);
-            hud.ShowToast($"回声 {_echoRecordings.Count} 已封存");
+            hud.ShowToast($"Echo {_echoRecordings.Count} committed");
             ResetCycle();
         }
 
@@ -313,7 +313,7 @@ namespace QuantumEcho
             if (_echoRecordings.Count == 0)
             {
                 Play(errorClip);
-                hud.ShowToast("没有可以撤销的回声");
+                hud.ShowToast("No Echo to undo");
                 return;
             }
             var last = _echoes.Count - 1;
@@ -323,7 +323,7 @@ namespace QuantumEcho
             _echoRecordings.RemoveAt(_echoRecordings.Count - 1);
             Play(interactClip);
             player.PulseHaptics(0.32f, 0.07f);
-            hud.ShowToast("最后一个回声已撤销");
+            hud.ShowToast("Last Echo undone");
             ResetCycle();
         }
 
@@ -442,13 +442,13 @@ namespace QuantumEcho
                     _trainFaulted = true;
                     SetEmission(_level.trainRenderer, new Color(1f, 0.2f, 0.25f), 2f);
                     Play(errorClip);
-                    hud.ShowToast("换轨过早：让第二段路线更晚抵达，撤销后重录");
+                    hud.ShowToast("Switch too early — the second path must arrive later; undo and re-record");
                 }
                 else
                 {
                     _trainAtJunction = true;
                     Play(unlockClip);
-                    hud.ShowToast("换轨节拍命中：列车驶向核心泊位");
+                    hud.ShowToast("Switch beat hit — Phase Train heading to core dock");
                 }
             }
             if (_trainAtJunction && !_trainFaulted)
@@ -463,7 +463,7 @@ namespace QuantumEcho
             {
                 _trainDockAnnounced = true;
                 Play(confirmClip);
-                hud.ShowToast("列车已停靠核心泊位");
+                hud.ShowToast("Phase Train docked at the core");
             }
         }
 
@@ -486,7 +486,7 @@ namespace QuantumEcho
                     _luredSentinels++;
                     SetEmission(sentinel.mainRenderer, new Color(0.88f, 0.32f, 0.74f), 1.7f);
                     Play(unlockClip);
-                    hud.ShowToast($"追猎体 {index + 1} 已锁定回声诱饵");
+                    hud.ShowToast($"Hunter {index + 1} locked onto the Echo Decoy");
                 }
                 var target = sentinel.collected && lureZone != null
                     ? lureZone.position + Vector3.up * 0.8f
@@ -509,14 +509,14 @@ namespace QuantumEcho
                 fragment.captureProgress = Mathf.Clamp01(fragment.captureProgress + (extracting ? delta / HoldDuration : -delta * 2.2f));
                 if (fragment.halo != null) fragment.halo.localScale = fragment.haloBaseScale * (1f + fragment.captureProgress * 0.75f);
                 SetEmission(fragment.mainRenderer, new Color(0.26f, 0.9f, 0.82f), 1.9f + fragment.captureProgress * 2.3f);
-                if (inRange) hud.SetProgress(true, "【右扳机·持续按住】提取失落数据", fragment.captureProgress);
+                if (inRange) hud.SetProgress(true, "[R-Trigger · Hold] Extract Lost Data", fragment.captureProgress);
                 if (fragment.captureProgress >= 1f)
                 {
                     fragment.collected = true;
                     fragment.gameObject.SetActive(false);
                     Play(confirmClip);
                     player.PulseHaptics(0.55f, 0.1f);
-                    hud.ShowToast("失落数据已回收");
+                    hud.ShowToast("Lost Data recovered");
                 }
             }
 
@@ -529,7 +529,7 @@ namespace QuantumEcho
                 if (!sentinel.collected && _lureCatchCooldown <= 0f && FlatDistance(player.GroundPosition, sentinel.transform.position) < 1.50f)
                 {
                     Play(errorClip);
-                    hud.ShowToast("本体被追猎体锁定：先录制诱饵路线");
+                    hud.ShowToast("You are locked by a Hunter — record Decoy routes first");
                     ResetCycle();
                     return false;
                 }
@@ -601,8 +601,8 @@ namespace QuantumEcho
             if (inRange)
             {
                 hud.SetProgress(true, capturing
-                    ? "【右扳机·持续按住】正在回收量子核心"
-                    : "【右扳机·持续按住】回收量子核心", _coreCaptureProgress);
+                    ? "[R-Trigger · Hold] Extracting Core…"
+                    : "[R-Trigger · Hold] Extract Core", _coreCaptureProgress);
             }
             if (_coreCaptureProgress >= 1f) WinLevel();
         }
@@ -637,10 +637,10 @@ namespace QuantumEcho
         {
             var timerLabel = _level.mode switch
             {
-                QuantumLevelMode.Tutorial => "教学回路长度",
-                QuantumLevelMode.Train => "本段节拍长度",
-                QuantumLevelMode.Lure => "诱饵回路长度",
-                _ => "回路稳定度"
+                QuantumLevelMode.Tutorial => "Tutorial Loop",
+                QuantumLevelMode.Train => "Beat Length",
+                QuantumLevelMode.Lure => "Decoy Loop",
+                _ => "Loop Stability"
             };
             hud.SetLevel(_level.levelCode, _echoRecordings.Count + 1, timerLabel);
             hud.SetTimer(_level.loopDuration - _loopElapsed, _level.loopDuration);
@@ -661,11 +661,11 @@ namespace QuantumEcho
 
         void UpdatePrompt()
         {
-            const string interactKey = "右扳机";
-            const string commitKey = "握把 / A / X";
+            const string interactKey = "R-Trigger";
+            const string commitKey = "Grip / A / X";
             if (IsCoreReady() && IsTargetedOrNear(_level.core, 1.8f, 3.5f))
             {
-                hud.SetPrompt(interactKey, player.InteractHeld ? $"持续按住，核心回收 {Mathf.RoundToInt(_coreCaptureProgress * 100f)}%" : "回收量子核心");
+                hud.SetPrompt(interactKey, player.InteractHeld ? $"Hold — Core {Mathf.RoundToInt(_coreCaptureProgress * 100f)}% extracted" : "Extract the Quantum Core");
                 return;
             }
             if (_level.mode == QuantumLevelMode.Lure)
@@ -677,15 +677,15 @@ namespace QuantumEcho
                         if (fragment == null) continue;
                         if (!fragment.collected && IsTargetedOrNear(fragment.transform, 0.82f, 3.2f))
                         {
-                            hud.SetPrompt(interactKey, $"提取失落数据 {Mathf.RoundToInt(fragment.captureProgress * 100f)}%");
+                            hud.SetPrompt(interactKey, $"Extracting Lost Data {Mathf.RoundToInt(fragment.captureProgress * 100f)}%");
                             return;
                         }
                     }
                 }
-                if (_echoRecordings.Count < 2) hud.SetPrompt(commitKey, "跑入左右紫色残响区，分别封存两条诱饵路线");
-                else if (_luredSentinels < 2) hud.SetPrompt("左摇杆", "保持距离，等待回声引走追猎体");
-                else if (!AllFragmentsCollected()) hud.SetPrompt("右扳机", "靠近门前碎片并持续吸取");
-                else hud.SetPrompt(interactKey, "穿过已开启的收容门并同步核心");
+                if (_echoRecordings.Count < 2) hud.SetPrompt(commitKey, "Run to both Decoy Residue zones and commit two routes");
+                else if (_luredSentinels < 2) hud.SetPrompt("L-Stick", "Keep distance — let the Echoes lure the Hunters away");
+                else if (!AllFragmentsCollected()) hud.SetPrompt("R-Trigger", "Approach the gate fragments and hold to extract");
+                else hud.SetPrompt(interactKey, "Walk through the open gate and sync the Core");
                 return;
             }
 
@@ -693,21 +693,21 @@ namespace QuantumEcho
             var nearB = _level.padB != null && FlatDistance(player.GroundPosition, _level.padB.position) < 1.25f;
             if (nearA || nearB)
             {
-                if (_level.mode == QuantumLevelMode.Tutorial) hud.SetPrompt(commitKey, "保持器已踩住：封存这段站位");
-                else hud.SetPrompt("右扳机", $"{(nearA ? "A" : "B")} 区同步{(_interactionLatched || player.InteractHeld ? "中" : "")}");
+                if (_level.mode == QuantumLevelMode.Tutorial) hud.SetPrompt(commitKey, "Holder activated — commit this position");
+                else hud.SetPrompt("R-Trigger", $"{(nearA ? "A" : "B")} zone {(_interactionLatched || player.InteractHeld ? "syncing" : "sync")}");
                 return;
             }
             if (_level.mode == QuantumLevelMode.Train && _echoRecordings.Count >= 2 && !_trainDockAnnounced)
             {
-                hud.SetPrompt("左摇杆", "移至安全观察位，等待列车靠站");
+                hud.SetPrompt("L-Stick", "Move to a safe spot and wait for the train to dock");
                 return;
             }
             if (_echoRecordings.Count == 0)
-                hud.SetPrompt("左摇杆", _level.mode == QuantumLevelMode.Tutorial ? "走上蓝色保持器" : "前往 A 区稳定器");
+                hud.SetPrompt("L-Stick", _level.mode == QuantumLevelMode.Tutorial ? "Step onto the blue Holder" : "Head to Stabilizer A");
             else if (_gateOpenAmount > 0.65f)
-                hud.SetPrompt("左摇杆", "穿过门，靠近量子核心");
+                hud.SetPrompt("L-Stick", "Walk through the gate to the Quantum Core");
             else
-                hud.SetPrompt(commitKey, "封存当前动作，开始下一回路");
+                hud.SetPrompt(commitKey, "Commit this action and start the next loop");
         }
 
         static (string title, string copy) GetObjective(int level, int step)
@@ -716,27 +716,27 @@ namespace QuantumEcho
             {
                 new[]
                 {
-                    ("踩住保持器", "走进蓝色圆盘，门会保持开启；站上去后封存为回声。"),
-                    ("让回声接手", "新回路开始后，回声会走回保持器。等门打开后，自己穿过去。"),
-                    ("回收量子核心", "穿过已开启的教学力场，靠近并持续吸取核心。")
+                    ("Activate the Holder", "Step onto the blue disc to keep the door open. Then commit as an Echo."),
+                    ("Let Your Echo Take Over", "When the new loop starts, your Echo returns to the Holder. Wait for the door, then walk through."),
+                    ("Recover the Quantum Core", "Walk through the open Tutorial Field and hold to extract the Core.")
                 },
                 new[]
                 {
-                    ("记录左侧稳定器", "进入 A 区同步，然后封存当前回路。"),
-                    ("记录右侧稳定器", "让回声同步 A 区；你在 B 区同步，再封存一次。"),
-                    ("取回量子核心", "等待两个回声解除力场，靠近并持续吸取核心。")
+                    ("Sync Stabilizer A", "Enter zone A to sync, then commit this loop."),
+                    ("Sync Stabilizer B", "Let your Echo sync zone A while you sync zone B, then commit."),
+                    ("Recover the Quantum Core", "Wait for both Echoes to lower the field, then hold to extract the Core.")
                 },
                 new[]
                 {
-                    ("录制发车节拍", "到 A 枢纽同步后封存，它会让列车从始发站出发。"),
-                    ("录制换轨节拍", "到 B 枢纽同步后再封存；这条路径要比第一条更晚抵达。"),
-                    ("等待列车靠站", "回声会让列车先发车、再换轨。停靠后靠近并持续吸取核心。")
+                    ("Record the Departure Beat", "Sync at junction A and commit — this sends the Phase Train from the start."),
+                    ("Record the Switch Beat", "Sync at junction B and commit. This path must arrive later than the first."),
+                    ("Wait for the Train to Dock", "Your Echoes launch and redirect the train. Once docked, hold to extract the Core.")
                 },
                 new[]
                 {
-                    ("录制左侧诱饵", "跑向左上方紫色残响区并封存，第一台追猎体会认错目标。"),
-                    ("录制右侧诱饵", "下一回路跑向右上方残响区并封存，两台追猎体将分别被带走。"),
-                    ("回收门前数据", "两台追猎体被引走后，持续吸取门前两枚蓝色碎片。")
+                    ("Record Left Decoy", "Run to the upper-left Decoy Residue and commit — the first Hunter will follow your Echo."),
+                    ("Record Right Decoy", "In the next loop, run to the upper-right Residue and commit — both Hunters will be drawn away."),
+                    ("Recover the Lost Data", "With both Hunters lured away, hold to extract the two blue fragments by the gate.")
                 }
             };
             return objectives[Mathf.Clamp(level, 0, objectives.Length - 1)][Mathf.Clamp(step, 0, 2)];
@@ -752,10 +752,10 @@ namespace QuantumEcho
             player.PulseHaptics(0.8f, 0.18f);
             var result = _currentLevelIndex switch
             {
-                0 => "回声接力完成",
-                1 => "核心回收完成",
-                2 => "相位列车调度完成",
-                _ => "失落数据已回收"
+                0 => "Echo Relay Complete",
+                1 => "Core Recovery Complete",
+                2 => "Phase Train Dispatch Complete",
+                _ => "Lost Data Recovered"
             };
             hud.ShowResult(result, _echoRecordings.Count, _totalElapsed, _currentLevelIndex == levels.Length - 1);
             if (_currentLevelIndex < levels.Length - 1)

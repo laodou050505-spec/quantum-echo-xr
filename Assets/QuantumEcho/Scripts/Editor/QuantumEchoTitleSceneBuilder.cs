@@ -83,7 +83,7 @@ namespace QuantumEcho.Editor
             var startButton = startTarget.GetComponent<QuantumTitleMenuButton>();
             var exitTarget = CreateMenuAction(menuRect, "EXIT TARGET - world-space trigger", "EXIT", new Vector2(-476f, -200f), font, false);
             var exitButton = exitTarget.GetComponent<QuantumTitleMenuButton>();
-            CreateMenuText(menuRect, "Start Hint", "【右扳机】选择并确认", new Vector2(-476f, -287f), new Vector2(448f, 36f), 24f, new Color(0.80f, 0.89f, 0.94f), font);
+            CreateMenuText(menuRect, "Start Hint", "[Right Trigger] Select & Confirm", new Vector2(-476f, -287f), new Vector2(448f, 36f), 24f, new Color(0.80f, 0.89f, 0.94f), font);
 
             var rig = new GameObject("TITLE XR RIG - design start derived");
             rig.transform.SetParent(root.transform);

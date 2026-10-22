@@ -676,7 +676,7 @@ namespace QuantumEcho.Editor
             if (labels == null) return;
             foreach (var label in labels.GetComponentsInChildren<TextMesh>(true))
             {
-                if (!label.text.StartsWith("失落数据")) continue;
+                if (!label.text.StartsWith("Lost Data")) continue;
                 var index = label.text.Contains("2") ? 1 : 0;
                 label.transform.localPosition = fragmentPositions[index] + Vector3.up * 0.72f;
                 EditorUtility.SetDirty(label);
@@ -1242,7 +1242,7 @@ namespace QuantumEcho.Editor
             var brand = FindChild(hud, "Brand Text")?.GetComponent<TMP_Text>();
             if (brand != null)
             {
-                brand.text = "Q-RELAY  /  量子回声";
+                brand.text = "Q-RELAY  /  QUANTUM ECHO";
                 brand.fontSize = 24;
                 brand.alignment = TextAlignmentOptions.MidlineLeft;
             }

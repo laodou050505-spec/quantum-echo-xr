@@ -1339,7 +1339,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u3010\u53F3\u6273\u673A\u3011\u9009\u62E9\u5E76\u786E\u8BA4"
+  m_text: "[Right Trigger] Select & Confirm"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}

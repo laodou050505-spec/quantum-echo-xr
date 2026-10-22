@@ -83,12 +83,12 @@ namespace QuantumEcho
             hud._detail = AddText(rect, font, "Detail", new Vector2(40f, -148f), new Vector2(760f, 92f), 30f, new Color(0.85f, 0.92f, 0.96f));
             hud._prompt = AddText(rect, font, "Prompt", new Vector2(40f, -238f), new Vector2(760f, 48f), 30f, new Color(0.60f, 0.95f, 0.93f));
             hud._countdown = AddText(rect, font, "Echo Countdown", new Vector2(40f, -302f), new Vector2(760f, 38f), 26f, new Color(1f, 0.80f, 0.43f));
-            hud._countdown.text = "回声结束  0.0s";
+            hud._countdown.text = "Echo End  0.0s";
             hud._helpHint = AddText(rect, font, "Help Hint", new Vector2(390f, -24f), new Vector2(410f, 42f), 25f, new Color(0.71f, 0.82f, 0.88f));
             hud._helpHint.alignment = TextAlignmentOptions.TopRight;
-            hud._helpHint.text = "【左摇杆按下】操作说明";
+            hud._helpHint.text = "[L-Stick] Controls";
             hud._controls = AddText(rect, font, "PICO Controls", new Vector2(40f, -370f), new Vector2(760f, 172f), 28f, Color.white);
-            hud._controls.text = "【左摇杆】移动\n【右扳机】交互 / 持续吸取\n【握把 / A / X】封存回声\n【B / Y】撤销   【左菜单键】重置";
+            hud._controls.text = "[L-Stick] Move\n[R-Trigger] Interact / Hold to Extract\n[Grip / A / X] Commit Echo\n[B / Y] Undo   [Left Menu] Reset";
             hud._controls.gameObject.SetActive(false);
             hud._feedback = AddText(rect, font, "Action Feedback", new Vector2(40f, -256f), new Vector2(760f, 70f), 30f, new Color(1f, 0.80f, 0.43f));
             hud._feedback.gameObject.SetActive(false);
@@ -126,7 +126,7 @@ namespace QuantumEcho
             _panel.sizeDelta = new Vector2(PanelWidth, expanded ? ExpandedHeight : CompactHeight);
             UpdatePlacement();
             _controls.gameObject.SetActive(expanded);
-            _helpHint.text = expanded ? "【左摇杆按下】收起操作说明" : "【左摇杆按下】操作说明";
+            _helpHint.text = expanded ? "[L-Stick] Hide Controls" : "[L-Stick] Controls";
         }
 
         void OnEnable() => Application.onBeforeRender += BeforeRenderPlacement;
@@ -229,7 +229,7 @@ namespace QuantumEcho
 
         public void SetContent(string level, string index, string objective, string detail, string key, string prompt)
         {
-            if (_level != null) _level.text = string.IsNullOrWhiteSpace(index) ? level : $"{level}  ·  目标 {index}";
+            if (_level != null) _level.text = string.IsNullOrWhiteSpace(index) ? level : $"{level}  ·  Obj. {index}";
             if (_objective != null) _objective.text = objective;
             if (_detail != null) _detail.text = detail;
             if (_prompt != null) _prompt.text = string.IsNullOrWhiteSpace(key) ? prompt : $"{key}  {prompt}";
@@ -237,7 +237,7 @@ namespace QuantumEcho
 
         public void SetCountdown(float remaining)
         {
-            if (_countdown != null) _countdown.text = $"回声结束  {Mathf.Max(0f, remaining):0.0}s";
+            if (_countdown != null) _countdown.text = $"Echo End  {Mathf.Max(0f, remaining):0.0}s";
         }
 
         public void ShowFeedback(string message, float seconds)

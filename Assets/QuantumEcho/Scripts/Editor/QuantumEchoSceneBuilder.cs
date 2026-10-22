@@ -128,9 +128,9 @@ namespace QuantumEcho.Editor
         static void ConfigureProject()
         {
             PlayerSettings.companyName = "Quantum Echo Lab";
-            PlayerSettings.productName = "量子回声";
+            PlayerSettings.productName = "QUANTUM ECHO";
             PlayerSettings.bundleVersion = "0.1.0";
-            PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.quantumecho.decrypt1");
+            PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.quantumecho.decrypt1.en");
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
             PlayerSettings.colorSpace = ColorSpace.Linear;
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
@@ -361,10 +361,10 @@ namespace QuantumEcho.Editor
             level.loopDuration = index switch { 0 => 14f, 1 => 12f, 2 => 16f, _ => 18f };
             level.title = index switch
             {
-                0 => "让回声替你守住门",
-                1 => "一个人，三个时间切片",
-                2 => "给量子列车编一段节拍",
-                _ => "别让追猎体认出你"
+                0 => "Let Your Echo Hold the Door",
+                1 => "One Self, Three Time Slices",
+                2 => "Set the Rhythm for the Phase Train",
+                _ => "Don't Let the Hunters Find You"
             };
 
             var geometry = Child(root.transform, "ENVIRONMENT - walls floor lights");
@@ -410,23 +410,23 @@ namespace QuantumEcho.Editor
             if (mode != QuantumLevelMode.Lure)
             {
                 level.padA = CreatePad(puzzle.transform, index == 0 ? "A - HOLD PAD" : "A - SYNC PAD", padAPosition, out level.padARenderer);
-                CreateWorldLabel(labels.transform, index == 0 ? "保持器 // 持续踩住" : index == 2 ? "A // 发车枢纽" : "A // 稳定器", padAPosition + Vector3.up * 1.25f, Amber);
+                CreateWorldLabel(labels.transform, index == 0 ? "Holder // Stay on It" : index == 2 ? "A // Launch Junction" : "A // Stabilizer", padAPosition + Vector3.up * 1.25f, Amber);
             }
             if (mode == QuantumLevelMode.Paired || mode == QuantumLevelMode.Train)
             {
                 level.padB = CreatePad(puzzle.transform, mode == QuantumLevelMode.Train ? "B - SWITCH PAD" : "B - SYNC PAD", padBPosition, out level.padBRenderer);
-                CreateWorldLabel(labels.transform, mode == QuantumLevelMode.Train ? "B // 换轨枢纽" : "B // 稳定器", padBPosition + Vector3.up * 1.25f, Amber);
+                CreateWorldLabel(labels.transform, mode == QuantumLevelMode.Train ? "B // Switch Junction" : "B // Stabilizer", padBPosition + Vector3.up * 1.25f, Amber);
             }
 
             CreateGate(puzzle.transform, out level.gateLeft, out level.gateRight, out level.gateLeftRenderer, out level.gateRightRenderer);
             level.gateLeftClosedLocal = level.gateLeft.localPosition;
             level.gateRightClosedLocal = level.gateRight.localPosition;
-            CreateWorldLabel(labels.transform, index switch { 0 => "教学力场", 1 => "双相位力场", 2 => "量子列车泊位", _ => "数据收容区" }, new Vector3(0f, 2.35f, -0.72f), Cyan);
+            CreateWorldLabel(labels.transform, index switch { 0 => "Tutorial Field", 1 => "Dual-Phase Field", 2 => "Phase Train Dock", _ => "Data Containment Zone" }, new Vector3(0f, 2.35f, -0.72f), Cyan);
             level.core = CreateCore(puzzle.transform, index, out var coreTarget);
             level.coreTarget = coreTarget;
             var terminalTarget = level.spawnPoint.position + Vector3.up * 1.25f;
             level.worldTaskTerminalAnchor.rotation = Quaternion.LookRotation(terminalTarget - level.worldTaskTerminalAnchor.position, Vector3.up);
-            CreateWorldLabel(labels.transform, $"Q-{index:00} // 核心", new Vector3(0f, 2.65f, -4.15f), Cyan);
+            CreateWorldLabel(labels.transform, $"Q-{index:00} // Core", new Vector3(0f, 2.65f, -4.15f), Cyan);
 
             if (mode == QuantumLevelMode.Train) BuildTrain(level, puzzle.transform, labels.transform);
             if (mode == QuantumLevelMode.Lure) BuildLure(level, puzzle.transform, labels.transform);
@@ -466,7 +466,7 @@ namespace QuantumEcho.Editor
             }
             CreateRing(parent, "Arena Ring Outer", Vector3.up * 0.035f, 5.15f, Cyan, 0.018f);
             CreateRing(parent, "Arena Ring Mid", new Vector3(0f, 0.036f, 0.35f), 3.45f, Cyan, 0.014f);
-            CreateWorldLabel(parent, $"实验舱 {index:00} // 场景模型可直接编辑", new Vector3(0f, 2.72f, -5.58f), Cyan);
+            CreateWorldLabel(parent, $"Lab {index:00} // Edit scene models here", new Vector3(0f, 2.72f, -5.58f), Cyan);
         }
 
         static void BuildRoomLights(Transform parent)
@@ -546,7 +546,7 @@ namespace QuantumEcho.Editor
             CreatePrimitive(train.transform, "Head Light", PrimitiveType.Cube, new Vector3(0.72f, 0.37f, 0f), new Vector3(0.12f, 0.12f, 0.48f), _amber, false);
             level.train = train.transform;
             level.trainRenderer = body.GetComponent<Renderer>();
-            CreateWorldLabel(labels, "相位列车 // 待命", new Vector3(0f, 1.4f, -2.55f), Amber);
+            CreateWorldLabel(labels, "Phase Train // Standby", new Vector3(0f, 1.4f, -2.55f), Amber);
         }
 
         static void BuildLure(QuantumLevelScene level, Transform parent, Transform labels)
@@ -560,7 +560,7 @@ namespace QuantumEcho.Editor
                 zone.transform.localPosition = lurePositions[i];
                 CreateRing(zone.transform, "Purple Residual Ring", Vector3.zero, 0.92f, Magenta, 0.07f);
                 level.lureZones[i] = zone.transform;
-                CreateWorldLabel(labels, $"诱饵残响 {i + 1}", lurePositions[i] + Vector3.up, Magenta);
+                CreateWorldLabel(labels, $"Decoy Residue {i + 1}", lurePositions[i] + Vector3.up, Magenta);
             }
 
             level.fragments = new QuantumSceneTarget[2];
@@ -579,7 +579,7 @@ namespace QuantumEcho.Editor
                 target.homeLocalPosition = fragment.transform.localPosition;
                 target.haloBaseScale = Vector3.one;
                 level.fragments[i] = target;
-                CreateWorldLabel(labels, $"失落数据 {i + 1} // 长按提取", fragmentPositions[i] + Vector3.up * 0.72f, Cyan);
+                CreateWorldLabel(labels, $"Lost Data {i + 1} // Hold to Extract", fragmentPositions[i] + Vector3.up * 0.72f, Cyan);
             }
 
             level.sentinels = new QuantumSceneTarget[2];
@@ -597,7 +597,7 @@ namespace QuantumEcho.Editor
                 target.homeLocalPosition = home;
                 level.sentinels[i] = target;
             }
-            CreateWorldLabel(labels, "追猎矩阵 // 录制两条反向诱饵路线", new Vector3(0f, 1.4f, -0.28f), Danger);
+            CreateWorldLabel(labels, "Hunter Matrix // Record two opposing Decoy routes", new Vector3(0f, 1.4f, -0.28f), Danger);
         }
 
         static QuantumPlayerRig BuildPlayerRig(Transform parent, QuantumDesignPlayerStart designStart)
@@ -697,7 +697,7 @@ namespace QuantumEcho.Editor
 
             var hud = canvasObject.AddComponent<QuantumHUD>();
             var brand = Panel(canvasObject.transform, "Brand", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(28f, -28f), new Vector2(330f, 96f));
-            Text(brand.transform, "Brand Text", "量子回声\nQ-RELAY / PICO XR", 28, TextAnchor.MiddleLeft, Color.white);
+            Text(brand.transform, "Brand Text", "QUANTUM ECHO\nQ-RELAY / PICO XR", 28, TextAnchor.MiddleLeft, Color.white);
 
             var levelPanel = Panel(canvasObject.transform, "Level Tabs", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-210f, -28f), new Vector2(420f, 64f));
             hud.levelText = Text(levelPanel.transform, "Level Code", "QER-00", 22, TextAnchor.MiddleCenter, Cyan);
@@ -716,37 +716,37 @@ namespace QuantumEcho.Editor
             for (var i = 0; i < 4; i++) CreateLevelButton(tabs.transform, i);
 
             var loopPanel = Panel(canvasObject.transform, "Loop", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-135f, -112f), new Vector2(270f, 48f));
-            hud.loopText = Text(loopPanel.transform, "Loop Text", "当前回路  01", 20, TextAnchor.MiddleCenter, Cyan);
+            hud.loopText = Text(loopPanel.transform, "Loop Text", "Loop  01", 20, TextAnchor.MiddleCenter, Cyan);
 
             var objective = Panel(canvasObject.transform, "Objective", new Vector2(0f, 0.72f), new Vector2(0f, 0.72f), new Vector2(28f, -10f), new Vector2(500f, 230f));
             hud.objectiveIndexText = Text(objective.transform, "Objective Index", "01", 40, TextAnchor.UpperLeft, Cyan, new Vector2(20f, -18f), new Vector2(72f, 58f));
-            hud.objectiveTitleText = Text(objective.transform, "Objective Title", "踩住保持器", 28, TextAnchor.UpperLeft, Color.white, new Vector2(96f, -22f), new Vector2(370f, 52f));
-            hud.objectiveCopyText = Text(objective.transform, "Objective Copy", "走进蓝色圆盘并封存为回声。", 19, TextAnchor.UpperLeft, new Color(0.78f, 0.86f, 0.86f), new Vector2(24f, -86f), new Vector2(445f, 120f));
+            hud.objectiveTitleText = Text(objective.transform, "Objective Title", "Activate the Holder", 28, TextAnchor.UpperLeft, Color.white, new Vector2(96f, -22f), new Vector2(370f, 52f));
+            hud.objectiveCopyText = Text(objective.transform, "Objective Copy", "Step onto the blue disc and commit as an Echo.", 19, TextAnchor.UpperLeft, new Color(0.78f, 0.86f, 0.86f), new Vector2(24f, -86f), new Vector2(445f, 120f));
 
             var timer = Panel(canvasObject.transform, "Timer", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-378f, -28f), new Vector2(350f, 108f));
-            hud.timerLabelText = Text(timer.transform, "Timer Label", "教学回路长度", 17, TextAnchor.UpperLeft, new Color(0.7f, 0.8f, 0.8f), new Vector2(20f, -17f), new Vector2(205f, 30f));
+            hud.timerLabelText = Text(timer.transform, "Timer Label", "Tutorial Loop", 17, TextAnchor.UpperLeft, new Color(0.7f, 0.8f, 0.8f), new Vector2(20f, -17f), new Vector2(205f, 30f));
             hud.timerValueText = Text(timer.transform, "Timer Value", "14.0s", 28, TextAnchor.UpperRight, Color.white, new Vector2(225f, -14f), new Vector2(105f, 36f));
             hud.timerFill = Bar(timer.transform, "Timer Bar", new Vector2(20f, -69f), new Vector2(310f, 8f), Cyan);
 
             var echoPanel = Panel(canvasObject.transform, "Echo Rail", new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-378f, 92f), new Vector2(350f, 62f));
-            hud.echoCountText = Text(echoPanel.transform, "Echo Count", "回声序列  0 / 4", 18, TextAnchor.MiddleCenter, Magenta);
+            hud.echoCountText = Text(echoPanel.transform, "Echo Count", "Echoes  0 / 4", 18, TextAnchor.MiddleCenter, Magenta);
 
             var promptPanel = Panel(canvasObject.transform, "Context Prompt", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-330f, 84f), new Vector2(660f, 66f));
-            hud.promptKeyText = Text(promptPanel.transform, "Prompt Key", "【握把 / A / X】", 18, TextAnchor.MiddleCenter, Cyan, new Vector2(16f, -13f), new Vector2(180f, 40f));
+            hud.promptKeyText = Text(promptPanel.transform, "Prompt Key", "[Grip / A / X]", 18, TextAnchor.MiddleCenter, Cyan, new Vector2(16f, -13f), new Vector2(180f, 40f));
             hud.promptKeyText.textWrappingMode = TextWrappingModes.NoWrap;
-            hud.promptText = Text(promptPanel.transform, "Prompt Text", "封存当前动作并开始下一回路", 21, TextAnchor.MiddleLeft, Color.white, new Vector2(206f, -13f), new Vector2(430f, 40f));
+            hud.promptText = Text(promptPanel.transform, "Prompt Text", "Commit this action and start the next loop", 21, TextAnchor.MiddleLeft, Color.white, new Vector2(206f, -13f), new Vector2(430f, 40f));
 
             var progress = Panel(canvasObject.transform, "Hold Progress", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-250f, 168f), new Vector2(500f, 92f));
             hud.progressPanel = progress;
-            hud.progressLabelText = Text(progress.transform, "Progress Label", "【右扳机·持续按住】回收", 18, TextAnchor.UpperLeft, Color.white, new Vector2(18f, -13f), new Vector2(360f, 30f));
+            hud.progressLabelText = Text(progress.transform, "Progress Label", "[R-Trigger · Hold] Extract", 18, TextAnchor.UpperLeft, Color.white, new Vector2(18f, -13f), new Vector2(360f, 30f));
             hud.progressValueText = Text(progress.transform, "Progress Value", "0%", 20, TextAnchor.UpperRight, Cyan, new Vector2(390f, -11f), new Vector2(90f, 32f));
             hud.progressFill = Bar(progress.transform, "Progress Bar", new Vector2(18f, -57f), new Vector2(464f, 9f), Cyan);
 
-            hud.toastText = Text(canvasObject.transform, "Toast", "回路已启动", 20, TextAnchor.MiddleCenter, Amber, new Vector2(710f, -92f), new Vector2(500f, 54f));
+            hud.toastText = Text(canvasObject.transform, "Toast", "Loop Started", 20, TextAnchor.MiddleCenter, Amber, new Vector2(710f, -92f), new Vector2(500f, 54f));
             var result = Panel(canvasObject.transform, "Result Overlay", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-330f, -180f), new Vector2(660f, 360f));
             hud.resultPanel = result;
-            hud.resultTitleText = Text(result.transform, "Result Title", "核心回收完成", 40, TextAnchor.MiddleCenter, Cyan, new Vector2(30f, -45f), new Vector2(600f, 80f));
-            hud.resultStatsText = Text(result.transform, "Result Stats", "使用回声  02    总用时  00:00", 22, TextAnchor.MiddleCenter, Color.white, new Vector2(40f, -145f), new Vector2(580f, 150f));
+            hud.resultTitleText = Text(result.transform, "Result Title", "Core Recovery Complete", 40, TextAnchor.MiddleCenter, Cyan, new Vector2(30f, -45f), new Vector2(600f, 80f));
+            hud.resultStatsText = Text(result.transform, "Result Stats", "Echoes  02    Time  00:00", 22, TextAnchor.MiddleCenter, Color.white, new Vector2(40f, -145f), new Vector2(580f, 150f));
             return hud;
         }
 
@@ -1005,7 +1005,7 @@ namespace QuantumEcho.Editor
         {
             var forbiddenLabels = new[]
             {
-                "Q / A", "ENTER / E", "ESC / EXIT", "\\u957F\\u6309 E", "长按 E", "按 R 重试"
+                "Q / A", "ENTER / E", "ESC / EXIT", "Hold E", "Long Press E", "Press R to Retry"
             };
             foreach (var scenePath in new[] { QuantumEchoTitleSceneBuilder.TitleScenePath, QuantumEchoTitleSceneBuilder.GameplayScenePath })
             {
@@ -1027,7 +1027,7 @@ namespace QuantumEcho.Editor
         /// </summary>
         static void EnsureAndroidPresentationMetadata()
         {
-            PlayerSettings.productName = "量子回声";
+            PlayerSettings.productName = "QUANTUM ECHO";
             var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/AppIcon/AppIcon.png");
             if (icon == null) throw new BuildFailedException("Android icon is missing: Assets/AppIcon/AppIcon.png");
             PlayerSettings.SetIcons(NamedBuildTarget.Android, new[] { icon }, IconKind.Application);

@@ -513,7 +513,7 @@ namespace QuantumEcho.Editor
             if (labels == null) return;
             foreach (var label in labels.GetComponentsInChildren<TextMesh>(true))
             {
-                if (!label.text.StartsWith("失落数据")) continue;
+                if (!label.text.StartsWith("Lost Data")) continue;
                 var isSecond = label.text.Contains("2");
                 var index = isSecond ? 1 : 0;
                 if (index >= positions.Length) continue;

@@ -64,7 +64,7 @@ namespace QuantumEcho
             // any legacy serialized Q/E text before the first gameplay Update.
             if (promptKeyText != null)
             {
-                promptKeyText.text = "【握把 / A / X】";
+                promptKeyText.text = "[Grip / A / X]";
                 promptKeyText.fontSize = 18f;
                 promptKeyText.textWrappingMode = TextWrappingModes.NoWrap;
                 var rect = promptKeyText.rectTransform;
@@ -72,13 +72,13 @@ namespace QuantumEcho
             }
             if (promptText != null)
             {
-                promptText.text = "封存当前动作并开始下一回路";
+                promptText.text = "Commit this action and start the next loop";
                 var rect = promptText.rectTransform;
                 rect.anchoredPosition = new Vector2(206f, rect.anchoredPosition.y);
                 rect.sizeDelta = new Vector2(430f, rect.sizeDelta.y);
             }
             if (progressLabelText != null)
-                progressLabelText.text = "【右扳机·持续按住】回收";
+                progressLabelText.text = "[R-Trigger · Hold] Extract";
         }
 
         void Start()
@@ -117,14 +117,14 @@ namespace QuantumEcho
         public void SetLevel(string code, int loop, string timerLabel)
         {
             levelText.text = code;
-            loopText.text = $"当前回路  {loop:00}";
+            loopText.text = $"Loop  {loop:00}";
             timerLabelText.text = timerLabel;
             RefreshComfortObjectiveHud();
         }
 
         public void SetLoop(int loop)
         {
-            loopText.text = $"当前回路  {loop:00}";
+            loopText.text = $"Loop  {loop:00}";
         }
 
         public void SetObjective(int index, string title, string copy)
@@ -145,7 +145,7 @@ namespace QuantumEcho
 
         public void SetEchoCount(int count, int maximum)
         {
-            echoCountText.text = $"回声序列  {count} / {maximum}";
+            echoCountText.text = $"Echoes  {count} / {maximum}";
         }
 
         public void SetPrompt(string key, string message)
@@ -158,8 +158,8 @@ namespace QuantumEcho
         static string FormatControllerKey(string key)
         {
             if (string.IsNullOrWhiteSpace(key)) return string.Empty;
-            if (key.StartsWith("【") && key.EndsWith("】")) return key;
-            return $"【{key}】";
+            if (key.StartsWith("[") && key.EndsWith("]")) return key;
+            return $"[{key}]";
         }
 
         void EnsureComfortObjectiveHud()
@@ -214,7 +214,7 @@ namespace QuantumEcho
         public void ShowResult(string title, int echoes, float totalSeconds, bool finalLevel)
         {
             resultTitleText.text = title;
-            resultStatsText.text = $"使用回声  {echoes:00}    总用时  {Mathf.FloorToInt(totalSeconds / 60f):00}:{Mathf.FloorToInt(totalSeconds % 60f):00}\n\n{(finalLevel ? "按【左菜单键】重试最后一关" : "正在载入下一关…")}";
+            resultStatsText.text = $"Echoes  {echoes:00}    Time  {Mathf.FloorToInt(totalSeconds / 60f):02}:{Mathf.FloorToInt(totalSeconds % 60f):02}\n\n{(finalLevel ? "Press [Left Menu] to retry the final level" : "Loading next level…")}";
             resultPanel.SetActive(true);
         }
 

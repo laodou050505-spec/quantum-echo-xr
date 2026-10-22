@@ -62,8 +62,8 @@ namespace QuantumEcho
 
         public void Show(string completedTitle, int nextLevelOneBased, float seconds)
         {
-            if (_title != null) _title.text = $"关卡完成 · {completedTitle}";
-            if (_detail != null) _detail.text = $"正在进入第 {nextLevelOneBased} 关  ·  {seconds:0.0} 秒";
+            if (_title != null) _title.text = $"Level Complete · {completedTitle}";
+            if (_detail != null) _detail.text = $"Entering Level {nextLevelOneBased}  ·  {seconds:0.0}s";
             gameObject.SetActive(true);
         }
 

@@ -466,7 +466,7 @@ namespace QuantumEcho.Editor
             }
             CreateRing(parent, "Arena Ring Outer", Vector3.up * 0.035f, 5.15f, Cyan, 0.018f);
             CreateRing(parent, "Arena Ring Mid", new Vector3(0f, 0.036f, 0.35f), 3.45f, Cyan, 0.014f);
-            CreateWorldLabel(parent, $"Lab {index:00} // Edit scene models here", new Vector3(0f, 2.72f, -5.58f), Cyan);
+            CreateWorldLabel(parent, $"Lab {index:00}", new Vector3(0f, 2.72f, -5.58f), Cyan);
         }
 
         static void BuildRoomLights(Transform parent)
@@ -560,7 +560,7 @@ namespace QuantumEcho.Editor
                 zone.transform.localPosition = lurePositions[i];
                 CreateRing(zone.transform, "Purple Residual Ring", Vector3.zero, 0.92f, Magenta, 0.07f);
                 level.lureZones[i] = zone.transform;
-                CreateWorldLabel(labels, $"Decoy Residue {i + 1}", lurePositions[i] + Vector3.up, Magenta);
+                CreateWorldLabel(labels, $"Decoy Zone {i + 1}", lurePositions[i] + Vector3.up, Magenta);
             }
 
             level.fragments = new QuantumSceneTarget[2];
@@ -597,7 +597,7 @@ namespace QuantumEcho.Editor
                 target.homeLocalPosition = home;
                 level.sentinels[i] = target;
             }
-            CreateWorldLabel(labels, "Hunter Matrix // Record two opposing Decoy routes", new Vector3(0f, 1.4f, -0.28f), Danger);
+            CreateWorldLabel(labels, "Hunter Matrix // Record two opposing Decoy Zone routes", new Vector3(0f, 1.4f, -0.28f), Danger);
         }
 
         static QuantumPlayerRig BuildPlayerRig(Transform parent, QuantumDesignPlayerStart designStart)
@@ -720,8 +720,8 @@ namespace QuantumEcho.Editor
 
             var objective = Panel(canvasObject.transform, "Objective", new Vector2(0f, 0.72f), new Vector2(0f, 0.72f), new Vector2(28f, -10f), new Vector2(500f, 230f));
             hud.objectiveIndexText = Text(objective.transform, "Objective Index", "01", 40, TextAnchor.UpperLeft, Cyan, new Vector2(20f, -18f), new Vector2(72f, 58f));
-            hud.objectiveTitleText = Text(objective.transform, "Objective Title", "Activate the Holder", 28, TextAnchor.UpperLeft, Color.white, new Vector2(96f, -22f), new Vector2(370f, 52f));
-            hud.objectiveCopyText = Text(objective.transform, "Objective Copy", "Step onto the blue disc and commit as an Echo.", 19, TextAnchor.UpperLeft, new Color(0.78f, 0.86f, 0.86f), new Vector2(24f, -86f), new Vector2(445f, 120f));
+            hud.objectiveTitleText = Text(objective.transform, "Objective Title", "Stand on the Holder", 28, TextAnchor.UpperLeft, Color.white, new Vector2(96f, -22f), new Vector2(370f, 52f));
+            hud.objectiveCopyText = Text(objective.transform, "Objective Copy", "Step onto the blue disc and seal it as an Echo.", 19, TextAnchor.UpperLeft, new Color(0.78f, 0.86f, 0.86f), new Vector2(24f, -86f), new Vector2(445f, 120f));
 
             var timer = Panel(canvasObject.transform, "Timer", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-378f, -28f), new Vector2(350f, 108f));
             hud.timerLabelText = Text(timer.transform, "Timer Label", "Tutorial Loop", 17, TextAnchor.UpperLeft, new Color(0.7f, 0.8f, 0.8f), new Vector2(20f, -17f), new Vector2(205f, 30f));
@@ -734,7 +734,7 @@ namespace QuantumEcho.Editor
             var promptPanel = Panel(canvasObject.transform, "Context Prompt", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-330f, 84f), new Vector2(660f, 66f));
             hud.promptKeyText = Text(promptPanel.transform, "Prompt Key", "[Grip / A / X]", 18, TextAnchor.MiddleCenter, Cyan, new Vector2(16f, -13f), new Vector2(180f, 40f));
             hud.promptKeyText.textWrappingMode = TextWrappingModes.NoWrap;
-            hud.promptText = Text(promptPanel.transform, "Prompt Text", "Commit this action and start the next loop", 21, TextAnchor.MiddleLeft, Color.white, new Vector2(206f, -13f), new Vector2(430f, 40f));
+            hud.promptText = Text(promptPanel.transform, "Prompt Text", "Seal this action and start the next loop", 21, TextAnchor.MiddleLeft, Color.white, new Vector2(206f, -13f), new Vector2(430f, 40f));
 
             var progress = Panel(canvasObject.transform, "Hold Progress", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-250f, 168f), new Vector2(500f, 92f));
             hud.progressPanel = progress;

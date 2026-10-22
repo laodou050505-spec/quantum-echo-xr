@@ -4124,7 +4124,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 01 // Edit scene models here"
+  m_text: "Lab 01"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -8037,7 +8037,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Step onto the blue disc and commit as an Echo."
+  m_text: "Step onto the blue disc and seal it as an Echo."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -12777,7 +12777,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 00 // Edit scene models here"
+  m_text: "Lab 00"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -12913,7 +12913,7 @@ GameObject:
   - component: {fileID: 444779179}
   - component: {fileID: 444779178}
   m_Layer: 0
-  m_Name: "Label - Decoy Residue 2"
+  m_Name: "Label - Decoy Zone 2"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12958,7 +12958,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Decoy Residue 2"
+  m_text: "Decoy Zone 2"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -22927,7 +22927,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 02 // Edit scene models here"
+  m_text: "Lab 02"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -32441,7 +32441,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Hunter Matrix // Record two opposing Decoy routes"
+  m_text: "Hunter Matrix // Record two opposing Decoy Zone routes"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -37581,7 +37581,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Commit this action and start the next loop"
+  m_text: "Seal this action and start the next loop"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -48353,7 +48353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Activate the Holder"
+  m_text: "Stand on the Holder"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -55177,7 +55177,7 @@ GameObject:
   - component: {fileID: 1692691810}
   - component: {fileID: 1692691809}
   m_Layer: 0
-  m_Name: "Label - Decoy Residue 1"
+  m_Name: "Label - Decoy Zone 1"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55222,7 +55222,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Decoy Residue 1"
+  m_text: "Decoy Zone 1"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
@@ -56659,7 +56659,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lab 03 // Edit scene models here"
+  m_text: "Lab 03"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}
   m_sharedMaterial: {fileID: -2567670281725971554, guid: ed28d8858ae544ef19cc63c155c48cf1, type: 2}

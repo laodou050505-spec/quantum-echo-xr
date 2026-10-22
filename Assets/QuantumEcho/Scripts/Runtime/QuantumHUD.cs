@@ -72,7 +72,7 @@ namespace QuantumEcho
             }
             if (promptText != null)
             {
-                promptText.text = "Commit this action and start the next loop";
+                promptText.text = "Seal this action and start the next loop";
                 var rect = promptText.rectTransform;
                 rect.anchoredPosition = new Vector2(206f, rect.anchoredPosition.y);
                 rect.sizeDelta = new Vector2(430f, rect.sizeDelta.y);
@@ -214,7 +214,7 @@ namespace QuantumEcho
         public void ShowResult(string title, int echoes, float totalSeconds, bool finalLevel)
         {
             resultTitleText.text = title;
-            resultStatsText.text = $"Echoes  {echoes:00}    Time  {Mathf.FloorToInt(totalSeconds / 60f):02}:{Mathf.FloorToInt(totalSeconds % 60f):02}\n\n{(finalLevel ? "Press [Left Menu] to retry the final level" : "Loading next level…")}";
+            resultStatsText.text = $"Echoes  {echoes:00}    Time  {Mathf.FloorToInt(totalSeconds / 60f):02}:{Mathf.FloorToInt(totalSeconds % 60f):02}\n\n{(finalLevel ? "Press [Menu] to retry the final level" : "Loading next level…")}";
             resultPanel.SetActive(true);
         }
 

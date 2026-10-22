@@ -112,12 +112,30 @@
 
 | 项目 | 内容 |
 |---|---|
-| 构建方法 | `QuantumEchoENBuilder.BuildENAndroid`（新建脚本，跳过 PXR SDK 依赖验证） |
+| 构建方法 | `QuantumEchoENBuilder.CaptureAndBuild`（截图 + 构建合并入口） |
 | 目标路径 | `Builds/EN/QuantumEcho-EN-PICO.apk` |
-| Unity | 6000.5.5f1 batchmode (`-nographics -quit`) |
-| 状态 | **构建成功** ✓（2026-10-22，日志：`Builds/EN/build.log`） |
-| APK SHA-256 | `f61953343e26109d3f5fa1a2e30c41b21290a63d1799c64035f0d0eebc717eb9` |
-| APK 大小 | 75,907,507 字节（约 72 MB） |
+| Unity | 6000.5.5f1 batchmode (含图形上下文，支持 RenderTexture 截图) |
+| 状态 | **返工重建中**（日志：`Builds/EN/build3.log`） |
+| APK SHA-256 | *返工构建完成后补充* |
+| APK 大小 | *返工构建完成后补充* |
+
+### 返工内容（总控核查后修订，2026-10-22）
+
+| 类别 | 修改 |
+|---|---|
+| 封存动词 | "commit" → "seal" 全游戏统一（Echo committed/sealed、Commit/Seal Echo、Commit/Seal this action、Holder commit → seal、Decoy commit → seal） |
+| 保持器提示 | "Activate the Holder" → "Stand on the Holder" |
+| 手柄提示 | "[L-Stick] Controls/Hide Controls" → "[Press L-Stick] Controls/Hide Controls" |
+| 目标索引 | "Obj. {n}" → "Objective {n}" |
+| 倒计时 | "Echo End {x}s" → "Echo ends in {x}s" |
+| 诱饵区标签 | "Decoy Residue" → "Decoy Zone"（世界标签、代码、YAML 全部同步） |
+| Hunter toast | "You are locked by a Hunter..." → "A Hunter has locked onto you..." |
+| 换轨 toast | "Switch beat hit — Phase Train heading to core dock" → "Switch beat on time — the Phase Train is heading to the Core dock" |
+| 核心吸取提示 | "Hold — Core {pct}% extracted" → "Extracting Core… {pct}%" |
+| Lab 世界标签 | "Lab {n} // Edit scene models here" → "Lab {n}"（移除开发者注释） |
+| [Left Menu] | 全游戏改为 [Menu] |
+| Hunter Matrix 标签 | "Record two opposing Decoy routes" → "Record two opposing Decoy Zone routes" |
+| Scene YAML 同步 | QuantumEcho_Main.unity 中 m_text 同步更新（Lab 标签、Commit→Seal、Hunter Matrix） |
 
 ---
 
@@ -125,10 +143,27 @@
 
 目录：`VisualQA/EN-20261022/`
 
+截图由 `QuantumEchoScreenshots.CaptureAll` 通过 `RenderTexture` 在 Editor batchmode 中渲染生成，无需 XR 头显。
+
 | 文件名 | 内容 | 状态 |
 |---|---|---|
-| cover.png | 封面主视觉（英文封面原图） | 现有文件 |
-| *(编辑器截图待补充)* | 教程 HUD、帮助展开/收起、结算、诱饵关 | 待 Unity 进程完成后 |
+| 01_cover_QUANTUM_ECHO.png | 英文封面主视觉 | 现有 |
+| 00_title_scene.png | 标题场景（EXIT / START GAME / [Right Trigger] Select & Confirm） | 已生成 |
+| 01_main_default.png | 主场景默认视角（第1关、全量 HUD 元素） | 已生成 |
+| 02_level0_tutorial_overview.png | 第1关全景（教程 Holder 区域） | 已生成 |
+| 03_level1_paired_overview.png | 第2关全景（Stabilizer A/B 区域） | 已生成 |
+| 04_level2_train_overview.png | 第3关全景（Phase Train 区域） | 已生成 |
+| 05_level3_lure_overview.png | 第4关全景（Decoy Zone 区域） | 已生成 |
+
+**TMP 文本核查（来自截图日志，编辑器 batchmode）：**
+- 标题场景：`[Right Trigger] Select & Confirm` ✓，`START GAME` ✓，`EXIT` ✓
+- 主场景关键标签：`Decoy Zone 1/2` ✓，`Holder // Stay on It` ✓，`A // Launch Junction` ✓，`B // Switch Junction` ✓，`A // Stabilizer` ✓，`B // Stabilizer` ✓，`Phase Train // Standby` ✓，`Hunter Matrix // Record two opposing Decoy Zone routes` ✓（返工后）
+- HUD 状态：`Loop  01` ✓，`Echoes  0 / 4` ✓，`Tutorial Loop` ✓，`Q-RELAY  /  QUANTUM ECHO` ✓
+- 通关标题（场景默认）：`Core Recovery Complete` ✓
+- 目标标题（场景默认）：`Stand on the Holder` ✓（返工后）
+- Lab 标签（返工后）：`Lab 00~03`（无开发者注释）✓
+
+**注意**：截图由 Editor 静态渲染（非 Play 模式），HUD 运行时覆盖值（如 Seal this action、Objective {n}、Echo ends in）由代码在 `Awake()/Start()` 动态设置，不体现在此静态截图中；代码逻辑已验证。
 
 ---
 
@@ -148,8 +183,8 @@
 
 | 原文 | 英文 | 备注 |
 |---|---|---|
-| 诱饵残响 | Decoy Residue | "残响"字面为 reverb/echo residue，采用"Residue"作为游戏术语标记区域物理残留 |
+| 诱饵残响 | Decoy Zone | 改为 Decoy Zone，与关卡术语统一（区域性概念，"残响"=余波，英文 Zone 更直白） |
 | 换轨节拍 | Switch Beat | "节拍"=beat，与第三关铁路节拍机制对应 |
 | 发车枢纽 | Launch Junction | "枢纽"=junction（转辙器/扳道叉），英文铁路术语 |
-| 保持器已踩住 | Holder activated | 直译"已踩住"比较生硬，采用"activated"更符合游戏反馈惯例 |
-| 封存当前动作并开始下一回路 | Commit this action and start the next loop | 两个完整句子，保留"and"连接以匹配原文两段指令结构 |
+| 踩住保持器 | Stand on the Holder | 改为"Stand on"，比"Activate"更直接描述物理动作 |
+| 封存当前动作并开始下一回路 | Seal this action and start the next loop | "封存"→"Seal"统一全游戏术语，比 Commit 更符合时间回声游戏的密封/固化含义 |

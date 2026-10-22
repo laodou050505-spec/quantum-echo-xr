@@ -141,7 +141,7 @@ namespace QuantumEcho
             if (_loopElapsed >= _level.loopDuration)
             {
                 Play(errorClip);
-                hud.ShowToast("Loop unstable — action not committed");
+                hud.ShowToast("Loop unstable — action not sealed");
                 ResetCycle();
             }
         }
@@ -285,7 +285,7 @@ namespace QuantumEcho
             CreateEchoVisual(recording, _echoRecordings.Count - 1);
             Play(unlockClip);
             player.PulseHaptics(0.55f, 0.10f);
-            hud.ShowToast($"Echo {_echoRecordings.Count} committed");
+            hud.ShowToast($"Echo {_echoRecordings.Count} sealed");
             ResetCycle();
         }
 
@@ -448,7 +448,7 @@ namespace QuantumEcho
                 {
                     _trainAtJunction = true;
                     Play(unlockClip);
-                    hud.ShowToast("Switch beat hit — Phase Train heading to core dock");
+                    hud.ShowToast("Switch beat on time — the Phase Train is heading to the Core dock");
                 }
             }
             if (_trainAtJunction && !_trainFaulted)
@@ -529,7 +529,7 @@ namespace QuantumEcho
                 if (!sentinel.collected && _lureCatchCooldown <= 0f && FlatDistance(player.GroundPosition, sentinel.transform.position) < 1.50f)
                 {
                     Play(errorClip);
-                    hud.ShowToast("You are locked by a Hunter — record Decoy routes first");
+                    hud.ShowToast("A Hunter has locked onto you — record Decoy routes first");
                     ResetCycle();
                     return false;
                 }
@@ -665,7 +665,7 @@ namespace QuantumEcho
             const string commitKey = "Grip / A / X";
             if (IsCoreReady() && IsTargetedOrNear(_level.core, 1.8f, 3.5f))
             {
-                hud.SetPrompt(interactKey, player.InteractHeld ? $"Hold — Core {Mathf.RoundToInt(_coreCaptureProgress * 100f)}% extracted" : "Extract the Quantum Core");
+                hud.SetPrompt(interactKey, player.InteractHeld ? $"Extracting Core… {Mathf.RoundToInt(_coreCaptureProgress * 100f)}%" : "Extract the Quantum Core");
                 return;
             }
             if (_level.mode == QuantumLevelMode.Lure)
@@ -682,7 +682,7 @@ namespace QuantumEcho
                         }
                     }
                 }
-                if (_echoRecordings.Count < 2) hud.SetPrompt(commitKey, "Run to both Decoy Residue zones and commit two routes");
+                if (_echoRecordings.Count < 2) hud.SetPrompt(commitKey, "Run to both Decoy Zones and seal two routes");
                 else if (_luredSentinels < 2) hud.SetPrompt("L-Stick", "Keep distance — let the Echoes lure the Hunters away");
                 else if (!AllFragmentsCollected()) hud.SetPrompt("R-Trigger", "Approach the gate fragments and hold to extract");
                 else hud.SetPrompt(interactKey, "Walk through the open gate and sync the Core");
@@ -693,7 +693,7 @@ namespace QuantumEcho
             var nearB = _level.padB != null && FlatDistance(player.GroundPosition, _level.padB.position) < 1.25f;
             if (nearA || nearB)
             {
-                if (_level.mode == QuantumLevelMode.Tutorial) hud.SetPrompt(commitKey, "Holder activated — commit this position");
+                if (_level.mode == QuantumLevelMode.Tutorial) hud.SetPrompt(commitKey, "On the Holder — seal this position");
                 else hud.SetPrompt("R-Trigger", $"{(nearA ? "A" : "B")} zone {(_interactionLatched || player.InteractHeld ? "syncing" : "sync")}");
                 return;
             }
@@ -707,7 +707,7 @@ namespace QuantumEcho
             else if (_gateOpenAmount > 0.65f)
                 hud.SetPrompt("L-Stick", "Walk through the gate to the Quantum Core");
             else
-                hud.SetPrompt(commitKey, "Commit this action and start the next loop");
+                hud.SetPrompt(commitKey, "Seal this action and start the next loop");
         }
 
         static (string title, string copy) GetObjective(int level, int step)
@@ -716,7 +716,7 @@ namespace QuantumEcho
             {
                 new[]
                 {
-                    ("Activate the Holder", "Step onto the blue disc to keep the door open. Then commit as an Echo."),
+                    ("Stand on the Holder", "Step onto the blue disc to keep the door open. Then seal it as an Echo."),
                     ("Let Your Echo Take Over", "When the new loop starts, your Echo returns to the Holder. Wait for the door, then walk through."),
                     ("Recover the Quantum Core", "Walk through the open Tutorial Field and hold to extract the Core.")
                 },
@@ -734,8 +734,8 @@ namespace QuantumEcho
                 },
                 new[]
                 {
-                    ("Record Left Decoy", "Run to the upper-left Decoy Residue and commit — the first Hunter will follow your Echo."),
-                    ("Record Right Decoy", "In the next loop, run to the upper-right Residue and commit — both Hunters will be drawn away."),
+                    ("Record Left Decoy", "Run to the upper-left Decoy Zone and seal — the first Hunter will follow your Echo."),
+                    ("Record Right Decoy", "In the next loop, run to the upper-right Decoy Zone and seal — both Hunters will be drawn away."),
                     ("Recover the Lost Data", "With both Hunters lured away, hold to extract the two blue fragments by the gate.")
                 }
             };

@@ -133,7 +133,7 @@ namespace QuantumEcho.Editor
                 var expandedTopLeft = camera.WorldToViewportPoint(corners[1]);
                 check(camera.WorldToViewportPoint(corners[0]).y > 0.05f && Mathf.Abs(expandedTopLeft.y-top.y)<0.002f && Mathf.Abs(expandedTopLeft.x-top.x)<0.002f, "HUD expanded stays on-screen with stable top-left anchor");
             }
-            hud.SetContent("QER-03", "03", "Sync Stabilizer A", "Step onto the blue disc to keep the door open. Then commit as an Echo.", "[Grip / A / X]", "Commit this action and start the next loop");
+            hud.SetContent("QER-03", "03", "Sync Stabilizer A", "Step onto the blue disc to keep the door open. Then seal it as an Echo.", "[Grip / A / X]", "Seal this action and start the next loop");
             hud.ShowFeedback("Switch beat hit — Phase Train heading to core dock", 2f);
             foreach(var text in hud.GetComponentsInChildren<TMP_Text>(true))
             {
@@ -144,7 +144,7 @@ namespace QuantumEcho.Editor
             for(var level=0; level<4; level++) for(var step=0; step<3; step++)
             {
                 var content = ((string title, string copy))objectives.Invoke(null, new object[] { level, step });
-                hud.SetContent("QER-0"+level, "0"+(step+1), content.title, content.copy, "[Grip / A / X]", "Commit this action and start the next loop");
+                hud.SetContent("QER-0"+level, "0"+(step+1), content.title, content.copy, "[Grip / A / X]", "Seal this action and start the next loop");
                 foreach(var text in hud.GetComponentsInChildren<TMP_Text>(true))
                 {
                     text.ForceMeshUpdate(true);

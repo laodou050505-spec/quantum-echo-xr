@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Quantum Echo Lab
-  productName: "QUANTUM ECHO"
+  productName: QUANTUM ECHO
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
@@ -149,7 +149,9 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 0.1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 8392194123659649026, guid: 9c5c4d4088c1f4c37a292cdeb264fc67, type: 2}
+  - {fileID: 11400000, guid: d8767291a44ed4dfab10568089c6bece, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   xboxOneDisableKinectGpuReservation: 1
@@ -708,14 +710,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: "QuantumEchoEN"
+  metroPackageName: QuantumEchoEN
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: "QUANTUM ECHO"
+  metroApplicationDescription: QUANTUM ECHO
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0

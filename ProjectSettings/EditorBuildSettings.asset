@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/QuantumEcho/Scenes/QuantumEcho_Title.unity
+    guid: 23df5fb0086064221936463981c4d523
+  - enabled: 1
     path: Assets/QuantumEcho/Scenes/QuantumEcho_Main.unity
     guid: d598b1e1275a14912a4fe03f54aa323a
   m_configObjects:

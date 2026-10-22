@@ -115,9 +115,9 @@
 | 构建方法 | `QuantumEchoENBuilder.CaptureAndBuild`（截图 + 构建合并入口） |
 | 目标路径 | `Builds/EN/QuantumEcho-EN-PICO.apk` |
 | Unity | 6000.5.5f1 batchmode (含图形上下文，支持 RenderTexture 截图) |
-| 状态 | **返工重建中**（日志：`Builds/EN/build3.log`） |
-| APK SHA-256 | *返工构建完成后补充* |
-| APK 大小 | *返工构建完成后补充* |
+| 状态 | **已完成**（日志：`Builds/EN/build4.log`） |
+| APK SHA-256 | `4dfea0c71d43d6e3884e3d3f160b4ad43ba959c7dc75dbccae78c4e2cea0bf20` |
+| APK 大小 | 75,908,207 字节（72.4 MB） |
 
 ### 返工内容（总控核查后修订，2026-10-22）
 

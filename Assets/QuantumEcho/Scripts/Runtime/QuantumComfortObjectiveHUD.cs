@@ -29,6 +29,11 @@ namespace QuantumEcho
         Material _panelMaterial;
         Material _textMaterial;
         Camera _camera;
+        // v2 polish: countdown colour state
+        float _countdownRemaining;
+        static readonly Color CountdownNormal = new Color(1f, 0.80f, 0.43f);
+        static readonly Color CountdownWarn   = new Color(1f, 0.52f, 0.15f);
+        static readonly Color CountdownAlert  = new Color(1f, 0.20f, 0.18f);
         const float PanelWidth = 840f;
         const float CompactHeight = 400f;
         const float ExpandedHeight = 600f;
@@ -116,6 +121,13 @@ namespace QuantumEcho
             {
                 _feedback.gameObject.SetActive(false);
                 _prompt.gameObject.SetActive(true);
+            }
+            // v2 polish: pulse the countdown text alpha when time is critical (< 2 s)
+            if (_countdown != null && _countdownRemaining > 0f && _countdownRemaining <= 2f)
+            {
+                var pulse = 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * Mathf.PI * 3.2f));
+                var c = _countdown.color;
+                _countdown.color = new Color(c.r, c.g, c.b, pulse);
             }
         }
 
@@ -237,7 +249,15 @@ namespace QuantumEcho
 
         public void SetCountdown(float remaining)
         {
-            if (_countdown != null) _countdown.text = $"Echo ends in {Mathf.Max(0f, remaining):0.0}s";
+            _countdownRemaining = remaining;
+            if (_countdown == null) return;
+            _countdown.text = $"Echo ends in {Mathf.Max(0f, remaining):0.0}s";
+            // v2 polish: colour transitions: normal → amber warn → red alert
+            Color target;
+            if (remaining > 5f)      target = CountdownNormal;
+            else if (remaining > 2f) target = CountdownWarn;
+            else                     target = CountdownAlert;
+            _countdown.color = target;
         }
 
         public void ShowFeedback(string message, float seconds)

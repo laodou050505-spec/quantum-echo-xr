@@ -1,0 +1,12 @@
+{
+  "task_id_1_square": "29d67983-532d-4c73-aa26-7638ac289dca",
+  "task_id_2_landscape_final": "0272bcf2-8ef5-46ae-858c-706b3ceb6315",
+  "model": "banana2",
+  "aspect_ratio": "16:9",
+  "output_size": "2752x1536",
+  "status": "success",
+  "purpose": "v2 polish cover - deeper atmosphere, volumetric portal beam, lavender echo halos, richer contrast",
+  "active_copy": "../CoverV6Clean/01_generated_image_url.png (replaced in-place to preserve Unity GUID)",
+  "credits_consumed": 20.0,
+  "generated_at": "2026-10-22"
+}

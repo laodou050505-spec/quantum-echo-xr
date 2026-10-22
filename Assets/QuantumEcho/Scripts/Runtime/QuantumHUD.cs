@@ -143,6 +143,15 @@ namespace QuantumEcho
             if (comfortObjectiveHud != null) comfortObjectiveHud.SetCountdown(remaining);
         }
 
+        /// <summary>v2 polish: tints the timer amber/red when the loop is nearly full.</summary>
+        public void SetLoopWarning(bool warning)
+        {
+            if (timerValueText != null)
+                timerValueText.color = warning ? new Color(1f, 0.30f, 0.22f) : new Color(1f, 0.68f, 0.18f, 0.96f);
+            if (timerFill != null)
+                timerFill.color = warning ? new Color(1f, 0.28f, 0.20f, 0.88f) : new Color(1f, 0.68f, 0.18f, 0.88f);
+        }
+
         public void SetEchoCount(int count, int maximum)
         {
             echoCountText.text = $"Echoes  {count} / {maximum}";

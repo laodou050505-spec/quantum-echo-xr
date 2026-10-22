@@ -58,8 +58,20 @@ namespace QuantumEcho
         bool _advancingLevel;
         float _advanceLevelAt;
         int _luredSentinels;
+        // v2 polish: loop pre-warning and deferred haptic echo
+        bool _loopWarned;
+        float _pendingHapticAt;
+        float _pendingHapticAmp;
 
         const float LevelAdvanceFeedbackSeconds = 1.8f;
+        // v2 polish: per-echo ghost colors (cyan, violet, amber, lime)
+        static readonly Color[] EchoColors =
+        {
+            new Color(0.18f, 0.93f, 1f,  0.85f),
+            new Color(0.77f, 0.32f, 1f,  0.85f),
+            new Color(1f,    0.68f, 0.18f, 0.82f),
+            new Color(0.42f, 1f,   0.36f, 0.82f)
+        };
 
         [Serializable]
         sealed class EchoRecording
@@ -138,6 +150,21 @@ namespace QuantumEcho
             UpdatePuzzle(Time.deltaTime);
             UpdateHud();
 
+            // v2 polish: deferred haptic echo (double-tap on seal)
+            if (_pendingHapticAt > 0f && Time.unscaledTime >= _pendingHapticAt)
+            {
+                player.PulseHaptics(_pendingHapticAmp, 0.06f);
+                _pendingHapticAt = 0f;
+            }
+
+            // v2 polish: pre-warn at 88 % of loop duration with a short buzz
+            if (!_loopWarned && _level.loopDuration > 0f && _loopElapsed >= _level.loopDuration * 0.88f)
+            {
+                _loopWarned = true;
+                player.PulseHaptics(0.18f, 0.04f);
+                hud.SetLoopWarning(true);
+            }
+
             if (_loopElapsed >= _level.loopDuration)
             {
                 Play(errorClip);
@@ -174,11 +201,17 @@ namespace QuantumEcho
             hud.HideResult();
             ResetCycle();
             Play(interactClip);
+            // v2 polish: short double-bump indicates reset clearly
+            player.PulseHaptics(0.45f, 0.07f);
+            _pendingHapticAt = Time.unscaledTime + 0.12f;
+            _pendingHapticAmp = 0.28f;
             hud.ShowToast("Experiment reset");
         }
 
         void ResetCycle()
         {
+            _loopWarned = false;
+            hud.SetLoopWarning(false);
             _loopElapsed = 0f;
             _lastSampleTime = float.NegativeInfinity;
             _currentRecording.Clear();
@@ -284,7 +317,10 @@ namespace QuantumEcho
             _echoRecordings.Add(recording);
             CreateEchoVisual(recording, _echoRecordings.Count - 1);
             Play(unlockClip);
-            player.PulseHaptics(0.55f, 0.10f);
+            // v2 polish: strong seal pulse + soft follow-up echo 120 ms later
+            player.PulseHaptics(0.65f, 0.11f);
+            _pendingHapticAt = Time.unscaledTime + 0.13f;
+            _pendingHapticAmp = 0.22f;
             hud.ShowToast($"Echo {_echoRecordings.Count} sealed");
             ResetCycle();
         }
@@ -294,15 +330,41 @@ namespace QuantumEcho
             var visual = Instantiate(echoTemplate);
             visual.name = $"Runtime Echo {index + 1:00}";
             visual.SetActive(true);
+
+            // v2 polish: per-echo colour tint on the ghost visual
+            var echoColor = EchoColors[index % EchoColors.Length];
+            foreach (var r in visual.GetComponentsInChildren<Renderer>(true))
+            {
+                var mpb = new MaterialPropertyBlock();
+                r.GetPropertyBlock(mpb);
+                mpb.SetColor("_Color", new Color(echoColor.r, echoColor.g, echoColor.b, 0.72f));
+                mpb.SetColor("_EmissionColor", new Color(echoColor.r, echoColor.g, echoColor.b, 1f) * 0.6f);
+                r.SetPropertyBlock(mpb);
+            }
+
             var trailObject = new GameObject($"Echo Trail {index + 1:00}");
             var trail = trailObject.AddComponent<LineRenderer>();
             trail.material = echoTrailMaterial;
-            trail.widthMultiplier = 0.035f;
+            // v2 polish: slightly wider trail; head-to-tail colour fade
+            trail.widthMultiplier = 0.052f;
+            var grad = new Gradient();
+            var colorKey = new GradientColorKey[]
+            {
+                new GradientColorKey(new Color(echoColor.r, echoColor.g, echoColor.b), 0f),
+                new GradientColorKey(new Color(echoColor.r, echoColor.g, echoColor.b), 1f)
+            };
+            var alphaKey = new GradientAlphaKey[]
+            {
+                new GradientAlphaKey(0.85f, 0f),
+                new GradientAlphaKey(0.10f, 1f)
+            };
+            grad.SetKeys(colorKey, alphaKey);
+            trail.colorGradient = grad;
             trail.positionCount = Mathf.Max(2, Mathf.CeilToInt(recording.samples.Count / 4f));
             for (var point = 0; point < trail.positionCount; point++)
             {
                 var sampleIndex = Mathf.Min(recording.samples.Count - 1, point * 4);
-                var position = recording.samples[sampleIndex].position + Vector3.up * (0.035f + index * 0.012f);
+                var position = recording.samples[sampleIndex].position + Vector3.up * (0.038f + index * 0.014f);
                 trail.SetPosition(point, position);
             }
             _echoes.Add(new EchoRuntime { visual = visual, trail = trail });
@@ -322,7 +384,10 @@ namespace QuantumEcho
             _echoes.RemoveAt(last);
             _echoRecordings.RemoveAt(_echoRecordings.Count - 1);
             Play(interactClip);
-            player.PulseHaptics(0.32f, 0.07f);
+            // v2 polish: short descending double-tap signals undo
+            player.PulseHaptics(0.32f, 0.06f);
+            _pendingHapticAt = Time.unscaledTime + 0.10f;
+            _pendingHapticAmp = 0.14f;
             hud.ShowToast("Last Echo undone");
             ResetCycle();
         }
@@ -749,7 +814,10 @@ namespace QuantumEcho
             _level.core.gameObject.SetActive(false);
             hud.SetProgress(false);
             Play(unlockClip);
-            player.PulseHaptics(0.8f, 0.18f);
+            // v2 polish: three-beat win haptic — strong / medium echo / soft tail
+            player.PulseHaptics(0.85f, 0.16f);
+            _pendingHapticAt = Time.unscaledTime + 0.20f;
+            _pendingHapticAmp = 0.45f;
             var result = _currentLevelIndex switch
             {
                 0 => "Echo Relay Complete",

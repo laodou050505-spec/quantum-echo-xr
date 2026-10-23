@@ -5,12 +5,12 @@ namespace QuantumEcho
 {
     /// <summary>
     /// Replaces a plain UI background with the generated Quantum hologram panel.
-    /// v3: Updated to holographic cyan-border design with corner ornaments and scan lines.
+    /// v4: PIL 程序化绘制干净底板——深藏青 85% 不透明 + 1px 青色细边 + 顶部高光，真 alpha，无棋盘格。
     /// The generated image contains no text; TMP remains fully editable and crisp.
     /// </summary>
     public static class QuantumGeneratedPanelSkin
     {
-        // v3: PanelV3 hologram panel generated 2026-10-22 (Tripo banana2)
+        // v4: PIL 绘制干净面板（2026-10-23），替换含棋盘格假透明的 v3 生成图
         const string ResourcePath = "QuantumEcho/QuantumHologramPanel";
         // Fallback to v1 panel if new asset not yet imported
         const string FallbackPath = "QuantumEcho/QuantumPhasePanel";
@@ -35,9 +35,8 @@ namespace QuantumEcho
             if (image == null || PanelSprite == null) return;
             image.enabled = true;
             image.sprite = PanelSprite;
-            image.type = Image.Type.Sliced;
-            // v3: tighter PPU so the border ornaments scale correctly on the narrow HUD panel
-            image.pixelsPerUnitMultiplier = 4f;
+            // v4: Simple 模式——新底板已有真 alpha，不需要 9-slice；Simple 直接拉伸不会暴露棋盘格
+            image.type = Image.Type.Simple;
             image.preserveAspect = false;
             image.color = new Color(1f, 1f, 1f, Mathf.Clamp01(opacity));
             image.raycastTarget = false;

@@ -139,6 +139,9 @@ namespace QuantumEcho
             // v3: detail text with slightly tinted color
             hud._detail = AddText(rect, font, "Detail", new Vector2(32f, -144f), new Vector2(776f, 96f), 27f, new Color(0.80f, 0.91f, 0.94f));
             hud._detail.lineSpacing = 6f;
+            hud._detail.enableAutoSizing = true;
+            hud._detail.fontSizeMin = 18f;
+            hud._detail.fontSizeMax = 27f;
 
             // v3: prompt with cyan-green tint and controller key prefix icon
             hud._prompt = AddText(rect, font, "Prompt", new Vector2(32f, -248f), new Vector2(776f, 48f), 27f, new Color(0.55f, 0.96f, 0.90f));

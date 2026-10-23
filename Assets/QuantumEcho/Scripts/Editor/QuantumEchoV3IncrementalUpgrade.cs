@@ -129,18 +129,21 @@ namespace QuantumEcho.Editor
         // ────────────────────────────────────────────────────────────────────
         static void RunQA(string destPath)
         {
+            const string src = "Logs/QuantumEcho-CollisionAndHudQA.txt";
+            bool needsCopy = !string.Equals(Path.GetFullPath(src), Path.GetFullPath(destPath),
+                                            System.StringComparison.OrdinalIgnoreCase);
             try
             {
                 QuantumEchoCollisionQA.RunBatch();
-                if (File.Exists("Logs/QuantumEcho-CollisionAndHudQA.txt"))
-                    File.Copy("Logs/QuantumEcho-CollisionAndHudQA.txt", destPath, overwrite: true);
+                if (needsCopy && File.Exists(src))
+                    File.Copy(src, destPath, overwrite: true);
                 Debug.Log("[INC] QA 结果: " + destPath);
             }
             catch (System.Exception ex)
             {
                 Debug.LogWarning("[INC] QA 异常（继续）: " + ex.Message);
-                if (File.Exists("Logs/QuantumEcho-CollisionAndHudQA.txt"))
-                    File.Copy("Logs/QuantumEcho-CollisionAndHudQA.txt", destPath, overwrite: true);
+                if (needsCopy && File.Exists(src))
+                    try { File.Copy(src, destPath, overwrite: true); } catch { /* 忽略二次拷贝失败 */ }
             }
         }
 
@@ -245,6 +248,63 @@ namespace QuantumEcho.Editor
             var labels = GetAllInScene<QuantumHologramWorldLabel>(scene);
             foreach (var lbl in labels) { if (orbitron != null) { lbl.font = orbitron; EditorUtility.SetDirty(lbl); } }
             Debug.Log($"[INC] QuantumHologramWorldLabel：{labels.Count} 个");
+
+            // ── HUD 排版修复（v3 UI 精修：解决溢出 / 叠字）
+            var allHUDs = GetAllInScene<QuantumHUD>(scene);
+            if (allHUDs.Count > 0)
+            {
+                var hud = allHUDs[0];
+                // 1. 目标标题：启用自动缩放防止"Stand on the Holder"顶到右边框
+                if (hud.objectiveTitleText != null)
+                {
+                    hud.objectiveTitleText.enableAutoSizing = true;
+                    hud.objectiveTitleText.fontSizeMin = 18f;
+                    hud.objectiveTitleText.fontSizeMax = 30f;
+                    EditorUtility.SetDirty(hud.objectiveTitleText);
+                }
+                // 2. 计时数值：右侧补 16px 内边距，"14.0s" 不贴边框
+                if (hud.timerValueText != null)
+                {
+                    hud.timerValueText.margin = new Vector4(0f, 0f, 16f, 0f);
+                    EditorUtility.SetDirty(hud.timerValueText);
+                }
+                // 3. Toast（反馈文字）：移入计时面板内部，24px 左右内边距，字号缩小；默认隐藏
+                if (hud.toastText != null)
+                {
+                    var toastRT = hud.toastText.rectTransform;
+                    // 新位置：计时面板内，进度条下方；anchoredPosition 相对 canvas 左上角 anchor
+                    toastRT.anchoredPosition = new Vector2(176f, -109f);
+                    toastRT.sizeDelta        = new Vector2(282f, 24f);
+                    hud.toastText.fontSize   = 16f;
+                    hud.toastText.margin     = new Vector4(0f, 0f, 0f, 0f);
+                    hud.toastText.alignment  = TMPro.TextAlignmentOptions.Left;
+                    hud.toastText.gameObject.SetActive(false);   // 默认不可见
+                    EditorUtility.SetDirty(hud.toastText);
+                    EditorUtility.SetDirty(toastRT);
+                    EditorUtility.SetDirty(hud.toastText.gameObject);
+                }
+                // 4. 计时面板高度：98 → 120，为 Toast 腾出空间
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tr in root.GetComponentsInChildren<Transform>(true))
+                        if (tr.name == "Timer" && tr.GetComponent<RectTransform>() is RectTransform timerRT
+                            && Mathf.Approximately(timerRT.sizeDelta.x, 330f)
+                            && Mathf.Approximately(timerRT.sizeDelta.y, 98f))
+                        {
+                            timerRT.sizeDelta = new Vector2(330f, 120f);
+                            EditorUtility.SetDirty(timerRT);
+                        }
+                // 5. 结算面板：截图时 Awake() 不运行，需在保存场景前显式隐藏
+                if (hud.resultPanel != null)
+                {
+                    hud.resultPanel.SetActive(false);
+                    EditorUtility.SetDirty(hud.resultPanel);
+                }
+                Debug.Log("[INC] HUD 排版修复完成（标题自动缩放 / 计时内边距 / Toast 重定位 / 结算面板隐藏）");
+            }
+            else
+            {
+                Debug.LogWarning("[INC] 未找到 QuantumHUD，跳过 HUD 排版修复");
+            }
 
             PrintStats("MAIN-AFTER", scene);
             EditorSceneManager.SaveScene(scene);
@@ -397,6 +457,16 @@ namespace QuantumEcho.Editor
                     hud.progressPanel.SetActive(expanded);
                     EditorUtility.SetDirty(hud.progressPanel);
                 }
+                // 结算面板：截图时始终隐藏（Awake 在 batchmode 中不运行）
+                if (hud.resultPanel != null)
+                    hud.resultPanel.SetActive(false);
+                // Toast：展开态显示"Loop Started"演示新排版；折叠态隐藏
+                if (hud.toastText != null)
+                {
+                    hud.toastText.gameObject.SetActive(expanded);
+                    if (expanded)
+                        hud.toastText.text = "Loop Started";
+                }
             }
 
             ForceTMPUpdate(scene);
@@ -426,6 +496,9 @@ namespace QuantumEcho.Editor
                 hud.SetEchoCount(2, 4);
                 hud.SetTimer(22f, 30f);
                 hud.SetPrompt("[Grip / A / X]", "Seal and echo");
+                // 截图时始终隐藏结算面板和 Toast（Awake 在 batchmode 中不运行）
+                if (hud.resultPanel != null) hud.resultPanel.SetActive(false);
+                if (hud.toastText != null) hud.toastText.gameObject.SetActive(false);
             }
 
             // 相机：从玩家出生点朝向 HUD + 世界铭牌区域

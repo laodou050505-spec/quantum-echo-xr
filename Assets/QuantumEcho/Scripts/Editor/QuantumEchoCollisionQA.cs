@@ -138,7 +138,10 @@ namespace QuantumEcho.Editor
             foreach(var text in hud.GetComponentsInChildren<TMP_Text>(true))
             {
                 text.ForceMeshUpdate(true);
-                check(text.preferredHeight <= text.rectTransform.rect.height + 1f && text.preferredWidth <= text.rectTransform.rect.width + 1f, "HUD text fits: " + text.name + " height="+text.preferredHeight);
+                // preferredWidth is the natural single-line width; for word-wrapped elements it always
+                // exceeds rect.width — use height-only constraint there (wrapping enforces width).
+                bool fitsWidth = text.enableWordWrapping || text.preferredWidth <= text.rectTransform.rect.width + 1f;
+                check(text.preferredHeight <= text.rectTransform.rect.height + 1f && fitsWidth, "HUD text fits: " + text.name + " height="+text.preferredHeight);
             }
             var objectives = typeof(QuantumEchoGameManager).GetMethod("GetObjective", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
             for(var level=0; level<4; level++) for(var step=0; step<3; step++)

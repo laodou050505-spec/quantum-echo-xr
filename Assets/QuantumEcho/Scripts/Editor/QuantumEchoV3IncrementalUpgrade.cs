@@ -111,6 +111,7 @@ namespace QuantumEcho.Editor
             CaptureTitleShot(ScreenDir + "/title_pressed.png", idle: false, pressBtn: true);
             CaptureHUDShot(ScreenDir + "/hud_collapsed.png",   expanded: false);
             CaptureHUDShot(ScreenDir + "/hud_expanded.png",    expanded: true);
+            CaptureHUDShot(ScreenDir + "/timer_88.png",         expanded: false, timerValue: 88.8f, timerDuration: 99f);
             CaptureMainShot(ScreenDir + "/gameplay_hud.png");
 
             // ── 步骤 8: 改动后 QA ────────────────────────────────────────────
@@ -249,57 +250,112 @@ namespace QuantumEcho.Editor
             foreach (var lbl in labels) { if (orbitron != null) { lbl.font = orbitron; EditorUtility.SetDirty(lbl); } }
             Debug.Log($"[INC] QuantumHologramWorldLabel：{labels.Count} 个");
 
-            // ── HUD 排版修复（v3 UI 精修：解决溢出 / 叠字）
+            // ── HUD 排版修复（v3 UI 精修 r2：溢出 / 叠字 / 细竖线）
             var allHUDs = GetAllInScene<QuantumHUD>(scene);
             if (allHUDs.Count > 0)
             {
                 var hud = allHUDs[0];
-                // 1. 目标标题：启用自动缩放防止"Stand on the Holder"顶到右边框
+
+                // ── 先找计时面板（用于后面 Toast 挂载）
+                RectTransform timerPanelRT = null;
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tr in root.GetComponentsInChildren<Transform>(true))
+                        if (tr.name == "Timer" && tr.GetComponent<RectTransform>() is RectTransform trt
+                            && Mathf.Approximately(trt.sizeDelta.x, 330f))
+                        { timerPanelRT = trt; break; }
+
+                // ── 计时面板高度：98 → 120，为 Toast 腾出空间（幂等：已经是 120 则跳过）
+                if (timerPanelRT != null && Mathf.Approximately(timerPanelRT.sizeDelta.y, 98f))
+                {
+                    timerPanelRT.sizeDelta = new Vector2(330f, 120f);
+                    EditorUtility.SetDirty(timerPanelRT);
+                }
+
+                // ── Fix 3: 目标标题文本框右边缘内缩 20px，再启用自动缩放
                 if (hud.objectiveTitleText != null)
                 {
+                    var rt = hud.objectiveTitleText.rectTransform;
+                    // 原 sizeDelta.x=370 → 右边缘 466；内缩 20px → 右边缘 446，留 22px 内边距
+                    if (rt.sizeDelta.x > 354f)
+                        rt.sizeDelta = new Vector2(rt.sizeDelta.x - 20f, rt.sizeDelta.y);
                     hud.objectiveTitleText.enableAutoSizing = true;
                     hud.objectiveTitleText.fontSizeMin = 18f;
                     hud.objectiveTitleText.fontSizeMax = 30f;
                     EditorUtility.SetDirty(hud.objectiveTitleText);
+                    EditorUtility.SetDirty(rt);
                 }
-                // 2. 计时数值：右侧补 16px 内边距，"14.0s" 不贴边框
+
+                // ── Fix 2: 计时数值 — 去掉 margin，改为收窄 RectTransform 右边缘 16px，并启用自动缩放
                 if (hud.timerValueText != null)
                 {
-                    hud.timerValueText.margin = new Vector4(0f, 0f, 16f, 0f);
+                    var rt = hud.timerValueText.rectTransform;
+                    hud.timerValueText.margin = Vector4.zero;          // 移除旧 margin（上版误用）
+                    if (rt.sizeDelta.x > 73f)                          // 幂等：不重复缩减
+                        rt.sizeDelta = new Vector2(rt.sizeDelta.x - 16f, rt.sizeDelta.y);  // 105→89
+                    hud.timerValueText.enableAutoSizing = true;
+                    hud.timerValueText.fontSizeMin = 22f;
+                    hud.timerValueText.fontSizeMax = 28f;
                     EditorUtility.SetDirty(hud.timerValueText);
+                    EditorUtility.SetDirty(rt);
                 }
-                // 3. Toast（反馈文字）：移入计时面板内部，24px 左右内边距，字号缩小；默认隐藏
-                if (hud.toastText != null)
+
+                // ── Fix 1: Toast — 挂载到计时面板，锚点底部拉伸，左右 24px / 底部 14px / 高 28px / 字号 20
+                if (hud.toastText != null && timerPanelRT != null
+                    && hud.toastText.transform.parent != timerPanelRT.transform)
                 {
+                    hud.toastText.transform.SetParent(timerPanelRT, false);
                     var toastRT = hud.toastText.rectTransform;
-                    // 新位置：计时面板内，进度条下方；anchoredPosition 相对 canvas 左上角 anchor
-                    toastRT.anchoredPosition = new Vector2(176f, -109f);
-                    toastRT.sizeDelta        = new Vector2(282f, 24f);
-                    hud.toastText.fontSize   = 16f;
-                    hud.toastText.margin     = new Vector4(0f, 0f, 0f, 0f);
-                    hud.toastText.alignment  = TMPro.TextAlignmentOptions.Left;
-                    hud.toastText.gameObject.SetActive(false);   // 默认不可见
+                    toastRT.anchorMin = new Vector2(0f, 0f);
+                    toastRT.anchorMax = new Vector2(1f, 0f);
+                    toastRT.pivot     = new Vector2(0.5f, 0f);
+                    toastRT.offsetMin = new Vector2(24f, 14f);   // 左 24px, 距底 14px
+                    toastRT.offsetMax = new Vector2(-24f, 42f);  // 右 24px, 高度=42-14=28px
+                    hud.toastText.margin    = Vector4.zero;
+                    hud.toastText.fontSize  = 20f;
+                    hud.toastText.alignment = TMPro.TextAlignmentOptions.Left;
+                    hud.toastText.gameObject.SetActive(false);
                     EditorUtility.SetDirty(hud.toastText);
                     EditorUtility.SetDirty(toastRT);
                     EditorUtility.SetDirty(hud.toastText.gameObject);
                 }
-                // 4. 计时面板高度：98 → 120，为 Toast 腾出空间
-                foreach (var root in scene.GetRootGameObjects())
-                    foreach (var tr in root.GetComponentsInChildren<Transform>(true))
-                        if (tr.name == "Timer" && tr.GetComponent<RectTransform>() is RectTransform timerRT
-                            && Mathf.Approximately(timerRT.sizeDelta.x, 330f)
-                            && Mathf.Approximately(timerRT.sizeDelta.y, 98f))
-                        {
-                            timerRT.sizeDelta = new Vector2(330f, 120f);
-                            EditorUtility.SetDirty(timerRT);
-                        }
-                // 5. 结算面板：截图时 Awake() 不运行，需在保存场景前显式隐藏
+                else if (hud.toastText != null)
+                {
+                    // 如已挂载：仅确保字号和默认隐藏状态正确
+                    if (hud.toastText.fontSize < 19f)
+                    { hud.toastText.fontSize = 20f; EditorUtility.SetDirty(hud.toastText); }
+                    if (hud.toastText.gameObject.activeSelf)
+                    { hud.toastText.gameObject.SetActive(false); EditorUtility.SetDirty(hud.toastText.gameObject); }
+                }
+
+                // ── Fix 5: 结算面板（截图时 Awake 不运行）
                 if (hud.resultPanel != null)
                 {
                     hud.resultPanel.SetActive(false);
                     EditorUtility.SetDirty(hud.resultPanel);
                 }
-                Debug.Log("[INC] HUD 排版修复完成（标题自动缩放 / 计时内边距 / Toast 重定位 / 结算面板隐藏）");
+
+                // ── Fix 4: 隐藏 Awake() 才会隐藏的非必要面板（batchmode 不运行 Awake）
+                var awakePanels = new[] { "Brand", "Level Tabs", "Loop", "Echo Rail" };
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var tr in root.GetComponentsInChildren<Transform>(true))
+                        if (tr.parent != null && System.Array.IndexOf(awakePanels, tr.name) >= 0
+                            && tr.gameObject.activeSelf)
+                        {
+                            tr.gameObject.SetActive(false);
+                            EditorUtility.SetDirty(tr.gameObject);
+                            Debug.Log($"[INC] 隐藏面板: {tr.name}");
+                        }
+
+                // 诊断：输出所有 宽<4px 且 高>50px 的 Graphic（帮助定位残余细竖线）
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var g in root.GetComponentsInChildren<Graphic>(true))
+                    {
+                        var sz = g.rectTransform.rect.size;
+                        if (sz.x < 4f && sz.y > 50f)
+                            Debug.Log($"[DIAG-THIN] {g.gameObject.name} type={g.GetType().Name} w={sz.x:F1} h={sz.y:F1} active={g.gameObject.activeSelf}");
+                    }
+
+                Debug.Log("[INC] HUD 排版修复 r2 完成（标题 RT 收窄+自动缩放 / 计时 RT 收窄+自动缩放 / Toast 挂载到计时面板 / 非必要面板隐藏）");
             }
             else
             {
@@ -410,7 +466,7 @@ namespace QuantumEcho.Editor
         // HUD 截图（折叠/展开）
         // 关键：相机应在 HUD 正面（-forward 方向）
         // ────────────────────────────────────────────────────────────────────
-        static void CaptureHUDShot(string outPng, bool expanded)
+        static void CaptureHUDShot(string outPng, bool expanded, float timerValue = 14f, float timerDuration = 30f)
         {
             var scene = EditorSceneManager.OpenScene(MainScenePath, OpenSceneMode.Single);
             var orbitron = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(OrbitronPath);
@@ -448,7 +504,7 @@ namespace QuantumEcho.Editor
                 hud.SetObjective(0, "Stand on the Holder",
                     expanded ? "Step onto the blue disc and seal it as an Echo. Wait for the timer to count down." : "…");
                 hud.SetEchoCount(0, 4);
-                hud.SetTimer(14f, 30f);
+                hud.SetTimer(timerValue, timerDuration);
                 hud.SetPrompt("[Grip / A / X]", expanded ? "Seal this action and start the next loop" : "…");
 
                 // 展开态：显示进度面板；折叠态：隐藏
